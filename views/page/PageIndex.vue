@@ -2,6 +2,7 @@
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
+import RowActions from '@admin/components/ui/RowActions.vue'
 import DataTable, { type Column } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -31,7 +32,6 @@ const fetchPages = async () => {
 }
 
 const deletePage = async (id: number) => {
-  if (!confirm('Biztosan törölni szeretné ezt a lapot?')) return
   try {
     await pageService.delete(id)
     await fetchPages()
@@ -66,10 +66,10 @@ onMounted(() => {
       @fetch="fetchPages"
     >
       <template #row-actions="{ row }">
-        <div class="flex items-center justify-end gap-2">
-          <Button variant="ghost" size="sm" @click="editPage(row.id!)">Szerkesztés</Button>
-          <Button variant="destructive" size="sm" @click="deletePage(row.id!)">Törlés</Button>
-        </div>
+        <RowActions
+          @edit="editPage(row.id!)"
+          @delete="deletePage(row.id!)"
+        />
       </template>
       <template #empty>
         Nincs megjeleníthető oldal.
