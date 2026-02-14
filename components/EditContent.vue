@@ -159,9 +159,9 @@ const moveDown = (index: number) => {
 
     <!-- Type select modal -->
     <Teleport to="body">
-      <div v-if="showTypeModal" class="fixed inset-0 z-[100] flex items-center justify-center">
+      <div v-if="showTypeModal" class="fixed inset-0 flex items-center justify-center">
         <div class="absolute inset-0 bg-black/50" @click="closeTypeModal"></div>
-        <div class="relative bg-background rounded-lg shadow-lg w-full max-w-lg p-6">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-lg p-6">
           <h4 class="text-base font-medium mb-4">Válaszd ki az elem típusát</h4>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <Button
