@@ -24,7 +24,7 @@ api.interceptors.request.use(
 )
 
 export interface Author {
-  id?: number
+  id: number
   name: string
   profile_url?: string | null
   created_at?: string

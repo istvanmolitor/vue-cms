@@ -1,5 +1,7 @@
 import axios from 'axios'
 import config from '@config'
+import type { Author } from './authorService'
+import type { PageGroup } from './pageGroupService'
 
 const api = axios.create({
   baseURL: config.SERVER_URL,
@@ -42,6 +44,8 @@ export interface Page {
   slug: string
   content?: Content | null
   draftContent?: Content | null
+  authors?: Author[]
+  pageGroups?: PageGroup[]
   created_at?: string
   updated_at?: string
 }
@@ -50,11 +54,15 @@ export interface PageFormData {
   title: string
   slug: string
   content_elements: ContentElement[]
+  author_ids: number[]
+  page_group_ids: number[]
 }
 
 export interface PagePayload {
   title: string
   slug: string
+  author_ids?: number[]
+  page_group_ids?: number[]
   content_elements: Array<{
     type: string
     settings: any  // API expects 'settings' not 'content'
@@ -82,9 +90,11 @@ export const pageService = {
     return api.get<SingleResponse<Page>>(`/api/cms/slug/${slug}`)
   },
   create(payload: PagePayload) {
-    const { content_elements, ...rest } = payload
+    const { content_elements, author_ids, page_group_ids, ...rest } = payload
     const data = {
       ...rest,
+      author_ids,
+      page_group_ids,
       content: {
         content_elements
       }
@@ -92,9 +102,11 @@ export const pageService = {
     return api.post<SingleResponse<Page>>('/api/cms/pages', data)
   },
   update(id: number | string, payload: PagePayload) {
-    const { content_elements, ...rest } = payload
+    const { content_elements, author_ids, page_group_ids, ...rest } = payload
     const data = {
       ...rest,
+      author_ids,
+      page_group_ids,
       content: {
         content_elements
       }

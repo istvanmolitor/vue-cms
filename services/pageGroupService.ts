@@ -24,7 +24,7 @@ api.interceptors.request.use(
 )
 
 export interface PageGroup {
-  id?: number
+  id: number
   name: string
   slug: string
   created_at?: string
