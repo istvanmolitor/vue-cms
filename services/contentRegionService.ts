@@ -40,6 +40,7 @@ export interface ContentRegion {
   id?: number
   name: string
   content?: Content | null
+  draftContent?: Content | null
 }
 
 export interface ContentRegionFormData {
@@ -82,5 +83,11 @@ export const contentRegionService = {
   },
   delete(id: number | string) {
     return api.delete(`/api/cms/regions/${id}`)
+  },
+  approveDraft(id: number | string) {
+    return api.post<SingleResponse<ContentRegion>>(`/api/cms/regions/${id}/approve-draft`)
+  },
+  resetDraft(id: number | string) {
+    return api.post<SingleResponse<ContentRegion>>(`/api/cms/regions/${id}/reset-draft`)
   },
 }

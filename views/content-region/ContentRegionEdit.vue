@@ -17,6 +17,8 @@ import EditContent from '../../components/EditContent.vue'
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
+const isPublishing = ref(false)
+const isResetting = ref(false)
 const isLoading = ref(true)
 const regionId = route.params.id as string
 const errors = ref<any>({})
@@ -31,7 +33,8 @@ const fetchRegion = async () => {
     isLoading.value = true
     const { data } = await contentRegionService.getById(regionId)
     form.name = data.data.name
-    form.content_elements = data.data.content?.content_elements || []
+    // Load draft_content if it exists, otherwise fall back to published content
+    form.content_elements = data.data.draftContent?.content_elements || data.data.content?.content_elements || []
   } catch (error) {
     console.error('Hiba a régió betöltésekor:', error)
   } finally {
@@ -69,6 +72,38 @@ const handleSubmit = async () => {
   }
 }
 
+const handlePublish = async () => {
+  try {
+    isPublishing.value = true
+    errors.value = {}
+
+    await contentRegionService.approveDraft(regionId)
+
+    // Show success message or redirect
+    router.push('/cms/regions')
+  } catch (error: any) {
+    console.error('Hiba a draft publikálásakor:', error)
+  } finally {
+    isPublishing.value = false
+  }
+}
+
+const handleReset = async () => {
+  try {
+    isResetting.value = true
+    errors.value = {}
+
+    await contentRegionService.resetDraft(regionId)
+
+    // Reload the region data
+    await fetchRegion()
+  } catch (error: any) {
+    console.error('Hiba a draft visszaállításakor:', error)
+  } finally {
+    isResetting.value = false
+  }
+}
+
 const goBack = () => {
   router.push('/cms/regions')
 }
@@ -82,7 +117,15 @@ onMounted(() => {
   <AdminLayout>
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Régió szerkesztése</h2>
-      <Button variant="outline" @click="goBack">Vissza</Button>
+      <div class="flex gap-2">
+        <Button variant="default" @click="handlePublish" :disabled="isPublishing || isSaving || isResetting">
+          {{ isPublishing ? 'Publikálás...' : 'Publikálás' }}
+        </Button>
+        <Button variant="outline" @click="handleReset" :disabled="isResetting || isSaving || isPublishing">
+          {{ isResetting ? 'Visszaállítás...' : 'Visszaállítás' }}
+        </Button>
+        <Button variant="outline" @click="goBack">Vissza</Button>
+      </div>
     </div>
 
     <div v-if="isLoading" class="flex justify-center py-8">
@@ -92,7 +135,7 @@ onMounted(() => {
     <Card v-else>
       <CardHeader>
         <CardTitle>Régió adatai</CardTitle>
-        <CardDescription>Módosítsd a tartalom régió adatait.</CardDescription>
+        <CardDescription>Módosítsd a régió piszkozatát. A változások mentése után használd a "Publikálás" gombot a közzétételhez.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
@@ -108,6 +151,7 @@ onMounted(() => {
       <CardFooter>
         <FormButtons
           :is-saving="isSaving"
+          save-text="Piszkozat mentése"
           @save="handleSubmit"
           @cancel="goBack"
         />

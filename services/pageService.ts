@@ -41,6 +41,7 @@ export interface Page {
   title: string
   slug: string
   content?: Content | null
+  draftContent?: Content | null
   created_at?: string
   updated_at?: string
 }
@@ -102,5 +103,11 @@ export const pageService = {
   },
   delete(id: number | string) {
     return api.delete(`/api/cms/pages/${id}`)
+  },
+  approveDraft(id: number | string) {
+    return api.post<SingleResponse<Page>>(`/api/cms/pages/${id}/approve-draft`)
+  },
+  resetDraft(id: number | string) {
+    return api.post<SingleResponse<Page>>(`/api/cms/pages/${id}/reset-draft`)
   },
 }

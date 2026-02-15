@@ -17,6 +17,8 @@ import EditContent from '../../components/EditContent.vue'
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
+const isPublishing = ref(false)
+const isResetting = ref(false)
 const isLoading = ref(true)
 const pageId = route.params.id as string
 const errors = ref<any>({})
@@ -33,7 +35,8 @@ const fetchPage = async () => {
     const { data } = await pageService.getById(pageId)
     form.title = data.data.title
     form.slug = data.data.slug
-    form.content_elements = data.data.content?.content_elements || []
+    // Load draft_content if it exists, otherwise fall back to published content
+    form.content_elements = data.data.draftContent?.content_elements || data.data.content?.content_elements || []
   } catch (error) {
     console.error('Hiba az oldal betöltésekor:', error)
   } finally {
@@ -70,6 +73,38 @@ const handleSubmit = async () => {
   }
 }
 
+const handlePublish = async () => {
+  try {
+    isPublishing.value = true
+    errors.value = {}
+
+    await pageService.approveDraft(pageId)
+
+    // Show success message or redirect
+    router.push('/cms/pages')
+  } catch (error: any) {
+    console.error('Hiba a draft publikálásakor:', error)
+  } finally {
+    isPublishing.value = false
+  }
+}
+
+const handleReset = async () => {
+  try {
+    isResetting.value = true
+    errors.value = {}
+
+    await pageService.resetDraft(pageId)
+
+    // Reload the page data
+    await fetchPage()
+  } catch (error: any) {
+    console.error('Hiba a draft visszaállításakor:', error)
+  } finally {
+    isResetting.value = false
+  }
+}
+
 const goBack = () => {
   router.push('/cms/pages')
 }
@@ -83,7 +118,15 @@ onMounted(() => {
   <AdminLayout>
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Oldal szerkesztése</h2>
-      <Button variant="outline" @click="goBack">Vissza</Button>
+      <div class="flex gap-2">
+        <Button variant="default" @click="handlePublish" :disabled="isPublishing || isSaving || isResetting">
+          {{ isPublishing ? 'Publikálás...' : 'Publikálás' }}
+        </Button>
+        <Button variant="outline" @click="handleReset" :disabled="isResetting || isSaving || isPublishing">
+          {{ isResetting ? 'Visszaállítás...' : 'Visszaállítás' }}
+        </Button>
+        <Button variant="outline" @click="goBack">Vissza</Button>
+      </div>
     </div>
 
     <div v-if="isLoading" class="flex justify-center py-8">
@@ -93,7 +136,7 @@ onMounted(() => {
     <Card v-else>
       <CardHeader>
         <CardTitle>Oldal adatai</CardTitle>
-        <CardDescription>Módosítsd az oldal adatait.</CardDescription>
+        <CardDescription>Módosítsd az oldal piszkozatát. A változások mentése után használd a "Publikálás" gombot a közzétételhez.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
@@ -113,6 +156,7 @@ onMounted(() => {
       <CardFooter>
         <FormButtons
           :is-saving="isSaving"
+          save-text="Piszkozat mentése"
           @save="handleSubmit"
           @cancel="goBack"
         />

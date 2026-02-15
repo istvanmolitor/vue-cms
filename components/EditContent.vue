@@ -153,7 +153,7 @@ const getHeadingClass = (level: number) => {
               </div>
 
               <div class="flex items-center gap-1">
-                <Button type="button" variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground/60 hover:text-primary hover:bg-primary/10 transition-all" @click="openSettingsModal(index)">
+                <Button type="button" variant="ghost" size="icon" class="text-muted-foreground/60 hover:text-primary hover:bg-primary/10 transition-all" @click="openSettingsModal(index)">
                   <Icon name="settings" class="w-4 h-4" />
                 </Button>
                 <Button type="button" variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground/40 hover:text-destructive hover:bg-destructive/10 transition-all" @click="removeElement(index)">
