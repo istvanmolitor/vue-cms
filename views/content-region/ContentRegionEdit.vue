@@ -11,7 +11,7 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { contentRegionService, type ContentRegionFormData } from '../../services/contentRegionService.ts'
+import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
 import EditContent from '../../components/EditContent.vue'
 
 const router = useRouter()
@@ -21,10 +21,10 @@ const isLoading = ref(true)
 const regionId = route.params.id as string
 const errors = ref<any>({})
 
-const form = reactive<ContentRegionFormData>({
+const form = reactive({
   name: '',
-  content_elements: []
-})
+  content_elements: [] as ContentElement[]
+}) as ContentRegionFormData
 
 const fetchRegion = async () => {
   try {
@@ -43,12 +43,21 @@ const handleSubmit = async () => {
   try {
     isSaving.value = true
     errors.value = {}
-    // ContentRegion update is not implemented in backend repository/controller yet,
-    // but usually we would call update here.
-    // Given the current backend implementation only has create/delete,
-    // and store/index/show in controller.
-    // I should probably add update to backend too.
-    await contentRegionService.update(regionId, form)
+
+    // Transform data to match API expectations
+    const payload = {
+      name: form.name,
+      content: {
+        content_elements: form.content_elements.map((element, index) => ({
+          type: element.type,
+          settings: element.settings,  // API expects 'settings' field
+          sort: index,
+          is_visible: element.is_visible
+        }))
+      }
+    }
+
+    await contentRegionService.update(regionId, payload)
     router.push('/cms/regions')
   } catch (error: any) {
     if (error.response?.status === 422) {

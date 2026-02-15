@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import Button from '@admin/components/ui/Button.vue'
-import Card from '@admin/components/ui/Card.vue'
-import CardContent from '@admin/components/ui/CardContent.vue'
 import { Plus, Trash, MoveUp, MoveDown, GripVertical } from 'lucide-vue-next'
 import { contentElementTypeRegistry } from '../registry'
-
-interface ContentElement {
-  id?: number
-  type: string
-  content: any
-  sort: number
-  is_visible: boolean
-}
+import type { ContentElement } from '../services/contentRegionService'
 
 interface Props {
   modelValue: ContentElement[]
@@ -45,7 +36,7 @@ const addElementWithType = (type: string) => {
 
   elements.value.push({
     type,
-    content: {},
+    settings: {},
     sort: nextSort,
     is_visible: true
   })
@@ -63,10 +54,8 @@ const removeElement = (index: number) => {
 }
 
 const moveUp = (index: number) => {
-  if (index > 0) {
-    const temp = elements.value[index]
-    elements.value[index] = elements.value[index - 1]
-    elements.value[index - 1] = temp
+  if (index > 0 && index < elements.value.length) {
+    [elements.value[index - 1], elements.value[index]] = [elements.value[index]!, elements.value[index - 1]!]
 
     // Update sort values
     elements.value.forEach((el, i) => el.sort = i)
@@ -75,10 +64,8 @@ const moveUp = (index: number) => {
 }
 
 const moveDown = (index: number) => {
-  if (index < elements.value.length - 1) {
-    const temp = elements.value[index]
-    elements.value[index] = elements.value[index + 1]
-    elements.value[index + 1] = temp
+  if (index >= 0 && index < elements.value.length - 1) {
+    [elements.value[index], elements.value[index + 1]] = [elements.value[index + 1]!, elements.value[index]!]
 
     // Update sort values
     elements.value.forEach((el, i) => el.sort = i)
@@ -148,7 +135,7 @@ const moveDown = (index: number) => {
             <div class="pl-1">
               <component
                 :is="contentElementTypeRegistry.getComponent(element.type)"
-                v-model="element.content"
+                v-model="element.settings"
                 @update:modelValue="updateModel"
               />
             </div>

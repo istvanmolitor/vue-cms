@@ -26,7 +26,7 @@ api.interceptors.request.use(
 export interface ContentElement {
   id?: number
   type: string
-  content: string
+  settings: any
   sort: number
   is_visible: boolean
 }
@@ -44,7 +44,19 @@ export interface ContentRegion {
 
 export interface ContentRegionFormData {
   name: string
-  content_elements?: ContentElement[]
+  content_elements: ContentElement[]
+}
+
+export interface ContentRegionPayload {
+  name: string
+  content: {
+    content_elements: Array<{
+      type: string
+      settings: any  // API expects 'settings' not 'content'
+      sort: number
+      is_visible: boolean
+    }>
+  }
 }
 
 export interface SingleResponse<T> {
@@ -62,10 +74,10 @@ export const contentRegionService = {
   getById(id: number | string) {
     return api.get<SingleResponse<ContentRegion>>(`/api/cms/regions/${id}`)
   },
-  create(region: ContentRegionFormData) {
+  create(region: ContentRegionPayload) {
     return api.post<SingleResponse<ContentRegion>>('/api/cms/regions', region)
   },
-  update(id: number | string, region: ContentRegionFormData) {
+  update(id: number | string, region: ContentRegionPayload) {
     return api.put<SingleResponse<ContentRegion>>(`/api/cms/regions/${id}`, region)
   },
   delete(id: number | string) {

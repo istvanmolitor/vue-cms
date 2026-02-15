@@ -26,7 +26,7 @@ api.interceptors.request.use(
 export interface ContentElement {
   id?: number
   type: string
-  content: string
+  settings: any
   sort: number
   is_visible: boolean
 }
@@ -48,7 +48,18 @@ export interface Page {
 export interface PageFormData {
   title: string
   slug: string
-  content_elements?: ContentElement[]
+  content_elements: ContentElement[]
+}
+
+export interface PagePayload {
+  title: string
+  slug: string
+  content_elements: Array<{
+    type: string
+    settings: any  // API expects 'settings' not 'content'
+    sort: number
+    is_visible: boolean
+  }>
 }
 
 export interface SingleResponse<T> {
@@ -69,25 +80,25 @@ export const pageService = {
   getBySlug(slug: string) {
     return api.get<SingleResponse<Page>>(`/api/cms/slug/${slug}`)
   },
-  create(page: PageFormData) {
-    const { content_elements, ...rest } = page
-    const payload = {
+  create(payload: PagePayload) {
+    const { content_elements, ...rest } = payload
+    const data = {
       ...rest,
       content: {
         content_elements
       }
     }
-    return api.post<SingleResponse<Page>>('/api/cms/pages', payload)
+    return api.post<SingleResponse<Page>>('/api/cms/pages', data)
   },
-  update(id: number | string, page: PageFormData) {
-    const { content_elements, ...rest } = page
-    const payload = {
+  update(id: number | string, payload: PagePayload) {
+    const { content_elements, ...rest } = payload
+    const data = {
       ...rest,
       content: {
         content_elements
       }
     }
-    return api.put<SingleResponse<Page>>(`/api/cms/pages/${id}`, payload)
+    return api.put<SingleResponse<Page>>(`/api/cms/pages/${id}`, data)
   },
   delete(id: number | string) {
     return api.delete(`/api/cms/pages/${id}`)

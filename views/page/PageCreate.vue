@@ -18,17 +18,30 @@ const router = useRouter()
 const isSaving = ref(false)
 const errors = ref<any>({})
 
-const form = reactive<PageFormData>({
+const form = reactive({
   title: '',
   slug: '',
-  content_elements: []
-})
+  content_elements: [] as ContentElement[]
+}) as PageFormData
 
 const handleSubmit = async () => {
   try {
     isSaving.value = true
     errors.value = {}
-    await pageService.create(form)
+
+    // Transform data to match API expectations
+    const payload = {
+      title: form.title,
+      slug: form.slug,
+      content_elements: form.content_elements.map((element, index) => ({
+        type: element.type,
+        settings: element.settings,  // API expects 'settings' field
+        sort: index,
+        is_visible: element.is_visible
+      }))
+    }
+
+    await pageService.create(payload)
     router.push('/cms/pages')
   } catch (error: any) {
     if (error.response?.status === 422) {
