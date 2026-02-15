@@ -57,5 +57,51 @@ watch([text, level], updateValue)
         </select>
       </div>
     </div>
+
+    <!-- Preview -->
+    <div v-if="text" class="mt-4 p-4 border rounded-md bg-muted/30">
+      <p class="text-xs text-muted-foreground mb-2">Előnézet:</p>
+      <component :is="`h${level}`" class="heading-preview">
+        {{ text }}
+      </component>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.heading-preview {
+  margin: 0;
+  font-weight: 700;
+}
+
+h1.heading-preview {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+h2.heading-preview {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+h3.heading-preview {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+h4.heading-preview {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+h5.heading-preview {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+h6.heading-preview {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+</style>
+

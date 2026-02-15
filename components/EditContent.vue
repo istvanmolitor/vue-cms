@@ -84,6 +84,19 @@ const moveDown = (index: number) => {
     updateModel()
   }
 }
+
+const getHeadingClass = (level: number) => {
+  const baseClasses = 'font-bold text-foreground'
+  const sizeClasses = {
+    1: 'text-4xl',
+    2: 'text-3xl',
+    3: 'text-2xl',
+    4: 'text-xl',
+    5: 'text-lg',
+    6: 'text-base'
+  }
+  return `${baseClasses} ${sizeClasses[level as keyof typeof sizeClasses] || sizeClasses[1]}`
+}
 </script>
 
 <template>
@@ -150,7 +163,39 @@ const moveDown = (index: number) => {
             </div>
 
             <div class="pl-1 text-sm text-muted-foreground">
-              <div v-if="Object.keys(element.settings).length > 0" class="space-y-1">
+              <!-- Special preview for heading elements -->
+              <div v-if="element.type === 'heading' && element.settings.text" class="mt-2">
+                <component
+                  :is="`h${element.settings.level || 1}`"
+                  :class="getHeadingClass(element.settings.level || 1)"
+                >
+                  {{ element.settings.text }}
+                </component>
+              </div>
+              <!-- Special preview for text elements -->
+              <div v-else-if="element.type === 'text' && element.settings.text" class="mt-2">
+                <p :class="`text-${element.settings.align || 'left'} text-sm leading-relaxed`">
+                  {{ element.settings.text }}
+                </p>
+              </div>
+              <!-- Special preview for image elements -->
+              <div v-else-if="element.type === 'image' && element.settings.url" class="mt-2">
+                <img
+                  :src="element.settings.url"
+                  :alt="element.settings.alt || 'Kép'"
+                  :style="{
+                    width: element.settings.width || 'auto',
+                    height: element.settings.height || 'auto',
+                    maxWidth: '300px'
+                  }"
+                  class="rounded-lg shadow-sm border border-border"
+                />
+                <div v-if="element.settings.alt" class="text-xs text-muted-foreground mt-1">
+                  {{ element.settings.alt }}
+                </div>
+              </div>
+              <!-- Default settings display for other elements -->
+              <div v-else-if="Object.keys(element.settings).length > 0" class="space-y-1">
                 <div v-for="(value, key) in element.settings" :key="key" class="text-xs">
                   <span class="font-medium">{{ key }}:</span>
                   <span class="ml-1">{{ typeof value === 'object' ? JSON.stringify(value).substring(0, 50) : String(value).substring(0, 50) }}</span>
