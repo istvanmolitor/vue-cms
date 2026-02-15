@@ -6,55 +6,54 @@ import VideoElementEditor from '../components/elements/VideoElementEditor.vue'
 import CodeElementEditor from '../components/elements/CodeElementEditor.vue'
 import QuoteElementEditor from '../components/elements/QuoteElementEditor.vue'
 import ListElementEditor from '../components/elements/ListElementEditor.vue'
-import { Type, Heading1, Image, Video, Code, Quote, List } from 'lucide-vue-next'
 
 contentElementTypeRegistry.register({
   type: 'text',
   label: 'Szöveg',
   component: TextElementEditor,
-  icon: Type
+  icon: 'type'
 })
 
 contentElementTypeRegistry.register({
   type: 'heading',
   label: 'Címsor',
   component: HeadingElementEditor,
-  icon: Heading1
+  icon: 'heading'
 })
 
 contentElementTypeRegistry.register({
   type: 'image',
   label: 'Kép',
   component: ImageElementEditor,
-  icon: Image
+  icon: 'image'
 })
 
 contentElementTypeRegistry.register({
   type: 'video',
   label: 'Videó',
   component: VideoElementEditor,
-  icon: Video
+  icon: 'video'
 })
 
 contentElementTypeRegistry.register({
   type: 'code',
   label: 'Kód',
   component: CodeElementEditor,
-  icon: Code
+  icon: 'code'
 })
 
 contentElementTypeRegistry.register({
   type: 'quote',
   label: 'Idézet',
   component: QuoteElementEditor,
-  icon: Quote
+  icon: 'quote'
 })
 
 contentElementTypeRegistry.register({
   type: 'list',
   label: 'Lista',
   component: ListElementEditor,
-  icon: List
+  icon: 'list'
 })
 
 export * from './ContentElementTypeRegistry'

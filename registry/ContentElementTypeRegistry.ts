@@ -1,10 +1,10 @@
-import { defineAsyncComponent, type Component } from 'vue'
+import { type Component } from 'vue'
 
 export interface ContentElementType {
   type: string
   label: string
   component: Component
-  icon: Component
+  icon: string
 }
 
 class ContentElementTypeRegistry {
@@ -26,7 +26,7 @@ class ContentElementTypeRegistry {
     return this.types.get(type)?.component
   }
 
-  getIcon(type: string): Component | undefined {
+  getIcon(type: string): string | undefined {
     return this.types.get(type)?.icon
   }
 }
