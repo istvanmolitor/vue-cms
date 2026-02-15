@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers, User } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User, FolderTree } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -82,6 +82,13 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/cms/authors',
           icon: User,
           order: 30
+        },
+        {
+          id: 'cms-page-groups',
+          title: 'Oldal Csoportok',
+          path: '/cms/page-groups',
+          icon: FolderTree,
+          order: 40
         }
       ]
     }

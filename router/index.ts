@@ -55,6 +55,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/author/AuthorEdit.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/cms/page-groups',
+    name: 'cms-page-groups',
+    component: () => import('../views/page-group/PageGroupIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/page-groups/create',
+    name: 'cms-page-group-create',
+    component: () => import('../views/page-group/PageGroupCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/page-groups/:id/edit',
+    name: 'cms-page-group-edit',
+    component: () => import('../views/page-group/PageGroupEdit.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 export default cmsRoutes
