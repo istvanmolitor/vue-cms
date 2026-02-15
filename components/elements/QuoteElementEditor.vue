@@ -40,7 +40,7 @@ watch([quote, author], updateValue)
     <div>
       <label class="text-sm font-medium mb-1 block">Idézet</label>
       <textarea
-        v-model="text"
+        v-model="quote"
         rows="4"
         class="flex min-h-[96px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="Az idézet szövege..."

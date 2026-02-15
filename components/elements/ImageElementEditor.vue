@@ -9,7 +9,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
-const url = ref(props.modelValue?.url || '')
+const src = ref(props.modelValue?.src || '')
 const alt = ref(props.modelValue?.alt || '')
 const width = ref(props.modelValue?.width || '')
 const height = ref(props.modelValue?.height || '')
@@ -17,13 +17,13 @@ const height = ref(props.modelValue?.height || '')
 // Initialize if empty
 onMounted(() => {
   if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { url: '', alt: '', width: '', height: '' })
+    emit('update:modelValue', { src: '', alt: '', width: '', height: '' })
   }
 })
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
-    url.value = newVal.url || ''
+    src.value = newVal.src || ''
     alt.value = newVal.alt || ''
     width.value = newVal.width || ''
     height.value = newVal.height || ''
@@ -32,14 +32,14 @@ watch(() => props.modelValue, (newVal) => {
 
 const updateValue = () => {
   emit('update:modelValue', {
-    url: url.value,
+    src: src.value,
     alt: alt.value,
     width: width.value,
     height: height.value
   })
 }
 
-watch([url, alt, width, height], updateValue)
+watch([src, alt, width, height], updateValue)
 </script>
 
 <template>
@@ -47,7 +47,7 @@ watch([url, alt, width, height], updateValue)
     <div>
       <label class="text-sm font-medium mb-1 block">Kép URL</label>
       <MediaFilePicker
-        v-model="url"
+        v-model="src"
         :accept-types="['image/*']"
         :show-preview="true"
       />

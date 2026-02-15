@@ -4,6 +4,7 @@ export interface ContentElementType {
   type: string
   label: string
   component: Component
+  previewComponent?: Component
   icon: string
 }
 
@@ -24,6 +25,10 @@ class ContentElementTypeRegistry {
 
   getComponent(type: string): Component | undefined {
     return this.types.get(type)?.component
+  }
+
+  getPreviewComponent(type: string): Component | undefined {
+    return this.types.get(type)?.previewComponent
   }
 
   getIcon(type: string): string | undefined {

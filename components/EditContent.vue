@@ -2,8 +2,10 @@
 import { ref, watch, computed } from 'vue'
 import Button from '@admin/components/ui/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
+import IconButton from '@admin/components/ui/IconButton.vue'
 import { contentElementTypeRegistry } from '../registry'
 import type { ContentElement } from '../services/contentRegionService'
+import DefaultElementPreview from './elements/DefaultElementPreview.vue'
 
 interface Props {
   modelValue: ContentElement[]
@@ -85,17 +87,8 @@ const moveDown = (index: number) => {
   }
 }
 
-const getHeadingClass = (level: number) => {
-  const baseClasses = 'font-bold text-foreground'
-  const sizeClasses = {
-    1: 'text-4xl',
-    2: 'text-3xl',
-    3: 'text-2xl',
-    4: 'text-xl',
-    5: 'text-lg',
-    6: 'text-base'
-  }
-  return `${baseClasses} ${sizeClasses[level as keyof typeof sizeClasses] || sizeClasses[1]}`
+const getPreviewComponent = (type: string) => {
+  return contentElementTypeRegistry.getPreviewComponent(type) || DefaultElementPreview
 }
 </script>
 
@@ -121,12 +114,8 @@ const getHeadingClass = (level: number) => {
               <Icon name="grip-vertical" class="w-4 h-4" />
             </div>
             <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button type="button" variant="ghost" size="icon" class="h-6 w-6" @click="moveUp(index)" :disabled="index === 0">
-                <Icon name="move-up" class="w-3 h-3" />
-              </Button>
-              <Button type="button" variant="ghost" size="icon" class="h-6 w-6" @click="moveDown(index)" :disabled="index === elements.length - 1">
-                <Icon name="move-down" class="w-3 h-3" />
-              </Button>
+              <IconButton icon="move-up" @click="moveUp(index)" :disabled="index === 0" />
+              <IconButton icon="move-down" @click="moveDown(index)" :disabled="index === elements.length - 1" />
             </div>
           </div>
 
@@ -152,58 +141,22 @@ const getHeadingClass = (level: number) => {
               </div>
 
               <div class="flex items-center gap-1">
-                <Button type="button" variant="ghost" size="icon" class="text-muted-foreground/60 hover:text-primary hover:bg-primary/10 transition-all" @click="openSettingsModal(index)">
-                  <Icon name="settings" class="w-4 h-4" />
-                </Button>
-                <Button type="button" variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground/40 hover:text-destructive hover:bg-destructive/10 transition-all" @click="removeElement(index)">
-                  <Icon name="trash" class="w-4 h-4" />
-                </Button>
+                <IconButton
+                  icon="settings"
+                  @click="openSettingsModal(index)"
+                />
+                <IconButton
+                  icon="trash"
+                  @click="removeElement(index)"
+                />
               </div>
             </div>
 
             <div class="pl-1 text-sm text-muted-foreground">
-              <!-- Special preview for heading elements -->
-              <div v-if="element.type === 'heading' && element.settings.text" class="mt-2">
-                <component
-                  :is="`h${element.settings.level || 1}`"
-                  :class="getHeadingClass(element.settings.level || 1)"
-                >
-                  {{ element.settings.text }}
-                </component>
-              </div>
-              <!-- Special preview for text elements -->
-              <div v-else-if="element.type === 'text' && element.settings.text" class="mt-2">
-                <p :class="`text-${element.settings.align || 'left'} text-sm leading-relaxed`">
-                  {{ element.settings.text }}
-                </p>
-              </div>
-              <!-- Special preview for image elements -->
-              <div v-else-if="element.type === 'image' && element.settings.url" class="mt-2">
-                <img
-                  :src="element.settings.url"
-                  :alt="element.settings.alt || 'Kép'"
-                  :style="{
-                    width: element.settings.width || 'auto',
-                    height: element.settings.height || 'auto',
-                    maxWidth: '300px'
-                  }"
-                  class="rounded-lg shadow-sm border border-border"
-                />
-                <div v-if="element.settings.alt" class="text-xs text-muted-foreground mt-1">
-                  {{ element.settings.alt }}
-                </div>
-              </div>
-              <!-- Default settings display for other elements -->
-              <div v-else-if="Object.keys(element.settings).length > 0" class="space-y-1">
-                <div v-for="(value, key) in element.settings" :key="key" class="text-xs">
-                  <span class="font-medium">{{ key }}:</span>
-                  <span class="ml-1">{{ typeof value === 'object' ? JSON.stringify(value).substring(0, 50) : String(value).substring(0, 50) }}</span>
-                  <span v-if="String(value).length > 50">...</span>
-                </div>
-              </div>
-              <div v-else class="text-xs italic">
-                Nincsenek beállítások - kattints a <Icon name="settings" class="w-3 h-3 inline" /> ikonra a szerkesztéshez
-              </div>
+              <component
+                :is="getPreviewComponent(element.type)"
+                :settings="element.settings"
+              />
             </div>
           </div>
         </div>
