@@ -37,6 +37,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/content-region/ContentRegionEdit.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/cms/authors',
+    name: 'cms-authors',
+    component: () => import('../views/author/AuthorIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/authors/create',
+    name: 'cms-author-create',
+    component: () => import('../views/author/AuthorCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/authors/:id/edit',
+    name: 'cms-author-edit',
+    component: () => import('../views/author/AuthorEdit.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 export default cmsRoutes

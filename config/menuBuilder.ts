@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -75,6 +75,13 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/cms/regions',
           icon: Layers,
           order: 20
+        },
+        {
+          id: 'cms-authors',
+          title: 'Szerzők',
+          path: '/cms/authors',
+          icon: User,
+          order: 30
         }
       ]
     }
