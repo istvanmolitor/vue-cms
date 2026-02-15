@@ -2,6 +2,9 @@
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
+import Textarea from '@admin/components/ui/Textarea.vue'
+import Checkbox from '@admin/components/ui/Checkbox.vue'
+import Label from '@admin/components/ui/Label.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -10,6 +13,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
@@ -21,8 +25,6 @@ import EditContent from '../../components/EditContent.vue'
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
-const isPublishing = ref(false)
-const isResetting = ref(false)
 const isLoading = ref(true)
 const isLoadingAuthors = ref(true)
 const isLoadingPageGroups = ref(true)
@@ -34,6 +36,9 @@ const pageGroups = ref<PageGroup[]>([])
 const form = reactive({
   title: '',
   slug: '',
+  is_published: false,
+  lead: '',
+  layout: 'default',
   main_image_url: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
@@ -70,9 +75,12 @@ const fetchPage = async () => {
     const { data } = await pageService.getById(pageId)
     form.title = data.data.title
     form.slug = data.data.slug
+    form.is_published = data.data.is_published || false
+    form.lead = data.data.lead || ''
+    form.layout = data.data.layout || 'default'
     form.main_image_url = data.data.main_image_url || ''
     // Load draft_content if it exists, otherwise fall back to published content
-    form.content_elements = data.data.draftContent?.content_elements || data.data.content?.content_elements || []
+    form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     // Load authors
     form.author_ids = data.data.authors?.map(author => author.id) || []
     // Load page groups
@@ -93,6 +101,9 @@ const handleSubmit = async () => {
     const payload = {
       title: form.title,
       slug: form.slug,
+      is_published: form.is_published,
+      lead: form.lead,
+      layout: form.layout,
       main_image_url: form.main_image_url,
       author_ids: form.author_ids,
       page_group_ids: form.page_group_ids,
@@ -116,37 +127,6 @@ const handleSubmit = async () => {
   }
 }
 
-const handlePublish = async () => {
-  try {
-    isPublishing.value = true
-    errors.value = {}
-
-    await pageService.approveDraft(pageId)
-
-    // Show success message or redirect
-    router.push('/cms/pages')
-  } catch (error: any) {
-    console.error('Hiba a draft publikálásakor:', error)
-  } finally {
-    isPublishing.value = false
-  }
-}
-
-const handleReset = async () => {
-  try {
-    isResetting.value = true
-    errors.value = {}
-
-    await pageService.resetDraft(pageId)
-
-    // Reload the page data
-    await fetchPage()
-  } catch (error: any) {
-    console.error('Hiba a draft visszaállításakor:', error)
-  } finally {
-    isResetting.value = false
-  }
-}
 
 const goBack = () => {
   router.push('/cms/pages')
@@ -164,12 +144,6 @@ onMounted(() => {
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Oldal szerkesztése</h2>
       <div class="flex gap-2">
-        <Button variant="default" @click="handlePublish" :disabled="isPublishing || isSaving || isResetting">
-          {{ isPublishing ? 'Publikálás...' : 'Publikálás' }}
-        </Button>
-        <Button variant="outline" @click="handleReset" :disabled="isResetting || isSaving || isPublishing">
-          {{ isResetting ? 'Visszaállítás...' : 'Visszaállítás' }}
-        </Button>
         <Button variant="outline" @click="goBack">Vissza</Button>
       </div>
     </div>
@@ -190,10 +164,31 @@ onMounted(() => {
             <div class="space-y-2">
               <label for="title" class="text-sm font-medium">Cím</label>
               <Input id="title" v-model="form.title" placeholder="Oldal címe" />
+              <FieldError :errors="errors.title" />
             </div>
             <div class="space-y-2">
               <label for="slug" class="text-sm font-medium">Slug</label>
               <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
+              <FieldError :errors="errors.slug" />
+            </div>
+            <div class="space-y-2">
+              <label for="lead" class="text-sm font-medium">Bevezető szöveg</label>
+              <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
+              <FieldError :errors="errors.lead" />
+            </div>
+            <div class="space-y-2">
+              <label for="layout" class="text-sm font-medium">Sablon</label>
+              <Input id="layout" v-model="form.layout" placeholder="default" />
+              <FieldError :errors="errors.layout" />
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <Checkbox id="is_published" v-model:checked="form.is_published" />
+                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Publikálva
+                </Label>
+              </div>
+              <FieldError :errors="errors.is_published" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
@@ -202,6 +197,7 @@ onMounted(() => {
                 v-model="form.main_image_url"
                 :accept-types="['image/*']"
               />
+              <FieldError :errors="errors.main_image_url" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
@@ -218,6 +214,7 @@ onMounted(() => {
               <div v-else class="text-sm text-[--color-muted-foreground]">
                 Szerzők betöltése...
               </div>
+              <FieldError :errors="errors.author_ids" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
@@ -234,12 +231,13 @@ onMounted(() => {
               <div v-else class="text-sm text-[--color-muted-foreground]">
                 Oldal csoportok betöltése...
               </div>
+              <FieldError :errors="errors.page_group_ids" />
             </div>
           </CardContent>
           <CardFooter>
             <FormButtons
               :is-saving="isSaving"
-              save-text="Piszkozat mentése"
+              save-text="Mentés"
               @save="handleSubmit"
               @cancel="goBack"
             />
@@ -256,9 +254,8 @@ onMounted(() => {
           </CardHeader>
           <CardContent>
             <EditContent v-model="form.content_elements" />
-            <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
-              Legalább egy tartalmi elemet meg kell adni.
-            </div>
+            <FieldError :errors="errors['content.content_elements']" />
+            <FieldError :errors="errors.content" />
           </CardContent>
         </Card>
       </div>

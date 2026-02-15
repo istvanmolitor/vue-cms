@@ -9,6 +9,7 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { MediaFilePicker } from '@/packages/vue-media'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
@@ -88,8 +89,8 @@ onMounted(() => {
             id="name"
             v-model="form.name"
             placeholder="Szerző neve"
-            :error="errors.name?.[0]"
           />
+          <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
           <label for="profile_url" class="text-sm font-medium">Profil URL</label>
@@ -97,9 +98,7 @@ onMounted(() => {
             v-model="form.profile_url"
             :accept-types="['image/*']"
           />
-          <p v-if="errors.profile_url?.[0]" class="text-sm text-red-500">
-            {{ errors.profile_url[0] }}
-          </p>
+          <FieldError :errors="errors.profile_url" />
         </div>
       </CardContent>
       <CardFooter>

@@ -9,6 +9,7 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageGroupService, type PageGroupFormData } from '../../services/pageGroupService.ts'
@@ -87,8 +88,8 @@ onMounted(() => {
             id="name"
             v-model="form.name"
             placeholder="Csoport neve"
-            :error="errors.name?.[0]"
           />
+          <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
           <label for="slug" class="text-sm font-medium">Slug</label>
@@ -96,8 +97,8 @@ onMounted(() => {
             id="slug"
             v-model="form.slug"
             placeholder="csoport-slug"
-            :error="errors.slug?.[0]"
           />
+          <FieldError :errors="errors.slug" />
         </div>
       </CardContent>
       <CardFooter>

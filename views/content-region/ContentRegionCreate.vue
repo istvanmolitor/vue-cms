@@ -9,6 +9,7 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
 import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
@@ -74,12 +75,12 @@ const goBack = () => {
         <div class="space-y-2">
           <label for="name" class="text-sm font-medium">Név</label>
           <Input id="name" v-model="form.name" placeholder="Régió neve" />
+          <FieldError :errors="errors.name" />
         </div>
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" />
-        <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
-          Legalább egy tartalmi elemet meg kell adni.
-        </div>
+        <FieldError :errors="errors['content.content_elements']" />
+        <FieldError :errors="errors.content" />
       </CardContent>
       <CardFooter>
         <FormButtons

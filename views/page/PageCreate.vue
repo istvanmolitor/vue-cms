@@ -2,6 +2,9 @@
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
+import Textarea from '@admin/components/ui/Textarea.vue'
+import Checkbox from '@admin/components/ui/Checkbox.vue'
+import Label from '@admin/components/ui/Label.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -29,6 +32,9 @@ const pageGroups = ref<PageGroup[]>([])
 const form = reactive({
   title: '',
   slug: '',
+  is_published: false,
+  lead: '',
+  layout: 'default',
   main_image_url: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
@@ -68,6 +74,9 @@ const handleSubmit = async () => {
     const payload = {
       title: form.title,
       slug: form.slug,
+      is_published: form.is_published,
+      lead: form.lead,
+      layout: form.layout,
       main_image_url: form.main_image_url,
       author_ids: form.author_ids,
       page_group_ids: form.page_group_ids,
@@ -117,10 +126,31 @@ onMounted(() => {
         <div class="space-y-2">
           <label for="title" class="text-sm font-medium">Cím</label>
           <Input id="title" v-model="form.title" placeholder="Oldal címe" />
+          <FieldError :errors="errors.title" />
         </div>
         <div class="space-y-2">
           <label for="slug" class="text-sm font-medium">Slug</label>
           <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
+          <FieldError :errors="errors.slug" />
+        </div>
+        <div class="space-y-2">
+          <label for="lead" class="text-sm font-medium">Bevezető szöveg</label>
+          <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
+          <FieldError :errors="errors.lead" />
+        </div>
+        <div class="space-y-2">
+          <label for="layout" class="text-sm font-medium">Sablon</label>
+          <Input id="layout" v-model="form.layout" placeholder="default" />
+          <FieldError :errors="errors.layout" />
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <Checkbox id="is_published" v-model:checked="form.is_published" />
+            <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Publikálva
+            </Label>
+          </div>
+          <FieldError :errors="errors.is_published" />
         </div>
         <hr class="my-6" />
         <div class="space-y-2">
@@ -129,6 +159,7 @@ onMounted(() => {
             v-model="form.main_image_url"
             :accept-types="['image/*']"
           />
+          <FieldError :errors="errors.main_image_url" />
         </div>
         <hr class="my-6" />
         <div class="space-y-2">
@@ -145,6 +176,7 @@ onMounted(() => {
           <div v-else class="text-sm text-[--color-muted-foreground]">
             Szerzők betöltése...
           </div>
+          <FieldError :errors="errors.author_ids" />
         </div>
         <hr class="my-6" />
         <div class="space-y-2">
@@ -161,12 +193,12 @@ onMounted(() => {
           <div v-else class="text-sm text-[--color-muted-foreground]">
             Oldal csoportok betöltése...
           </div>
+          <FieldError :errors="errors.page_group_ids" />
         </div>
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" />
-        <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
-          Legalább egy tartalmi elemet meg kell adni.
-        </div>
+        <FieldError :errors="errors['content.content_elements']" />
+        <FieldError :errors="errors.content" />
       </CardContent>
       <CardFooter>
         <FormButtons

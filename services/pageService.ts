@@ -42,9 +42,11 @@ export interface Page {
   id?: number
   title: string
   slug: string
+  is_published?: boolean
+  lead?: string
+  layout?: string
   main_image_url?: string
   content?: Content | null
-  draftContent?: Content | null
   authors?: Author[]
   pageGroups?: PageGroup[]
   created_at?: string
@@ -54,6 +56,9 @@ export interface Page {
 export interface PageFormData {
   title: string
   slug: string
+  is_published?: boolean
+  lead?: string
+  layout?: string
   main_image_url?: string
   content_elements: ContentElement[]
   author_ids: number[]
@@ -63,6 +68,9 @@ export interface PageFormData {
 export interface PagePayload {
   title: string
   slug: string
+  is_published?: boolean
+  lead?: string
+  layout?: string
   main_image_url?: string
   author_ids?: number[]
   page_group_ids?: number[]

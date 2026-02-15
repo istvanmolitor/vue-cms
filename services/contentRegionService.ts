@@ -40,7 +40,6 @@ export interface ContentRegion {
   id?: number
   name: string
   content?: Content | null
-  draftContent?: Content | null
 }
 
 export interface ContentRegionFormData {
