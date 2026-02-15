@@ -10,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
+import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
@@ -33,6 +34,7 @@ const pageGroups = ref<PageGroup[]>([])
 const form = reactive({
   title: '',
   slug: '',
+  main_image_url: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
   page_group_ids: [] as number[]
@@ -68,6 +70,7 @@ const fetchPage = async () => {
     const { data } = await pageService.getById(pageId)
     form.title = data.data.title
     form.slug = data.data.slug
+    form.main_image_url = data.data.main_image_url || ''
     // Load draft_content if it exists, otherwise fall back to published content
     form.content_elements = data.data.draftContent?.content_elements || data.data.content?.content_elements || []
     // Load authors
@@ -90,6 +93,7 @@ const handleSubmit = async () => {
     const payload = {
       title: form.title,
       slug: form.slug,
+      main_image_url: form.main_image_url,
       author_ids: form.author_ids,
       page_group_ids: form.page_group_ids,
       content_elements: form.content_elements.map((element, index) => ({
@@ -174,66 +178,90 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else>
-      <CardHeader>
-        <CardTitle>Oldal adatai</CardTitle>
-        <CardDescription>Módosítsd az oldal piszkozatát. A változások mentése után használd a "Publikálás" gombot a közzétételhez.</CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <label for="title" class="text-sm font-medium">Cím</label>
-          <Input id="title" v-model="form.title" placeholder="Oldal címe" />
-        </div>
-        <div class="space-y-2">
-          <label for="slug" class="text-sm font-medium">Slug</label>
-          <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
-        </div>
-        <hr class="my-6" />
-        <div class="space-y-2">
-          <MultiSelect
-            v-if="!isLoadingAuthors"
-            v-model="form.author_ids"
-            :items="authors"
-            label="Szerzők"
-            placeholder="Válassz szerzőket..."
-            search-placeholder="Szerző keresése név alapján..."
-            empty-message="Nincsenek elérhető szerzők."
-            label-field="name"
-          />
-          <div v-else class="text-sm text-[--color-muted-foreground]">
-            Szerzők betöltése...
-          </div>
-        </div>
-        <hr class="my-6" />
-        <div class="space-y-2">
-          <MultiSelect
-            v-if="!isLoadingPageGroups"
-            v-model="form.page_group_ids"
-            :items="pageGroups"
-            label="Oldal csoportok"
-            placeholder="Válassz oldal csoportokat..."
-            search-placeholder="Oldal csoport keresése név alapján..."
-            empty-message="Nincsenek elérhető oldal csoportok."
-            label-field="name"
-          />
-          <div v-else class="text-sm text-[--color-muted-foreground]">
-            Oldal csoportok betöltése...
-          </div>
-        </div>
-        <hr class="my-6" />
-        <EditContent v-model="form.content_elements" />
-        <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
-          Legalább egy tartalmi elemet meg kell adni.
-        </div>
-      </CardContent>
-      <CardFooter>
-        <FormButtons
-          :is-saving="isSaving"
-          save-text="Piszkozat mentése"
-          @save="handleSubmit"
-          @cancel="goBack"
-        />
-      </CardFooter>
-    </Card>
+    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Left column: Page settings -->
+      <div class="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Oldal beállításai</CardTitle>
+            <CardDescription>Az oldal alapvető adatai és tulajdonságai</CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <div class="space-y-2">
+              <label for="title" class="text-sm font-medium">Cím</label>
+              <Input id="title" v-model="form.title" placeholder="Oldal címe" />
+            </div>
+            <div class="space-y-2">
+              <label for="slug" class="text-sm font-medium">Slug</label>
+              <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
+            </div>
+            <hr class="my-6" />
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Főkép</label>
+              <MediaFilePicker
+                v-model="form.main_image_url"
+                :accept-types="['image/*']"
+              />
+            </div>
+            <hr class="my-6" />
+            <div class="space-y-2">
+              <MultiSelect
+                v-if="!isLoadingAuthors"
+                v-model="form.author_ids"
+                :items="authors"
+                label="Szerzők"
+                placeholder="Válassz szerzőket..."
+                search-placeholder="Szerző keresése név alapján..."
+                empty-message="Nincsenek elérhető szerzők."
+                label-field="name"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Szerzők betöltése...
+              </div>
+            </div>
+            <hr class="my-6" />
+            <div class="space-y-2">
+              <MultiSelect
+                v-if="!isLoadingPageGroups"
+                v-model="form.page_group_ids"
+                :items="pageGroups"
+                label="Oldal csoportok"
+                placeholder="Válassz oldal csoportokat..."
+                search-placeholder="Oldal csoport keresése név alapján..."
+                empty-message="Nincsenek elérhető oldal csoportok."
+                label-field="name"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Oldal csoportok betöltése...
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <FormButtons
+              :is-saving="isSaving"
+              save-text="Piszkozat mentése"
+              @save="handleSubmit"
+              @cancel="goBack"
+            />
+          </CardFooter>
+        </Card>
+      </div>
+
+      <!-- Right column: Content elements -->
+      <div class="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Tartalom elemek</CardTitle>
+            <CardDescription>Az oldal tartalmának elemei</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EditContent v-model="form.content_elements" />
+            <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
+              Legalább egy tartalmi elemet meg kell adni.
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   </AdminLayout>
 </template>

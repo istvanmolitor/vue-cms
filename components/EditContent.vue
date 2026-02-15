@@ -101,8 +101,7 @@ const getHeadingClass = (level: number) => {
 
 <template>
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-medium">Tartalom elemek</h3>
+    <div class="flex items-center justify-end">
       <Button type="button" variant="outline" size="sm" @click="openAddElementModal">
         <Icon name="plus" class="w-4 h-4 mr-2" />
         Elem hozzáadása

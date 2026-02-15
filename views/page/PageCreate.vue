@@ -10,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
+import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
@@ -28,6 +29,7 @@ const pageGroups = ref<PageGroup[]>([])
 const form = reactive({
   title: '',
   slug: '',
+  main_image_url: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
   page_group_ids: [] as number[]
@@ -66,6 +68,7 @@ const handleSubmit = async () => {
     const payload = {
       title: form.title,
       slug: form.slug,
+      main_image_url: form.main_image_url,
       author_ids: form.author_ids,
       page_group_ids: form.page_group_ids,
       content_elements: form.content_elements.map((element, index) => ({
@@ -118,6 +121,14 @@ onMounted(() => {
         <div class="space-y-2">
           <label for="slug" class="text-sm font-medium">Slug</label>
           <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
+        </div>
+        <hr class="my-6" />
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Főkép</label>
+          <MediaFilePicker
+            v-model="form.main_image_url"
+            :accept-types="['image/*']"
+          />
         </div>
         <hr class="my-6" />
         <div class="space-y-2">

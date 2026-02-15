@@ -42,6 +42,7 @@ export interface Page {
   id?: number
   title: string
   slug: string
+  main_image_url?: string
   content?: Content | null
   draftContent?: Content | null
   authors?: Author[]
@@ -53,6 +54,7 @@ export interface Page {
 export interface PageFormData {
   title: string
   slug: string
+  main_image_url?: string
   content_elements: ContentElement[]
   author_ids: number[]
   page_group_ids: number[]
@@ -61,6 +63,7 @@ export interface PageFormData {
 export interface PagePayload {
   title: string
   slug: string
+  main_image_url?: string
   author_ids?: number[]
   page_group_ids?: number[]
   content_elements: Array<{
