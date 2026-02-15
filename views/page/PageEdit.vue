@@ -152,8 +152,15 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Left column: Page settings -->
+    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left column: Content elements (2 units wide) -->
+      <div class="lg:col-span-2 space-y-6">
+          <EditContent v-model="form.content_elements" />
+          <FieldError :errors="errors['content.content_elements']" />
+          <FieldError :errors="errors.content" />
+      </div>
+
+      <!-- Right column: Page settings (1 unit wide) -->
       <div class="space-y-6">
         <Card>
           <CardHeader>
@@ -242,21 +249,6 @@ onMounted(() => {
               @cancel="goBack"
             />
           </CardFooter>
-        </Card>
-      </div>
-
-      <!-- Right column: Content elements -->
-      <div class="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Tartalom elemek</CardTitle>
-            <CardDescription>Az oldal tartalmának elemei</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <EditContent v-model="form.content_elements" />
-            <FieldError :errors="errors['content.content_elements']" />
-            <FieldError :errors="errors.content" />
-          </CardContent>
         </Card>
       </div>
     </div>
