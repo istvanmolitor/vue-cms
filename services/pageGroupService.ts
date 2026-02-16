@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from '@config'
+import type { Page } from './pageService'
 
 const api = axios.create({
   baseURL: config.SERVER_URL,
@@ -27,6 +28,7 @@ export interface PageGroup {
   id: number
   name: string
   slug: string
+  pages?: Page[]
   created_at?: string
   updated_at?: string
 }

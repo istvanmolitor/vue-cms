@@ -44,6 +44,10 @@ const editPageGroup = (id: number) => {
   router.push(`/cms/page-groups/${id}/edit`)
 }
 
+const showPageGroup = (id: number) => {
+  router.push(`/cms/page-groups/${id}`)
+}
+
 onMounted(() => {
   fetchPageGroups()
 })
@@ -67,6 +71,7 @@ onMounted(() => {
     >
       <template #row-actions="{ row }">
         <RowActions
+          @show="showPageGroup(row.id!)"
           @edit="editPageGroup(row.id!)"
           @delete="deletePageGroup(row.id!)"
         />

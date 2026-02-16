@@ -68,6 +68,12 @@ const cmsRoutes: RouteRecordRaw[] = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/cms/page-groups/:id',
+    name: 'cms-page-group-show',
+    component: () => import('../views/page-group/PageGroupShow.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/cms/page-groups/:id/edit',
     name: 'cms-page-group-edit',
     component: () => import('../views/page-group/PageGroupEdit.vue'),
