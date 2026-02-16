@@ -42,6 +42,7 @@ export interface Page {
   id?: number
   title: string
   slug: string
+  url?: string
   is_published?: boolean
   lead?: string
   layout?: string

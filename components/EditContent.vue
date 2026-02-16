@@ -94,12 +94,6 @@ const getPreviewComponent = (type: string) => {
 
 <template>
   <div class="space-y-4">
-    <div class="flex items-center justify-end">
-      <Button type="button" variant="outline" size="sm" @click="openAddElementModal">
-        <Icon name="plus" class="w-4 h-4 mr-2" />
-        Elem hozzáadása
-      </Button>
-    </div>
 
     <div v-if="elements.length === 0" class="text-center py-8 border-2 border-dashed rounded-lg text-muted-foreground">
       Nincsenek tartalom elemek. Kattints az "Elem hozzáadása" gombra.
@@ -213,5 +207,12 @@ const getPreviewComponent = (type: string) => {
         </div>
       </div>
     </Teleport>
+
+    <div class="flex items-center justify-end">
+      <Button type="button" @click="openAddElementModal">
+        <Icon name="plus" class="w-4 h-4 mr-2" />
+        Elem hozzáadása
+      </Button>
+    </div>
   </div>
 </template>

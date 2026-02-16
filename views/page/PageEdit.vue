@@ -14,6 +14,7 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
@@ -32,6 +33,7 @@ const pageId = route.params.id as string
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const pageGroups = ref<PageGroup[]>([])
+const pageUrl = ref<string | null>(null)
 
 const form = reactive({
   title: '',
@@ -85,6 +87,8 @@ const fetchPage = async () => {
     form.author_ids = data.data.authors?.map(author => author.id) || []
     // Load page groups
     form.page_group_ids = data.data.pageGroups?.map(pageGroup => pageGroup.id) || []
+    // Store page URL
+    pageUrl.value = data.data.url || null
   } catch (error) {
     console.error('Hiba az oldal betöltésekor:', error)
   } finally {
@@ -132,6 +136,12 @@ const goBack = () => {
   router.push('/cms/pages')
 }
 
+const viewPage = () => {
+  if (pageUrl.value) {
+    window.open(pageUrl.value, '_blank')
+  }
+}
+
 onMounted(() => {
   fetchAuthors()
   fetchPageGroups()
@@ -144,6 +154,10 @@ onMounted(() => {
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Oldal szerkesztése</h2>
       <div class="flex gap-2">
+        <Button v-if="pageUrl" variant="outline" @click="viewPage">
+          <Icon name="eye" :size="16" class="mr-2" />
+          Megtekintés
+        </Button>
         <Button variant="outline" @click="goBack">Vissza</Button>
       </div>
     </div>
