@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { MediaFilePicker } from '@/packages/vue-media'
+import { Select } from '@/packages/vue-admin'
 
 interface Props {
   modelValue: Record<string, any>
@@ -13,11 +14,18 @@ const src = ref(props.modelValue?.src || '')
 const alt = ref(props.modelValue?.alt || '')
 const width = ref(props.modelValue?.width || '')
 const height = ref(props.modelValue?.height || '')
+const alignment = ref(props.modelValue?.alignment || 'left')
+
+const alignmentOptions = [
+  { value: 'left', label: 'Balra' },
+  { value: 'center', label: 'Középen' },
+  { value: 'right', label: 'Jobbra' }
+]
 
 // Initialize if empty
 onMounted(() => {
   if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { src: '', alt: '', width: '', height: '' })
+    emit('update:modelValue', { src: '', alt: '', width: '', height: '', alignment: 'left' })
   }
 })
 
@@ -27,6 +35,7 @@ watch(() => props.modelValue, (newVal) => {
     alt.value = newVal.alt || ''
     width.value = newVal.width || ''
     height.value = newVal.height || ''
+    alignment.value = newVal.alignment || 'left'
   }
 }, { deep: true })
 
@@ -35,11 +44,12 @@ const updateValue = () => {
     src: src.value,
     alt: alt.value,
     width: width.value,
-    height: height.value
+    height: height.value,
+    alignment: alignment.value
   })
 }
 
-watch([src, alt, width, height], updateValue)
+watch([src, alt, width, height, alignment], updateValue)
 </script>
 
 <template>
@@ -59,6 +69,14 @@ watch([src, alt, width, height], updateValue)
         type="text"
         class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="Kép leírása"
+      />
+    </div>
+    <div>
+      <label class="text-sm font-medium mb-1 block">Elrendezés</label>
+      <Select
+        v-model="alignment"
+        :options="alignmentOptions"
+        placeholder="Válassz elrendezést..."
       />
     </div>
     <div class="grid grid-cols-2 gap-4">
