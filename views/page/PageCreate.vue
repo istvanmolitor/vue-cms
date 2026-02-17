@@ -115,7 +115,13 @@ onMounted(() => {
   <AdminLayout>
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Új oldal</h2>
-      <Button variant="outline" @click="goBack">Vissza</Button>
+      <span>
+        <FormButtons
+            :is-saving="isSaving"
+            @save="handleSubmit"
+            @cancel="goBack"
+        />
+      </span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -123,8 +129,7 @@ onMounted(() => {
       <div class="lg:col-span-2 space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Tartalom elemek</CardTitle>
-            <CardDescription>Az oldal tartalmának elemei</CardDescription>
+            <CardTitle>Tartalom elemei</CardTitle>
           </CardHeader>
           <CardContent>
             <EditContent v-model="form.content_elements" />
@@ -139,7 +144,6 @@ onMounted(() => {
         <Card>
           <CardHeader>
             <CardTitle>Oldal adatai</CardTitle>
-            <CardDescription>Add meg az új oldal adatait a létrehozáshoz.</CardDescription>
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
@@ -215,13 +219,6 @@ onMounted(() => {
               <FieldError :errors="errors.page_group_ids" />
             </div>
           </CardContent>
-          <CardFooter>
-            <FormButtons
-              :is-saving="isSaving"
-              @save="handleSubmit"
-              @cancel="goBack"
-            />
-          </CardFooter>
         </Card>
       </div>
     </div>

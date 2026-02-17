@@ -158,7 +158,11 @@ onMounted(() => {
           <Icon name="eye" :size="16" class="mr-2" />
           Megtekintés
         </Button>
-        <Button variant="outline" @click="goBack">Vissza</Button>
+        <FormButtons
+            :is-saving="isSaving"
+            @save="handleSubmit"
+            @cancel="goBack"
+        />
       </div>
     </div>
 
@@ -178,8 +182,7 @@ onMounted(() => {
       <div class="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Oldal beállításai</CardTitle>
-            <CardDescription>Az oldal alapvető adatai és tulajdonságai</CardDescription>
+            <CardTitle>Oldal adatai</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
@@ -256,14 +259,6 @@ onMounted(() => {
               <FieldError :errors="errors.page_group_ids" />
             </div>
           </CardContent>
-          <CardFooter>
-            <FormButtons
-              :is-saving="isSaving"
-              save-text="Mentés"
-              @save="handleSubmit"
-              @cancel="goBack"
-            />
-          </CardFooter>
         </Card>
       </div>
     </div>
