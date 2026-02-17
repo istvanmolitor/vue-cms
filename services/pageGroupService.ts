@@ -1,28 +1,7 @@
-import axios from 'axios'
-import config from '@config'
+import { createApiClient } from '@user/services/apiClient'
 import type { Page } from './pageService'
 
-const api = axios.create({
-  baseURL: config.SERVER_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-})
-
-// Add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('auth_token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
+const api = createApiClient()
 
 export interface PageGroup {
   id: number
