@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import Button from '@admin/components/ui/Button.vue'
+import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
-import IconButton from '@admin/components/ui/IconButton.vue'
+import IconButton from '@admin/components/ui/button/IconButton.vue'
 import { contentElementTypeRegistry } from '../registry'
 import type { ContentElement } from '../services/contentRegionService'
 import DefaultElementPreview from './elements/DefaultElementPreview.vue'

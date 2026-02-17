@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
-import Button from '@admin/components/ui/Button.vue'
+import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
@@ -11,7 +11,7 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import FormButtons from '@admin/components/ui/FormButtons.vue'
+import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Icon from '@admin/components/ui/Icon.vue'
@@ -183,6 +183,15 @@ onMounted(() => {
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <Checkbox id="is_published" v-model:checked="form.is_published" />
+                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Publikálva
+                </Label>
+              </div>
+              <FieldError :errors="errors.is_published" />
+            </div>
+            <div class="space-y-2">
               <label for="title" class="text-sm font-medium">Cím</label>
               <Input id="title" v-model="form.title" placeholder="Oldal címe" />
               <FieldError :errors="errors.title" />
@@ -202,15 +211,7 @@ onMounted(() => {
               <Input id="layout" v-model="form.layout" placeholder="default" />
               <FieldError :errors="errors.layout" />
             </div>
-            <div class="space-y-2">
-              <div class="flex items-center space-x-2">
-                <Checkbox id="is_published" v-model:checked="form.is_published" />
-                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Publikálva
-                </Label>
-              </div>
-              <FieldError :errors="errors.is_published" />
-            </div>
+
             <hr class="my-6" />
             <div class="space-y-2">
               <label class="text-sm font-medium">Főkép</label>
