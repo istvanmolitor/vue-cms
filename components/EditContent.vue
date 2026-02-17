@@ -18,7 +18,6 @@ const elements = ref<ContentElement[]>([])
 const availableTypes = computed(() => contentElementTypeRegistry.getTypes())
 
 const showTypeModal = ref(false)
-const showSettingsModal = ref(false)
 const editingElementIndex = ref<number | null>(null)
 
 watch(() => props.modelValue, (newVal) => {
@@ -44,6 +43,10 @@ const addElementWithType = (type: string) => {
     sort: nextSort,
     is_visible: true
   })
+
+  // Automatically open edit mode for the new element
+  editingElementIndex.value = elements.value.length - 1
+
   updateModel()
   showTypeModal.value = false
 }
@@ -52,14 +55,12 @@ const closeTypeModal = () => {
   showTypeModal.value = false
 }
 
-const openSettingsModal = (index: number) => {
-  editingElementIndex.value = index
-  showSettingsModal.value = true
-}
-
-const closeSettingsModal = () => {
-  showSettingsModal.value = false
-  editingElementIndex.value = null
+const toggleEditMode = (index: number) => {
+  if (editingElementIndex.value === index) {
+    editingElementIndex.value = null
+  } else {
+    editingElementIndex.value = index
+  }
 }
 
 const removeElement = (index: number) => {
@@ -89,6 +90,14 @@ const moveDown = (index: number) => {
 
 const getPreviewComponent = (type: string) => {
   return contentElementTypeRegistry.getPreviewComponent(type) || DefaultElementPreview
+}
+
+const hasSettings = (element: ContentElement) => {
+  return element.settings && Object.keys(element.settings).length > 0
+}
+
+const shouldShowEditor = (index: number) => {
+  return editingElementIndex.value === index || !hasSettings(elements.value[index]!)
 }
 </script>
 
@@ -136,8 +145,9 @@ const getPreviewComponent = (type: string) => {
 
               <div class="flex items-center gap-1">
                 <IconButton
-                  icon="settings"
-                  @click="openSettingsModal(index)"
+                  v-if="hasSettings(element)"
+                  :icon="shouldShowEditor(index) ? 'show' : 'edit'"
+                  @click="toggleEditMode(index)"
                 />
                 <IconButton
                   icon="trash"
@@ -146,11 +156,22 @@ const getPreviewComponent = (type: string) => {
               </div>
             </div>
 
-            <div class="pl-1 text-sm text-muted-foreground">
-              <component
-                :is="getPreviewComponent(element.type)"
-                :settings="element.settings"
-              />
+            <div class="pl-1 text-sm">
+              <!-- Show editor when editing or when no settings exist -->
+              <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg">
+                <component
+                  :is="contentElementTypeRegistry.getComponent(element.type)"
+                  v-model="element.settings"
+                  @update:modelValue="updateModel"
+                />
+              </div>
+              <!-- Show preview otherwise -->
+              <div v-else class="text-muted-foreground">
+                <component
+                  :is="getPreviewComponent(element.type)"
+                  :settings="element.settings"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -178,31 +199,6 @@ const getPreviewComponent = (type: string) => {
           </div>
           <div class="mt-6 text-right">
             <Button type="button" variant="ghost" @click="closeTypeModal">Mégse</Button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
-
-    <!-- Settings modal -->
-    <Teleport to="body">
-      <div v-if="showSettingsModal && editingElementIndex !== null" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="absolute inset-0 bg-black/50" @click="closeSettingsModal"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h4 class="text-base font-medium flex items-center gap-2">
-              <Icon :name="contentElementTypeRegistry.getIcon(elements[editingElementIndex]!.type) || 'type'" class="w-5 h-5" />
-              {{ contentElementTypeRegistry.getType(elements[editingElementIndex]!.type)?.label || elements[editingElementIndex]!.type }} beállítások
-            </h4>
-          </div>
-          <div class="mb-6">
-            <component
-              :is="contentElementTypeRegistry.getComponent(elements[editingElementIndex]!.type)"
-              v-model="elements[editingElementIndex]!.settings"
-              @update:modelValue="updateModel"
-            />
-          </div>
-          <div class="flex justify-end gap-2 pt-4 border-t">
-            <Button type="button" variant="outline" @click="closeSettingsModal">Bezárás</Button>
           </div>
         </div>
       </div>
