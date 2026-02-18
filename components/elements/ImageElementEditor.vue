@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { MediaFilePicker } from '@/packages/vue-media'
-import { Select } from '@/packages/vue-admin'
+import MediaFilePicker from '@media/components/MediaFilePicker.vue'
+import Select from '@admin/components/ui/Select.vue'
 
 interface Props {
   modelValue: Record<string, any>
