@@ -60,7 +60,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Új régió">
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Új régió</h2>
       <Button variant="outline" @click="goBack">Vissza</Button>

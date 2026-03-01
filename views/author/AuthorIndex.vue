@@ -3,7 +3,7 @@ import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import RowActions from '@admin/components/ui/RowActions.vue'
-import DataTable, { type Column } from '@admin/components/DataTable.vue'
+import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { authorService, type Author } from '../../services/authorService.ts'
@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Szerzők">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-3xl font-bold tracking-tight">Szerzők</h2>
       <Button @click="router.push('/cms/authors/create')">

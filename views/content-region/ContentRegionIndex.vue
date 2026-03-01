@@ -2,7 +2,7 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
-import DataTable, { type Column } from '@admin/components/DataTable.vue'
+import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 // ...existing code...
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Régiók">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-3xl font-bold tracking-tight">Régiók</h2>
       <Button @click="router.push('/cms/regions/create')">

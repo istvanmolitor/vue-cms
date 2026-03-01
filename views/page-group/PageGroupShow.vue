@@ -7,7 +7,7 @@ import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import DataTable, { type Column } from '@admin/components/DataTable.vue'
+import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import RowActions from '@admin/components/ui/RowActions.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -71,7 +71,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Oldal csoport részletei">
     <div class="flex items-center justify-between space-y-2 mb-4">
       <h2 class="text-3xl font-bold tracking-tight">Oldal csoport részletei</h2>
       <div class="flex gap-2">
