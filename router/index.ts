@@ -79,6 +79,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/page-group/PageGroupEdit.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/cms/menus',
+    name: 'cms-menus',
+    component: () => import('../views/menu/MenuIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/menus/create',
+    name: 'cms-menu-create',
+    component: () => import('../views/menu/MenuCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/menus/:id/edit',
+    name: 'cms-menu-edit',
+    component: () => import('../views/menu/MenuEdit.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 export default cmsRoutes

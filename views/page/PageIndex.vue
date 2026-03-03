@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Button from '@admin/components/ui/button/Button.vue'
-import Icon from '@admin/components/ui/Icon.vue'
-import RowActions from '@admin/components/ui/RowActions.vue'
+import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -51,24 +48,19 @@ onMounted(() => {
 
 <template>
   <AdminLayout page-title="Oldalak">
-    <div class="flex items-center justify-between mb-6">
-      <Button @click="router.push('/cms/pages/create')">
-        <Icon name="plus" :size="16" class="mr-2" />
-        Új oldal
-      </Button>
-    </div>
-
     <DataTable
       :columns="columns"
       :data="pages"
       :loading="isLoading"
       @fetch="fetchPages"
     >
+      <template #actions>
+        <CreateButton to="/cms/pages/create">Új oldal</CreateButton>
+      </template>
+
       <template #row-actions="{ row }">
-        <RowActions
-          @edit="editPage(row.id!)"
-          @delete="deletePage(row.id!)"
-        />
+        <EditButton @click="editPage(row.id!)" />
+        <DeleteButton @confirm="deletePage(row.id!)" />
       </template>
       <template #empty>
         Nincs megjeleníthető oldal.

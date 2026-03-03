@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Button from '@admin/components/ui/button/Button.vue'
-import Icon from '@admin/components/ui/Icon.vue'
-import RowActions from '@admin/components/ui/RowActions.vue'
+import { AdminLayout, EditButton, DeleteButton, IconButton, CreateButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -55,26 +52,20 @@ onMounted(() => {
 
 <template>
   <AdminLayout page-title="Oldal Csoportok">
-    <div class="flex items-center justify-between mb-6">
-      <Button @click="router.push('/cms/page-groups/create')">
-        <Icon name="plus" :size="16" class="mr-2" />
-        Új csoport
-      </Button>
-    </div>
-
     <DataTable
       :columns="columns"
       :data="pageGroups"
       :loading="isLoading"
       @fetch="fetchPageGroups"
     >
+      <template #actions>
+        <CreateButton to="/cms/page-groups/create">Új csoport</CreateButton>
+      </template>
+
       <template #row-actions="{ row }">
-        <RowActions
-          :show-show="true"
-          @show="showPageGroup(row.id!)"
-          @edit="editPageGroup(row.id!)"
-          @delete="deletePageGroup(row.id!)"
-        />
+        <IconButton icon="eye" @click="showPageGroup(row.id!)" />
+        <EditButton @click="editPageGroup(row.id!)" />
+        <DeleteButton @confirm="deletePageGroup(row.id!)" />
       </template>
       <template #empty>
         Nincs megjeleníthető oldal csoport.

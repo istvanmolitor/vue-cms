@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers, User, FolderTree } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -89,6 +89,13 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/cms/page-groups',
           icon: FolderTree,
           order: 40
+        },
+        {
+          id: 'cms-menus',
+          title: 'Menük',
+          path: '/cms/menus',
+          icon: MenuIcon,
+          order: 50
         }
       ]
     }

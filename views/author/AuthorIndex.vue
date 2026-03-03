@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Button from '@admin/components/ui/button/Button.vue'
-import Icon from '@admin/components/ui/Icon.vue'
-import RowActions from '@admin/components/ui/RowActions.vue'
+import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -51,12 +48,6 @@ onMounted(() => {
 
 <template>
   <AdminLayout page-title="Szerzők">
-    <div class="flex items-center justify-between mb-6">
-      <Button @click="router.push('/cms/authors/create')">
-        <Icon name="plus" :size="16" class="mr-2" />
-        Új szerző
-      </Button>
-    </div>
 
     <DataTable
       :columns="columns"
@@ -64,11 +55,13 @@ onMounted(() => {
       :loading="isLoading"
       @fetch="fetchAuthors"
     >
+      <template #actions>
+        <CreateButton to="/cms/authors/create">Új szerző</CreateButton>
+      </template>
+
       <template #row-actions="{ row }">
-        <RowActions
-          @edit="editAuthor(row.id!)"
-          @delete="deleteAuthor(row.id!)"
-        />
+        <EditButton @click="editAuthor(row.id!)" />
+        <DeleteButton @confirm="deleteAuthor(row.id!)" />
       </template>
       <template #empty>
         Nincs megjeleníthető szerző.

@@ -1,14 +1,6 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Button from '@admin/components/ui/button/Button.vue'
-import Icon from '@admin/components/ui/Icon.vue'
-import Card from '@admin/components/ui/Card.vue'
-import CardContent from '@admin/components/ui/CardContent.vue'
-import CardDescription from '@admin/components/ui/CardDescription.vue'
-import CardHeader from '@admin/components/ui/CardHeader.vue'
-import CardTitle from '@admin/components/ui/CardTitle.vue'
+import { AdminLayout, Button, Icon, Card, CardContent, CardDescription, CardHeader, CardTitle, EditButton, DeleteButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
-import RowActions from '@admin/components/ui/RowActions.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { pageGroupService, type PageGroup } from '../../services/pageGroupService.ts'
@@ -72,7 +64,7 @@ onMounted(() => {
 
 <template>
   <AdminLayout page-title="Oldal csoport részletei">
-    <div class="flex items-center justify-between space-y-2 mb-4">
+    <div class="flex items-center justify-end space-y-2 mb-4">
       <div class="flex gap-2">
         <Button variant="outline" @click="goBack">
           <Icon name="arrow-left" :size="16" class="mr-2" />
@@ -124,10 +116,8 @@ onMounted(() => {
             :loading="false"
           >
             <template #row-actions="{ row }">
-              <RowActions
-                @edit="editPage(row.id!)"
-                @delete="deletePage(row.id!)"
-              />
+              <EditButton @click="editPage(row.id!)" />
+              <DeleteButton @confirm="deletePage(row.id!)" />
             </template>
           </DataTable>
           <div v-else class="text-center py-8 text-muted-foreground">

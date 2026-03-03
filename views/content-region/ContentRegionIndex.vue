@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Button from '@admin/components/ui/button/Button.vue'
-import Icon from '@admin/components/ui/Icon.vue'
+import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 // ...existing code...
 import { useRouter } from 'vue-router'
@@ -50,24 +48,19 @@ onMounted(() => {
 
 <template>
   <AdminLayout page-title="Régiók">
-    <div class="flex items-center justify-between mb-6">
-      <Button @click="router.push('/cms/regions/create')">
-        <Icon name="plus" :size="16" class="mr-2" />
-        Új régió
-      </Button>
-    </div>
-
     <DataTable
       :columns="columns"
       :data="regions"
       :loading="isLoading"
       @fetch="fetchRegions"
     >
+      <template #actions>
+        <CreateButton to="/cms/regions/create">Új régió</CreateButton>
+      </template>
+
       <template #row-actions="{ row }">
-        <div class="flex items-center justify-end gap-2">
-          <Button variant="ghost" size="sm" @click="editRegion(row.id!)">Szerkesztés</Button>
-          <Button variant="destructive" size="sm" @click="deleteRegion(row.id!)">Törlés</Button>
-        </div>
+        <EditButton @click="editRegion(row.id!)" />
+        <DeleteButton @confirm="deleteRegion(row.id!)" />
       </template>
       <template #empty>
         Nincs megjeleníthető régió.
