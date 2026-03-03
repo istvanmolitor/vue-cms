@@ -10,18 +10,38 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import Select from '@admin/components/ui/Select.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { pageGroupService, type PageGroupFormData } from '../../services/pageGroupService.ts'
+import { layoutService } from '../../services/layoutService.ts'
 
 const router = useRouter()
 const isSaving = ref(false)
 const errors = ref<any>({})
+const layouts = ref<any>({})
 
 const form = reactive({
   name: '',
-  slug: ''
+  slug: '',
+  layout: ''
 }) as PageGroupFormData
+
+const layoutOptions = computed(() => {
+  return Object.entries(layouts.value).map(([key, layout]: [string, any]) => ({
+    value: key,
+    label: layout.name
+  }))
+})
+
+const fetchLayouts = async () => {
+  try {
+    const { data } = await layoutService.getAll()
+    layouts.value = data.data
+  } catch (error) {
+    console.error('Hiba a layoutok betöltésekor:', error)
+  }
+}
 
 const handleSubmit = async () => {
   try {
@@ -43,12 +63,15 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/cms/page-groups')
 }
+
+onMounted(() => {
+  fetchLayouts()
+})
 </script>
 
 <template>
   <AdminLayout page-title="Új oldal csoport">
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Új oldal csoport</h2>
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
@@ -75,6 +98,16 @@ const goBack = () => {
             placeholder="csoport-slug"
           />
           <FieldError :errors="errors.slug" />
+        </div>
+        <div class="space-y-2">
+          <label for="layout" class="text-sm font-medium">Layout</label>
+          <Select
+            id="layout"
+            v-model="form.layout"
+            :options="layoutOptions"
+            placeholder="Válassz layoutot..."
+          />
+          <FieldError :errors="errors.layout" />
         </div>
       </CardContent>
       <CardFooter>

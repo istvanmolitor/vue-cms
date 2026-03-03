@@ -83,7 +83,6 @@ onMounted(() => {
 <template>
   <AdminLayout page-title="Régió szerkesztése">
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Régió szerkesztése</h2>
       <div class="flex gap-2">
         <Button variant="outline" @click="goBack">Vissza</Button>
       </div>

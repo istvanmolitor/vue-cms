@@ -49,7 +49,6 @@ const goBack = () => {
 <template>
   <AdminLayout page-title="Új szerző">
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Új szerző</h2>
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 

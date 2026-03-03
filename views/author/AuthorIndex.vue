@@ -52,7 +52,6 @@ onMounted(() => {
 <template>
   <AdminLayout page-title="Szerzők">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-3xl font-bold tracking-tight">Szerzők</h2>
       <Button @click="router.push('/cms/authors/create')">
         <Icon name="plus" :size="16" class="mr-2" />
         Új szerző

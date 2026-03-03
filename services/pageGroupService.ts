@@ -7,6 +7,7 @@ export interface PageGroup {
   id: number
   name: string
   slug: string
+  layout?: string
   pages?: Page[]
   created_at?: string
   updated_at?: string
@@ -15,6 +16,7 @@ export interface PageGroup {
 export interface PageGroupFormData {
   name: string
   slug: string
+  layout: string
 }
 
 export interface SingleResponse<T> {

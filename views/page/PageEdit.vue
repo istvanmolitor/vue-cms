@@ -167,7 +167,6 @@ onMounted(() => {
 <template>
   <AdminLayout page-title="Oldal szerkesztése">
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Oldal szerkesztése</h2>
       <div class="flex gap-2">
         <Button v-if="pageUrl" variant="outline" @click="viewPage">
           <Icon name="eye" :size="16" class="mr-2" />

@@ -73,7 +73,6 @@ onMounted(() => {
 <template>
   <AdminLayout page-title="Oldal csoport részletei">
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Oldal csoport részletei</h2>
       <div class="flex gap-2">
         <Button variant="outline" @click="goBack">
           <Icon name="arrow-left" :size="16" class="mr-2" />
