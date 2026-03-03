@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminLayout, Button, Input, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, FormButtons, FieldError, Checkbox, Modal, Icon } from '@admin'
+import { AdminLayout, Button, Input, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, FormButtons, FieldError, Checkbox, Modal, Icon, Label } from '@admin'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
@@ -195,7 +195,7 @@ onMounted(() => {
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
-              <label for="name" class="text-sm font-medium">Név</label>
+              <Label for="name" class="text-sm font-medium">Név</Label>
               <Input
                 id="name"
                 v-model="form.name"
@@ -249,12 +249,12 @@ onMounted(() => {
       <div class="space-y-6 py-4">
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <label class="text-sm font-medium">Ikon (Lucide név)</label>
+            <Label class="text-sm font-medium">Ikon (Lucide név)</Label>
             <Input v-model="itemForm.icon" placeholder="pl. Home, Settings" />
           </div>
           <div class="flex items-center space-x-2 pt-8">
             <Checkbox id="is_external" :checked="itemForm.is_external" @update:checked="(v: boolean) => itemForm.is_external = v" />
-            <label for="is_external" class="text-sm font-medium">Külső hivatkozás</label>
+            <Label for="is_external" class="text-sm font-medium">Külső hivatkozás</Label>
           </div>
         </div>
 
@@ -272,12 +272,12 @@ onMounted(() => {
             <template #default="{ language }">
               <div class="grid grid-cols-1 gap-4" v-if="language.code">
                 <div class="space-y-2">
-                  <label class="text-xs font-medium text-slate-500">Címke ({{ language.code }})</label>
+                  <Label class="text-xs font-medium text-slate-500">Címke ({{ language.code }})</Label>
                   <Input v-model="itemForm.label[language.code]" />
                   <FieldError :errors="itemErrors[`label.${language.code}`]" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-medium text-slate-500">URL ({{ language.code }})</label>
+                  <Label class="text-xs font-medium text-slate-500">URL ({{ language.code }})</Label>
                   <Input v-model="itemForm.url[language.code]" />
                   <FieldError :errors="itemErrors[`url.${language.code}`]" />
                 </div>

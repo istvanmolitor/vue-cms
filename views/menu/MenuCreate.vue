@@ -10,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import Label from '@admin/components/ui/Label.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
@@ -57,7 +58,7 @@ const goBack = () => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <label for="name" class="text-sm font-medium">Név</label>
+          <Label for="name" class="text-sm font-medium">Név</Label>
           <Input
             id="name"
             v-model="form.name"

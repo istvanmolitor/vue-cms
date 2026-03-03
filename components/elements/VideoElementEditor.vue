@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
+import { Label } from '@admin'
 
 interface Props {
   modelValue: Record<string, any>
@@ -54,7 +55,7 @@ watch([url, width, height], updateValue)
 <template>
   <div class="space-y-4">
     <div>
-      <label class="text-sm font-medium mb-1 block">YouTube URL</label>
+      <Label class="text-sm font-medium mb-1 block">YouTube URL</Label>
       <input
         v-model="url"
         type="text"
@@ -73,7 +74,7 @@ watch([url, width, height], updateValue)
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="text-sm font-medium mb-1 block">Szélesség</label>
+        <Label class="text-sm font-medium mb-1 block">Szélesség</Label>
         <input
           v-model="width"
           type="text"
@@ -82,7 +83,7 @@ watch([url, width, height], updateValue)
         />
       </div>
       <div>
-        <label class="text-sm font-medium mb-1 block">Magasság</label>
+        <Label class="text-sm font-medium mb-1 block">Magasság</Label>
         <input
           v-model="height"
           type="text"

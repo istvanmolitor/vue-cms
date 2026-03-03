@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import IconButton from '@admin/components/ui/button/IconButton.vue'
+import Label from '@admin/components/ui/Label.vue'
 import { contentElementTypeRegistry } from '../registry'
 import type { ContentElement } from '../services/contentRegionService'
 import DefaultElementPreview from './elements/DefaultElementPreview.vue'
@@ -130,7 +131,7 @@ const shouldShowEditor = (index: number) => {
                   <span>{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
                 </div>
 
-                <label class="flex items-center gap-2 cursor-pointer group/label">
+                <Label class="flex items-center gap-2 cursor-pointer group/label">
                    <input
                     type="checkbox"
                     v-model="element.is_visible"
@@ -140,7 +141,7 @@ const shouldShowEditor = (index: number) => {
                   <span class="text-[11px] text-muted-foreground/70 group-hover/label:text-muted-foreground transition-colors uppercase tracking-widest font-bold">
                     Látható
                   </span>
-                </label>
+                </Label>
               </div>
 
               <div class="flex items-center gap-1">

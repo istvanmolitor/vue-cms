@@ -160,22 +160,22 @@ onMounted(() => {
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
-              <label for="title" class="text-sm font-medium">Cím</label>
+              <Label for="title" class="text-sm font-medium">Cím</Label>
               <Input id="title" v-model="form.title" placeholder="Oldal címe" />
               <FieldError :errors="errors.title" />
             </div>
             <div class="space-y-2">
-              <label for="slug" class="text-sm font-medium">Slug</label>
+              <Label for="slug" class="text-sm font-medium">Slug</Label>
               <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
               <FieldError :errors="errors.slug" />
             </div>
             <div class="space-y-2">
-              <label for="lead" class="text-sm font-medium">Bevezető szöveg</label>
+              <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
               <FieldError :errors="errors.lead" />
             </div>
             <div class="space-y-2">
-              <label for="layout" class="text-sm font-medium">Sablon</label>
+              <Label for="layout" class="text-sm font-medium">Sablon</Label>
               <Select
                 id="layout"
                 v-model="form.layout"
@@ -195,7 +195,7 @@ onMounted(() => {
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
-              <label class="text-sm font-medium">Főkép</label>
+              <Label class="text-sm font-medium">Főkép</Label>
               <MediaFilePicker
                 v-model="form.main_image_url"
                 :accept-types="['image/*']"

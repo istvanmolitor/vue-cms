@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
+import { Label } from '@admin'
 
 interface Props {
   modelValue: Record<string, any>
@@ -39,7 +40,7 @@ watch([text, level], updateValue)
   <div class="space-y-4">
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-9">
-        <label class="text-sm font-medium mb-1 block">Szöveg</label>
+        <Label class="text-sm font-medium mb-1 block">Szöveg</Label>
         <input
           v-model="text"
           type="text"
@@ -48,7 +49,7 @@ watch([text, level], updateValue)
         />
       </div>
       <div class="col-span-3">
-        <label class="text-sm font-medium mb-1 block">Szint</label>
+        <Label class="text-sm font-medium mb-1 block">Szint</Label>
         <select
           v-model="level"
           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

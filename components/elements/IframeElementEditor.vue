@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
+import { Label } from '@admin'
 
 interface Props {
   modelValue: Record<string, any>
@@ -53,7 +54,7 @@ watch([url, width, height, title, allowFullscreen], updateValue)
 <template>
   <div class="space-y-4">
     <div>
-      <label class="text-sm font-medium mb-1 block">URL</label>
+      <Label class="text-sm font-medium mb-1 block">URL</Label>
       <input
         v-model="url"
         type="text"
@@ -72,7 +73,7 @@ watch([url, width, height, title, allowFullscreen], updateValue)
       </div>
     </div>
     <div>
-      <label class="text-sm font-medium mb-1 block">Cím (title attribútum)</label>
+      <Label class="text-sm font-medium mb-1 block">Cím (title attribútum)</Label>
       <input
         v-model="title"
         type="text"
@@ -82,7 +83,7 @@ watch([url, width, height, title, allowFullscreen], updateValue)
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="text-sm font-medium mb-1 block">Szélesség</label>
+        <Label class="text-sm font-medium mb-1 block">Szélesség</Label>
         <input
           v-model="width"
           type="text"
@@ -91,7 +92,7 @@ watch([url, width, height, title, allowFullscreen], updateValue)
         />
       </div>
       <div>
-        <label class="text-sm font-medium mb-1 block">Magasság</label>
+        <Label class="text-sm font-medium mb-1 block">Magasság</Label>
         <input
           v-model="height"
           type="text"
@@ -107,9 +108,9 @@ watch([url, width, height, title, allowFullscreen], updateValue)
         id="allowFullscreen"
         class="w-4 h-4 rounded border-input"
       />
-      <label for="allowFullscreen" class="text-sm font-medium cursor-pointer">
+      <Label for="allowFullscreen" class="text-sm font-medium cursor-pointer">
         Teljes képernyő engedélyezése
-      </label>
+      </Label>
     </div>
   </div>
 </template>

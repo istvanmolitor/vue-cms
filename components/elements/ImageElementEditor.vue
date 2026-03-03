@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import Select from '@admin/components/ui/Select.vue'
+import Label from '@admin/components/ui/Label.vue'
 
 interface Props {
   modelValue: Record<string, any>
@@ -55,7 +56,7 @@ watch([src, alt, width, height, alignment], updateValue)
 <template>
   <div class="space-y-4">
     <div>
-      <label class="text-sm font-medium mb-1 block">Kép URL</label>
+      <Label class="text-sm font-medium mb-1 block">Kép URL</Label>
       <MediaFilePicker
         v-model="src"
         :accept-types="['image/*']"
@@ -63,7 +64,7 @@ watch([src, alt, width, height, alignment], updateValue)
       />
     </div>
     <div>
-      <label class="text-sm font-medium mb-1 block">Alternatív szöveg</label>
+      <Label class="text-sm font-medium mb-1 block">Alternatív szöveg</Label>
       <input
         v-model="alt"
         type="text"
@@ -72,7 +73,7 @@ watch([src, alt, width, height, alignment], updateValue)
       />
     </div>
     <div>
-      <label class="text-sm font-medium mb-1 block">Elrendezés</label>
+      <Label class="text-sm font-medium mb-1 block">Elrendezés</Label>
       <Select
         v-model="alignment"
         :options="alignmentOptions"
@@ -81,7 +82,7 @@ watch([src, alt, width, height, alignment], updateValue)
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="text-sm font-medium mb-1 block">Szélesség</label>
+        <Label class="text-sm font-medium mb-1 block">Szélesség</Label>
         <input
           v-model="width"
           type="text"
@@ -90,7 +91,7 @@ watch([src, alt, width, height, alignment], updateValue)
         />
       </div>
       <div>
-        <label class="text-sm font-medium mb-1 block">Magasság</label>
+        <Label class="text-sm font-medium mb-1 block">Magasság</Label>
         <input
           v-model="height"
           type="text"

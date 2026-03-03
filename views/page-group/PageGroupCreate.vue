@@ -11,6 +11,7 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Select from '@admin/components/ui/Select.vue'
+import Label from '@admin/components/ui/Label.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { pageGroupService, type PageGroupFormData } from '../../services/pageGroupService.ts'
@@ -82,7 +83,7 @@ onMounted(() => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <label for="name" class="text-sm font-medium">Név</label>
+          <Label for="name" class="text-sm font-medium">Név</Label>
           <Input
             id="name"
             v-model="form.name"
@@ -91,7 +92,7 @@ onMounted(() => {
           <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
-          <label for="slug" class="text-sm font-medium">Slug</label>
+          <Label for="slug" class="text-sm font-medium">Slug</Label>
           <Input
             id="slug"
             v-model="form.slug"
@@ -100,7 +101,7 @@ onMounted(() => {
           <FieldError :errors="errors.slug" />
         </div>
         <div class="space-y-2">
-          <label for="layout" class="text-sm font-medium">Layout</label>
+          <Label for="layout" class="text-sm font-medium">Layout</Label>
           <Select
             id="layout"
             v-model="form.layout"

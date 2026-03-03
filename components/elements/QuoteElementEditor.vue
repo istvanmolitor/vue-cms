@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
+import { Label } from '@admin'
 
 interface Props {
   modelValue: Record<string, any>
@@ -38,7 +39,7 @@ watch([quote, author], updateValue)
 <template>
   <div class="space-y-4">
     <div>
-      <label class="text-sm font-medium mb-1 block">Idézet</label>
+      <Label class="text-sm font-medium mb-1 block">Idézet</Label>
       <textarea
         v-model="quote"
         rows="4"
@@ -47,7 +48,7 @@ watch([quote, author], updateValue)
       ></textarea>
     </div>
     <div>
-      <label class="text-sm font-medium mb-1 block">Szerző</label>
+      <Label class="text-sm font-medium mb-1 block">Szerző</Label>
       <input
         v-model="author"
         type="text"

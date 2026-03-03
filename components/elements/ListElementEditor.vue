@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import Button from '@admin/components/ui/button/Button.vue'
+import Label from '@admin/components/ui/Label.vue'
 import { Plus, Trash } from 'lucide-vue-next'
 
 interface Props {
@@ -52,7 +53,7 @@ const removeItem = (index: number) => {
   <div class="space-y-4">
     <div>
       <div class="flex items-center justify-between mb-2">
-        <label class="text-sm font-medium">Lista elemek</label>
+        <Label class="text-sm font-medium">Lista elemek</Label>
         <Button type="button" variant="outline" size="sm" @click="addItem">
           <Plus class="w-3 h-3 mr-1" />
           Elem hozzáadása
