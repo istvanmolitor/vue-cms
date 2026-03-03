@@ -38,7 +38,7 @@ export interface PageFormData {
   slug: string
   is_published?: boolean
   lead?: string
-  layout?: string
+  layout: string
   main_image_url?: string
   content_elements: ContentElement[]
   author_ids: number[]

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Input from '@admin/components/ui/Input.vue'
+import Select from '@admin/components/ui/Select.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -17,15 +18,18 @@ import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { pageGroupService, type PageGroup } from '../../services/pageGroupService.ts'
+import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingAuthors = ref(true)
 const isLoadingPageGroups = ref(true)
+const isLoadingLayouts = ref(true)
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const pageGroups = ref<PageGroup[]>([])
+const layouts = ref<Record<string, Layout>>({})
 
 const form = reactive({
   title: '',
@@ -60,6 +64,18 @@ const fetchPageGroups = async () => {
     console.error('Hiba az oldal csoportok betöltésekor:', error)
   } finally {
     isLoadingPageGroups.value = false
+  }
+}
+
+const fetchLayouts = async () => {
+  try {
+    isLoadingLayouts.value = true
+    const { data } = await layoutService.getAll()
+    layouts.value = data.data
+  } catch (error) {
+    console.error('Hiba a sablonok betöltésekor:', error)
+  } finally {
+    isLoadingLayouts.value = false
   }
 }
 
@@ -105,6 +121,7 @@ const goBack = () => {
 onMounted(() => {
   fetchAuthors()
   fetchPageGroups()
+  fetchLayouts()
 })
 </script>
 
@@ -160,7 +177,12 @@ onMounted(() => {
             </div>
             <div class="space-y-2">
               <label for="layout" class="text-sm font-medium">Sablon</label>
-              <Input id="layout" v-model="form.layout" placeholder="default" />
+              <Select
+                id="layout"
+                v-model="form.layout"
+                :options="Object.entries(layouts).map(([key, layout]) => ({ value: key, label: layout.name }))"
+                placeholder="Válassz sablont..."
+              />
               <FieldError :errors="errors.layout" />
             </div>
             <div class="space-y-2">
