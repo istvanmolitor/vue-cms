@@ -41,15 +41,15 @@ const itemForm = reactive<MenuItemFormData>({
 const fetchMenu = async () => {
   try {
     isLoading.value = true
-    const [{ data: menuData }, { data: itemsData }, { data: langData }] = await Promise.all([
+    const [menuResponse, itemsResponse, langResponse] = await Promise.all([
       menuService.getById(menuId),
       menuItemService.getAll({ menu_id: menuId }),
       languageService.getAll()
     ])
 
-    form.name = menuData.data.name
-    menuItems.value = buildTree(itemsData.data)
-    availableLanguages.value = langData.data
+    form.name = menuResponse.data.data.name
+    menuItems.value = buildTree(itemsResponse.data.data)
+    availableLanguages.value = langResponse.data.data
 
     // Alapértelmezett nyelvek kiválasztása (pl. hu, en)
     selectedLanguages.value = availableLanguages.value.filter(l => ['hu', 'en'].includes(l.code))
