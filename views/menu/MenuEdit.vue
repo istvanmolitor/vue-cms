@@ -4,9 +4,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
 import { menuItemService, type MenuItem, type MenuItemFormData } from '../../services/menuItemService.ts'
-import { languageService, type Language } from '../../../vue-language/services/languageService'
+import { languageService, type Language } from '@language/services/languageService'
 import MenuItemTree from './MenuItemTree.vue'
-import TranslationRepeater from '../../../vue-language/components/TranslationRepeater.vue'
+import TranslationRepeater from '@language/components/TranslationRepeater.vue'
 
 const router = useRouter()
 const route = useRoute()
