@@ -33,15 +33,15 @@ const fetchPageGroup = async () => {
 }
 
 const goBack = () => {
-  router.push('/cms/page-groups')
+  router.push('/admin/cms/page-group')
 }
 
 const editPageGroup = () => {
-  router.push(`/cms/page-groups/${pageGroupId}/edit`)
+  router.push(`/admin/cms/page-group/${pageGroupId}/edit`)
 }
 
 const editPage = (id: number) => {
-  router.push(`/cms/pages/${id}/edit`)
+  router.push(`/admin/cms/page/${id}/edit`)
 }
 
 const deletePage = async (id: number) => {

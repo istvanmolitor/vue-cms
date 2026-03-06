@@ -29,7 +29,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await menuService.create(form)
-    router.push('/cms/menus')
+    router.push('/admin/cms/menu')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -41,7 +41,7 @@ const handleSubmit = async () => {
 }
 
 const goBack = () => {
-  router.push('/cms/menus')
+  router.push('/admin/cms/menu')
 }
 </script>
 

@@ -44,7 +44,7 @@ const handleSubmit = async () => {
     }
 
     await contentRegionService.create(payload)
-    router.push('/cms/regions')
+    router.push('/admin/cms/region')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -56,7 +56,7 @@ const handleSubmit = async () => {
 }
 
 const goBack = () => {
-  router.push('/cms/regions')
+  router.push('/admin/cms/region')
 }
 </script>
 

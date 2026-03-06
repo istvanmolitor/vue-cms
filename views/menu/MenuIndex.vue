@@ -54,7 +54,7 @@ const deleteMenu = async (id: number) => {
 }
 
 const editMenu = (id: number) => {
-  router.push(`/cms/menus/${id}/edit`)
+  router.push(`/admin/cms/menu/${id}/edit`)
 }
 
 onMounted(() => {
@@ -79,7 +79,7 @@ onMounted(() => {
       @fetch="fetchMenus"
     >
       <template #actions>
-        <CreateButton to="/cms/menus/create">
+        <CreateButton to="/admin/cms/menu/create">
           Új menü
         </CreateButton>
       </template>

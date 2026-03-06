@@ -50,7 +50,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await pageGroupService.create(form)
-    router.push('/cms/page-groups')
+    router.push('/admin/cms/page-group')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -62,7 +62,7 @@ const handleSubmit = async () => {
 }
 
 const goBack = () => {
-  router.push('/cms/page-groups')
+  router.push('/admin/cms/page-group')
 }
 
 onMounted(() => {

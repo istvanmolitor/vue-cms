@@ -38,7 +38,7 @@ const deletePage = async (id: number) => {
 }
 
 const editPage = (id: number) => {
-  router.push(`/cms/pages/${id}/edit`)
+  router.push(`/admin/cms/page/${id}/edit`)
 }
 
 onMounted(() => {
@@ -55,7 +55,7 @@ onMounted(() => {
       @fetch="fetchPages"
     >
       <template #actions>
-        <CreateButton to="/cms/pages/create">Új oldal</CreateButton>
+        <CreateButton to="/admin/cms/page/create">Új oldal</CreateButton>
       </template>
 
       <template #row-actions="{ row }">

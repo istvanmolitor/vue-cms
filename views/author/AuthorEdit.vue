@@ -47,7 +47,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await authorService.update(authorId, form)
-    router.push('/cms/authors')
+    router.push('/admin/cms/author')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -59,7 +59,7 @@ const handleSubmit = async () => {
 }
 
 const goBack = () => {
-  router.push('/cms/authors')
+  router.push('/admin/cms/author')
 }
 
 onMounted(() => {

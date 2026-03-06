@@ -38,7 +38,7 @@ const deleteRegion = async (id: number) => {
 }
 
 const editRegion = (id: number) => {
-  router.push(`/cms/regions/${id}/edit`)
+  router.push(`/admin/cms/region/${id}/edit`)
 }
 
 onMounted(() => {
@@ -55,7 +55,7 @@ onMounted(() => {
       @fetch="fetchRegions"
     >
       <template #actions>
-        <CreateButton to="/cms/regions/create">Új régió</CreateButton>
+        <CreateButton to="/admin/cms/region/create">Új régió</CreateButton>
       </template>
 
       <template #row-actions="{ row }">

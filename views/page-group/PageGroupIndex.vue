@@ -38,11 +38,11 @@ const deletePageGroup = async (id: number) => {
 }
 
 const editPageGroup = (id: number) => {
-  router.push(`/cms/page-groups/${id}/edit`)
+  router.push(`/admin/cms/page-group/${id}/edit`)
 }
 
 const showPageGroup = (id: number) => {
-  router.push(`/cms/page-groups/${id}`)
+  router.push(`/admin/cms/page-group/${id}`)
 }
 
 onMounted(() => {
@@ -59,7 +59,7 @@ onMounted(() => {
       @fetch="fetchPageGroups"
     >
       <template #actions>
-        <CreateButton to="/cms/page-groups/create">Új csoport</CreateButton>
+        <CreateButton to="/admin/cms/page-group/create">Új csoport</CreateButton>
       </template>
 
       <template #row-actions="{ row }">

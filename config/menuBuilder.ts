@@ -65,35 +65,35 @@ export class CmsMenuBuilder extends MenuBuilder {
         {
           id: 'cms-pages',
           title: 'Oldalak',
-          path: '/cms/pages',
+          path: '/admin/cms/page',
           icon: FileText,
           order: 10
         },
         {
           id: 'cms-regions',
           title: 'Régiók',
-          path: '/cms/regions',
+          path: '/admin/cms/region',
           icon: Layers,
           order: 20
         },
         {
           id: 'cms-authors',
           title: 'Szerzők',
-          path: '/cms/authors',
+          path: '/admin/cms/author',
           icon: User,
           order: 30
         },
         {
           id: 'cms-page-groups',
           title: 'Oldal Csoportok',
-          path: '/cms/page-groups',
+          path: '/admin/cms/page-group',
           icon: FolderTree,
           order: 40
         },
         {
           id: 'cms-menus',
           title: 'Menük',
-          path: '/cms/menus',
+          path: '/admin/cms/menu',
           icon: MenuIcon,
           order: 50
         }

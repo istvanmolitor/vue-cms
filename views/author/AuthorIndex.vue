@@ -38,7 +38,7 @@ const deleteAuthor = async (id: number) => {
 }
 
 const editAuthor = (id: number) => {
-  router.push(`/cms/authors/${id}/edit`)
+  router.push(`/admin/cms/author/${id}/edit`)
 }
 
 onMounted(() => {
@@ -56,7 +56,7 @@ onMounted(() => {
       @fetch="fetchAuthors"
     >
       <template #actions>
-        <CreateButton to="/cms/authors/create">Új szerző</CreateButton>
+        <CreateButton to="/admin/cms/author/create">Új szerző</CreateButton>
       </template>
 
       <template #row-actions="{ row }">

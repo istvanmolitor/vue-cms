@@ -75,7 +75,7 @@ const handleSubmit = async () => {
     isSaving.value = true
     errors.value = {}
     await menuService.update(menuId, form)
-    router.push('/cms/menus')
+    router.push('/admin/cms/menu')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -167,7 +167,7 @@ const handleRemoveLanguage = (id: number) => {
 }
 
 const goBack = () => {
-  router.push('/cms/menus')
+  router.push('/admin/cms/menu')
 }
 
 onMounted(() => {

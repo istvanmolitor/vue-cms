@@ -134,7 +134,7 @@ const handleSubmit = async () => {
     }
 
     await pageService.update(pageId, payload)
-    router.push('/cms/pages')
+    router.push('/admin/cms/page')
   } catch (error: any) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors
@@ -147,7 +147,7 @@ const handleSubmit = async () => {
 
 
 const goBack = () => {
-  router.push('/cms/pages')
+  router.push('/admin/cms/page')
 }
 
 const viewPage = () => {
