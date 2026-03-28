@@ -15,13 +15,14 @@ import Label from '@admin/components/ui/Label.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
-import { languageService, type Language } from '@language/services/languageService'
+import { languageService } from '@language/services/languageService'
+import type { SelectOption } from '@admin/index'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingLanguages = ref(true)
 const errors = ref<any>({})
-const languages = ref<Language[]>([])
+const languageOptions = ref<SelectOption[]>([])
 
 const form = reactive({
   name: '',
@@ -31,11 +32,11 @@ const form = reactive({
 const fetchLanguages = async () => {
   try {
     isLoadingLanguages.value = true
-    const { data } = await languageService.getAll()
-    languages.value = data.data
+    const { data } = await languageService.getOptions()
+    languageOptions.value = data.data
     // Set the first language as default if available
-    if (languages.value.length > 0 && languages.value[0].id) {
-      form.language_id = languages.value[0].id
+    if (languageOptions.value.length > 0) {
+      form.language_id = languageOptions.value[0].value
     }
   } catch (error) {
     console.error('Hiba a nyelvek betöltésekor:', error)
@@ -96,7 +97,7 @@ onMounted(() => {
           <Select
             id="language_id"
             v-model="form.language_id"
-            :options="languages.map(lang => ({ value: lang.id!, label: lang.name || lang.code }))"
+            :options="languageOptions"
             placeholder="Válassz nyelvet..."
           />
           <FieldError :errors="errors.language_id" />
