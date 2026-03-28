@@ -2,6 +2,7 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
+import Select from '@admin/components/ui/Select.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -12,16 +13,36 @@ import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Label from '@admin/components/ui/Label.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
+import { languageService, type Language } from '@language/services/languageService'
 
 const router = useRouter()
 const isSaving = ref(false)
+const isLoadingLanguages = ref(true)
 const errors = ref<any>({})
+const languages = ref<Language[]>([])
 
 const form = reactive({
   name: '',
+  language_id: null
 }) as MenuFormData
+
+const fetchLanguages = async () => {
+  try {
+    isLoadingLanguages.value = true
+    const { data } = await languageService.getAll()
+    languages.value = data.data
+    // Set the first language as default if available
+    if (languages.value.length > 0 && languages.value[0].id) {
+      form.language_id = languages.value[0].id
+    }
+  } catch (error) {
+    console.error('Hiba a nyelvek betöltésekor:', error)
+  } finally {
+    isLoadingLanguages.value = false
+  }
+}
 
 const handleSubmit = async () => {
   try {
@@ -43,6 +64,10 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/admin/cms/menu')
 }
+
+onMounted(() => {
+  fetchLanguages()
+})
 </script>
 
 <template>
@@ -51,11 +76,7 @@ const goBack = () => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
-
-    <Card v-else>
+    <Card>
       <CardHeader>
         <CardTitle>Menü adatai</CardTitle>
         <CardDescription>Add meg az új menü adatait</CardDescription>
@@ -70,14 +91,13 @@ const goBack = () => {
           />
           <FieldError :errors="errors.name" />
         </div>
-
         <div class="space-y-2">
-          <Label for="language" class="text-sm font-medium">Nyelv</Label>
+          <Label for="language_id" class="text-sm font-medium">Nyelv</Label>
           <Select
-            id="language"
+            id="language_id"
             v-model="form.language_id"
-            :options="languageOptions"
-            placeholder="Válassz nyelvet"
+            :options="languages.map(lang => ({ value: lang.id!, label: lang.name || lang.code }))"
+            placeholder="Válassz nyelvet..."
           />
           <FieldError :errors="errors.language_id" />
         </div>
@@ -92,3 +112,5 @@ const goBack = () => {
     </Card>
   </AdminLayout>
 </template>
+
+

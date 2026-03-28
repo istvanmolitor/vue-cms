@@ -1,5 +1,5 @@
 import { createApiClient } from '@user/services/apiClient'
-import type { SingleResponse, ListResponse } from './menuService'
+import type { ListResponse } from './menuService'
 
 const api = createApiClient()
 
@@ -19,8 +19,8 @@ export interface MenuItem {
 
 export interface MenuItemFormData {
   menu_id?: number
-  label: string
-  url: string
+  label?: string
+  url?: string
   sort?: number
   is_external?: boolean
   icon?: string | null
@@ -32,13 +32,13 @@ export const menuItemService = {
     return api.get<ListResponse<MenuItem>>('/api/cms/menu-items', { params })
   },
   getById(id: number | string) {
-    return api.get<SingleResponse<MenuItem>>(`/api/cms/menu-items/${id}`)
+    return api.get<MenuItem>(`/api/cms/menu-items/${id}`)
   },
   create(formData: MenuItemFormData) {
-    return api.post<SingleResponse<MenuItem>>('/api/cms/menu-items', formData)
+    return api.post<MenuItem>('/api/cms/menu-items', formData)
   },
-  update(id: number | string, formData: MenuItemFormData) {
-    return api.put<SingleResponse<MenuItem>>(`/api/cms/menu-items/${id}`, formData)
+  update(id: number | string, formData: Partial<MenuItemFormData>) {
+    return api.put<MenuItem>(`/api/cms/menu-items/${id}`, formData)
   },
   delete(id: number | string) {
     return api.delete(`/api/cms/menu-items/${id}`)

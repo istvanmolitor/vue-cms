@@ -6,6 +6,7 @@ const api = createApiClient()
 export interface Menu {
   id: number
   name: string
+  language_id?: number | null
   language?: Language
   created_at?: string
   updated_at?: string
@@ -13,7 +14,7 @@ export interface Menu {
 
 export interface MenuFormData {
   name: string
-  language_id: number
+  language_id: number | null
 }
 
 export interface SingleResponse<T> {
