@@ -3,13 +3,11 @@ import { AdminLayout, toastService, EditButton, DeleteButton } from '@admin'
 import CreateButton from '@admin/components/ui/button/CreateButton.vue'
 import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { menuService, type Menu } from '../../services/menuService.ts'
-import { languageService, type Language } from '@language/services/languageService'
 
 const router = useRouter()
 const menus = ref<Menu[]>([])
-const languages = ref<Language[]>([])
 const isLoading = ref(false)
 const pagination = ref<PaginationMeta>({
   current_page: 1,
@@ -18,25 +16,10 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const languageMap = computed(() => {
-  const map: Record<number, string> = {}
-  languages.value.forEach(lang => {
-    if (lang.id) {
-      map[lang.id] = lang.code
-    }
-  })
-  return map
-})
-
 const columns: Column<Menu>[] = [
   { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
-  {
-    key: 'language_id',
-    label: 'Nyelv',
-    sortable: true,
-    format: (value: any) => languageMap.value[value as number] || '-'
-  },
+  { key: 'language', label: 'Nyelv', sortable: false },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
@@ -60,15 +43,6 @@ const fetchMenus = async (params: {
   }
 }
 
-const fetchLanguages = async () => {
-  try {
-    const response = await languageService.getAll()
-    languages.value = response.data.data
-  } catch (error) {
-    console.error('Hiba a nyelvek betöltésekor:', error)
-  }
-}
-
 const deleteMenu = async (id: number) => {
   try {
     await menuService.delete(id)
@@ -85,7 +59,6 @@ const editMenu = (id: number) => {
 }
 
 onMounted(async () => {
-  await fetchLanguages()
   await fetchMenus({
     page: 1,
     sort: 'name',
@@ -110,6 +83,10 @@ onMounted(async () => {
         <CreateButton to="/admin/cms/menu/create">
           Új menü
         </CreateButton>
+      </template>
+
+      <template #language="{ row }">
+        {{ row.language?.code || '-' }}
       </template>
 
       <template #row-actions="{ row }">

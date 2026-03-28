@@ -1,11 +1,12 @@
 import { createApiClient } from '@user/services/apiClient'
+import type { Language } from '@language/services/languageService'
 
 const api = createApiClient()
 
 export interface Menu {
   id: number
   name: string
-  language_id: number
+  language?: Language
   created_at?: string
   updated_at?: string
 }
