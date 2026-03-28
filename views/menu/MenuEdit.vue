@@ -12,6 +12,7 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Label from '@admin/components/ui/Label.vue'
+import MenuItemEditor from '../../components/menu/MenuItemEditor.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
@@ -128,6 +129,10 @@ onMounted(() => {
         />
       </CardFooter>
     </Card>
+
+    <div class="mt-6">
+      <MenuItemEditor :menu-id="parseInt(menuId)" />
+    </div>
   </AdminLayout>
 </template>
 
