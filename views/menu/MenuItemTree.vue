@@ -129,7 +129,6 @@ const currentLevel = computed(() => props.level || 0)
       >
         <MenuItemTree
           :items="item.children"
-          :languages="languages"
           :level="currentLevel + 1"
           @edit="emit('edit', $event)"
           @delete="emit('delete', $event)"

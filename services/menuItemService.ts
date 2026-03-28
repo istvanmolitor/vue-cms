@@ -6,8 +6,8 @@ const api = createApiClient()
 export interface MenuItem {
   id: number
   menu_id: number
-  label: Record<string, string>
-  url: Record<string, string>
+  label: string
+  url: string
   sort: number
   is_external: boolean
   icon: string | null
@@ -19,8 +19,8 @@ export interface MenuItem {
 
 export interface MenuItemFormData {
   menu_id?: number
-  label: Record<string, string>
-  url: Record<string, string>
+  label: string
+  url: string
   sort?: number
   is_external?: boolean
   icon?: string | null

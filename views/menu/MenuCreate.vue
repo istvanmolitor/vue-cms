@@ -51,7 +51,11 @@ const goBack = () => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <Card>
+    <div v-if="isLoading" class="flex justify-center py-8">
+      Betöltés...
+    </div>
+
+    <Card v-else>
       <CardHeader>
         <CardTitle>Menü adatai</CardTitle>
         <CardDescription>Add meg az új menü adatait</CardDescription>
@@ -65,6 +69,17 @@ const goBack = () => {
             placeholder="Menü neve"
           />
           <FieldError :errors="errors.name" />
+        </div>
+
+        <div class="space-y-2">
+          <Label for="language" class="text-sm font-medium">Nyelv</Label>
+          <Select
+            id="language"
+            v-model="form.language_id"
+            :options="languageOptions"
+            placeholder="Válassz nyelvet"
+          />
+          <FieldError :errors="errors.language_id" />
         </div>
       </CardContent>
       <CardFooter>

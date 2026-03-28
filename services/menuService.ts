@@ -5,12 +5,14 @@ const api = createApiClient()
 export interface Menu {
   id: number
   name: string
+  language_id: number
   created_at?: string
   updated_at?: string
 }
 
 export interface MenuFormData {
   name: string
+  language_id: number
 }
 
 export interface SingleResponse<T> {

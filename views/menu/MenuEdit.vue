@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import { AdminLayout, Button, Input, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, FormButtons, FieldError, Checkbox, Modal, Icon, Label } from '@admin'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { reactive, ref, onMounted } from 'vue'
-import { menuService, type MenuFormData } from '../../services/menuService.ts'
-import { menuItemService, type MenuItem, type MenuItemFormData } from '../../services/menuItemService.ts'
-import { languageService, type Language } from '@language/services/languageService'
+import { AdminLayout, Button, Input, Select, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, FormButtons, FieldError, Label, Modal, Checkbox, Icon } from '@admin'
 import MenuItemTree from './MenuItemTree.vue'
-import TranslationRepeater from '@language/components/TranslationRepeater.vue'
+import { menuService, type MenuFormData } from '../../services/menuService'
+import { menuItemService, type MenuItem, type MenuItemFormData } from '../../services/menuItemService'
+import { languageService, type Language } from '@language/services/languageService'
 
 const router = useRouter()
 const route = useRoute()
-const isSaving = ref(false)
-const isLoading = ref(true)
 const menuId = route.params.id as string
+const isLoading = ref(true)
+const isSaving = ref(false)
 const errors = ref<any>({})
-
+const languages = ref<Language[]>([])
 const menuItems = ref<MenuItem[]>([])
-const availableLanguages = ref<Language[]>([])
-const selectedLanguages = ref<Language[]>([])
-
-const form = reactive({
+const form = reactive<MenuFormData>({
   name: '',
-}) as MenuFormData
-
+  language_id: null
+})
+const languageOptions = computed(() =>
+  languages.value.map(lang => ({
+    value: lang.id,
+    label: lang.name
+  }))
+)
+const goBack = () => {
+  router.push('/admin/cms/menu')
+}
 // MenuItem Modal state
 const isItemModalOpen = ref(false)
 const isEditingItem = ref(false)
@@ -30,14 +35,13 @@ const editingItemId = ref<number | null>(null)
 const itemErrors = ref<any>({})
 const itemForm = reactive<MenuItemFormData>({
   menu_id: parseInt(menuId),
-  label: {},
-  url: {},
+  label: '',
+  url: '',
   icon: '',
   is_external: false,
   parent_id: null,
   sort: 0
 })
-
 const fetchMenu = async () => {
   try {
     isLoading.value = true
@@ -46,20 +50,16 @@ const fetchMenu = async () => {
       menuItemService.getAll({ menu_id: menuId }),
       languageService.getAll()
     ])
-
-    form.name = menuResponse.data.data.name
+    form.name = menuResponse.data.name
+    form.language_id = menuResponse.data.language_id
     menuItems.value = buildTree(itemsResponse.data.data)
-    availableLanguages.value = langResponse.data.data
-
-    // Alapértelmezett nyelvek kiválasztása (pl. hu, en)
-    selectedLanguages.value = availableLanguages.value.filter(l => ['hu', 'en'].includes(l.code))
+    languages.value = langResponse.data.data
   } catch (error) {
     console.error('Hiba az adatok betöltésekor:', error)
   } finally {
     isLoading.value = false
   }
 }
-
 const buildTree = (items: MenuItem[], parentId: number | null = null): MenuItem[] => {
   return items
     .filter(item => item.parent_id === parentId)
@@ -69,7 +69,6 @@ const buildTree = (items: MenuItem[], parentId: number | null = null): MenuItem[
     }))
     .sort((a, b) => a.sort - b.sort)
 }
-
 const handleSubmit = async () => {
   try {
     isSaving.value = true
@@ -85,15 +84,14 @@ const handleSubmit = async () => {
     isSaving.value = false
   }
 }
-
 const openAddItemModal = (parentId: number | null = null) => {
   isEditingItem.value = false
   editingItemId.value = null
   itemErrors.value = {}
   Object.assign(itemForm, {
     menu_id: parseInt(menuId),
-    label: {},
-    url: {},
+    label: '',
+    url: '',
     icon: '',
     is_external: false,
     parent_id: parentId,
@@ -101,15 +99,14 @@ const openAddItemModal = (parentId: number | null = null) => {
   })
   isItemModalOpen.value = true
 }
-
 const openEditItemModal = (item: MenuItem) => {
   isEditingItem.value = true
   editingItemId.value = item.id
   itemErrors.value = {}
   Object.assign(itemForm, {
     menu_id: item.menu_id,
-    label: { ...item.label },
-    url: { ...item.url },
+    label: item.label,
+    url: item.url,
     icon: item.icon,
     is_external: item.is_external,
     parent_id: item.parent_id,
@@ -117,7 +114,6 @@ const openEditItemModal = (item: MenuItem) => {
   })
   isItemModalOpen.value = true
 }
-
 const handleItemSubmit = async () => {
   try {
     itemErrors.value = {}
@@ -127,14 +123,13 @@ const handleItemSubmit = async () => {
       await menuItemService.create(itemForm)
     }
     isItemModalOpen.value = false
-    await fetchMenu() // Refresh tree
+    await fetchMenu()
   } catch (error: any) {
     if (error.response?.status === 422) {
       itemErrors.value = error.response.data.errors
     }
   }
 }
-
 const handleItemDelete = async (id: number) => {
   if (confirm('Biztosan törölni szeretnéd ezt a menüpontot és minden almenüjét?')) {
     try {
@@ -145,7 +140,6 @@ const handleItemDelete = async (id: number) => {
     }
   }
 }
-
 const handleItemMove = async (id: number, parentId: number | null, sort: number) => {
   try {
     await menuItemService.update(id, { parent_id: parentId, sort })
@@ -154,39 +148,19 @@ const handleItemMove = async (id: number, parentId: number | null, sort: number)
     console.error('Hiba a mozgatáskor:', error)
   }
 }
-
-const handleAddLanguage = (id: number) => {
-  const lang = availableLanguages.value.find(l => l.id === id)
-  if (lang && !selectedLanguages.value.find(l => l.id === id)) {
-    selectedLanguages.value.push(lang)
-  }
-}
-
-const handleRemoveLanguage = (id: number) => {
-  selectedLanguages.value = selectedLanguages.value.filter(l => l.id !== id)
-}
-
-const goBack = () => {
-  router.push('/admin/cms/menu')
-}
-
 onMounted(() => {
   fetchMenu()
 })
 </script>
-
 <template>
   <AdminLayout page-title="Menü szerkesztése">
     <div class="flex items-center justify-end space-y-2 mb-4">
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
-
     <div v-if="isLoading" class="flex justify-center py-8">
       Betöltés...
     </div>
-
     <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Menü adatai -->
       <div class="md:col-span-1">
         <Card>
           <CardHeader>
@@ -203,6 +177,16 @@ onMounted(() => {
               />
               <FieldError :errors="errors.name" />
             </div>
+            <div class="space-y-2">
+              <Label for="language" class="text-sm font-medium">Nyelv</Label>
+              <Select
+                id="language"
+                v-model="form.language_id"
+                :options="languageOptions"
+                placeholder="Válassz nyelvet"
+              />
+              <FieldError :errors="errors.language_id" />
+            </div>
           </CardContent>
           <CardFooter>
             <FormButtons
@@ -213,8 +197,6 @@ onMounted(() => {
           </CardFooter>
         </Card>
       </div>
-
-      <!-- Menü elemek fa struktúrában -->
       <div class="md:col-span-2">
         <Card>
           <CardHeader class="flex flex-row items-center justify-between">
@@ -230,7 +212,6 @@ onMounted(() => {
           <CardContent>
             <MenuItemTree
               v-model:items="menuItems"
-              :languages="availableLanguages"
               @edit="openEditItemModal"
               @delete="handleItemDelete"
               @move="handleItemMove"
@@ -239,14 +220,22 @@ onMounted(() => {
         </Card>
       </div>
     </div>
-
-    <!-- MenuItem Modal -->
     <Modal
       :show="isItemModalOpen"
       :title="isEditingItem ? 'Menüpont szerkesztése' : 'Új menüpont hozzáadása'"
       @close="isItemModalOpen = false"
     >
       <div class="space-y-6 py-4">
+        <div class="space-y-2">
+          <Label class="text-sm font-medium">Címke</Label>
+          <Input v-model="itemForm.label" placeholder="Menüpont címkéje" />
+          <FieldError :errors="itemErrors.label" />
+        </div>
+        <div class="space-y-2">
+          <Label class="text-sm font-medium">URL</Label>
+          <Input v-model="itemForm.url" placeholder="/útvonal vagy https://..." />
+          <FieldError :errors="itemErrors.url" />
+        </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
             <Label class="text-sm font-medium">Ikon (Lucide név)</Label>
@@ -257,36 +246,7 @@ onMounted(() => {
             <Label for="is_external" class="text-sm font-medium">Külső hivatkozás</Label>
           </div>
         </div>
-
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500">Fordítások</h3>
-          </div>
-
-          <TranslationRepeater
-            :languages="selectedLanguages"
-            :available-languages="availableLanguages"
-            @add="handleAddLanguage"
-            @remove="handleRemoveLanguage"
-          >
-            <template #default="{ language }">
-              <div class="grid grid-cols-1 gap-4" v-if="language.code">
-                <div class="space-y-2">
-                  <Label class="text-xs font-medium text-slate-500">Címke ({{ language.code }})</Label>
-                  <Input v-model="itemForm.label[language.code]" />
-                  <FieldError :errors="itemErrors[`label.${language.code}`]" />
-                </div>
-                <div class="space-y-2">
-                  <Label class="text-xs font-medium text-slate-500">URL ({{ language.code }})</Label>
-                  <Input v-model="itemForm.url[language.code]" />
-                  <FieldError :errors="itemErrors[`url.${language.code}`]" />
-                </div>
-              </div>
-            </template>
-          </TranslationRepeater>
-        </div>
       </div>
-
       <template #footer>
         <Button variant="outline" @click="isItemModalOpen = false">Mégse</Button>
         <Button @click="handleItemSubmit">Mentés</Button>
