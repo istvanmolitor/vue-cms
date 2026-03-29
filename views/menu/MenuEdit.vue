@@ -95,43 +95,46 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else>
-      <CardHeader>
-        <CardTitle>Menü adatai</CardTitle>
-        <CardDescription>Módosítsd a menü adatait</CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name" class="text-sm font-medium">Név</Label>
-          <Input
-            id="name"
-            v-model="form.name"
-            placeholder="Menü neve"
-          />
-          <FieldError :errors="errors.name" />
-        </div>
-        <div class="space-y-2">
-          <Label for="language_id" class="text-sm font-medium">Nyelv</Label>
-          <Select
-            id="language_id"
-            v-model="form.language_id"
-            :options="languageOptions"
-            placeholder="Válassz nyelvet..."
-          />
-          <FieldError :errors="errors.language_id" />
-        </div>
-      </CardContent>
-      <CardFooter>
-        <FormButtons
-          :is-saving="isSaving"
-          @save="handleSubmit"
-          @cancel="goBack"
-        />
-      </CardFooter>
-    </Card>
-
-    <div class="mt-6">
-      <MenuItemEditor :menu-id="parseInt(menuId)" />
+    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1">
+        <Card>
+          <CardHeader>
+            <CardTitle>Menü adatai</CardTitle>
+            <CardDescription>Módosítsd a menü adatait</CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <div class="space-y-2">
+              <Label for="name" class="text-sm font-medium">Név</Label>
+              <Input
+                id="name"
+                v-model="form.name"
+                placeholder="Menü neve"
+              />
+              <FieldError :errors="errors.name" />
+            </div>
+            <div class="space-y-2">
+              <Label for="language_id" class="text-sm font-medium">Nyelv</Label>
+              <Select
+                id="language_id"
+                v-model="form.language_id"
+                :options="languageOptions"
+                placeholder="Válassz nyelvet..."
+              />
+              <FieldError :errors="errors.language_id" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <FormButtons
+              :is-saving="isSaving"
+              @save="handleSubmit"
+              @cancel="goBack"
+            />
+          </CardFooter>
+        </Card>
+      </div>
+      <div class="lg:col-span-2">
+        <MenuItemEditor :menu-id="parseInt(menuId)" />
+      </div>
     </div>
   </AdminLayout>
 </template>
