@@ -20,6 +20,7 @@ import { authorService, type Author } from '../../services/authorService.ts'
 import { pageGroupService, type PageGroup } from '../../services/pageGroupService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
@@ -103,6 +104,7 @@ const handleSubmit = async () => {
     }
 
     await pageService.create(payload)
+    toastService.success('Oldal sikeresen létrehozva')
     router.push('/admin/cms/page')
   } catch (error: any) {
     if (error.response?.status === 422) {

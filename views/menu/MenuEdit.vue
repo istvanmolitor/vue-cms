@@ -17,6 +17,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService.ts'
 import { languageService } from '@language/services/languageService'
+import { toastService } from '@admin/lib/toastService'
 import type { SelectOption } from '@admin/index'
 
 const router = useRouter()
@@ -64,6 +65,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await menuService.update(menuId, form)
+    toastService.success('Menü sikeresen frissítve')
     router.push('/admin/cms/menu')
   } catch (error: any) {
     if (error.response?.status === 422) {

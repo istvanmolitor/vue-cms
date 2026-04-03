@@ -15,6 +15,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
 import EditContent from '../../components/EditContent.vue'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const route = useRoute()
@@ -61,6 +62,7 @@ const handleSubmit = async () => {
     }
 
     await contentRegionService.update(regionId, payload)
+    toastService.success('Régió sikeresen frissítve')
     router.push('/admin/cms/region')
   } catch (error: any) {
     if (error.response?.status === 422) {

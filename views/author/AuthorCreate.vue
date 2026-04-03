@@ -15,6 +15,7 @@ import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
 import { authorService, type AuthorFormData } from '../../services/authorService.ts'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
@@ -31,6 +32,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await authorService.create(form)
+    toastService.success('Szerző sikeresen létrehozva')
     router.push('/admin/cms/author')
   } catch (error: any) {
     if (error.response?.status === 422) {

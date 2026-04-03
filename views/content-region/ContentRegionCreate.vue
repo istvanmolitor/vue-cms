@@ -15,6 +15,7 @@ import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
 import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
 import EditContent from '../../components/EditContent.vue'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
@@ -44,6 +45,7 @@ const handleSubmit = async () => {
     }
 
     await contentRegionService.create(payload)
+    toastService.success('Régió sikeresen létrehozva')
     router.push('/admin/cms/region')
   } catch (error: any) {
     if (error.response?.status === 422) {

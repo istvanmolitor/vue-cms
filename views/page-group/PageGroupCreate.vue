@@ -16,6 +16,7 @@ import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { pageGroupService, type PageGroupFormData } from '../../services/pageGroupService.ts'
 import { layoutService } from '../../services/layoutService.ts'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
@@ -50,6 +51,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await pageGroupService.create(form)
+    toastService.success('Oldal csoport sikeresen létrehozva')
     router.push('/admin/cms/page-group')
   } catch (error: any) {
     if (error.response?.status === 422) {

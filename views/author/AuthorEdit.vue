@@ -15,6 +15,7 @@ import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { authorService, type AuthorFormData } from '../../services/authorService.ts'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const route = useRoute()
@@ -47,6 +48,7 @@ const handleSubmit = async () => {
     errors.value = {}
 
     await authorService.update(authorId, form)
+    toastService.success('Szerző sikeresen frissítve')
     router.push('/admin/cms/author')
   } catch (error: any) {
     if (error.response?.status === 422) {

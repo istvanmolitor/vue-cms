@@ -22,6 +22,7 @@ import { authorService, type Author } from '../../services/authorService.ts'
 import { pageGroupService, type PageGroup } from '../../services/pageGroupService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
+import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const route = useRoute()
@@ -134,6 +135,7 @@ const handleSubmit = async () => {
     }
 
     await pageService.update(pageId, payload)
+    toastService.success('Oldal sikeresen frissítve')
     router.push('/admin/cms/page')
   } catch (error: any) {
     if (error.response?.status === 422) {
