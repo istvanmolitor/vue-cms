@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin'
+import { Label } from '@admin/index'
 
 interface Props {
   modelValue: Record<string, any>
