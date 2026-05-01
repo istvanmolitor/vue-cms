@@ -7,6 +7,7 @@ import IframeElementEditor from '../components/elements/IframeElementEditor.vue'
 import CodeElementEditor from '../components/elements/CodeElementEditor.vue'
 import QuoteElementEditor from '../components/elements/QuoteElementEditor.vue'
 import ListElementEditor from '../components/elements/ListElementEditor.vue'
+import ColumnsElementEditor from '../components/elements/ColumnsElementEditor.vue'
 
 import TextElementPreview from '../components/elements/TextElementPreview.vue'
 import HeadingElementPreview from '../components/elements/HeadingElementPreview.vue'
@@ -16,6 +17,7 @@ import IframeElementPreview from '../components/elements/IframeElementPreview.vu
 import CodeElementPreview from '../components/elements/CodeElementPreview.vue'
 import QuoteElementPreview from '../components/elements/QuoteElementPreview.vue'
 import ListElementPreview from '../components/elements/ListElementPreview.vue'
+import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.vue'
 
 contentElementTypeRegistry.register({
   type: 'text',
@@ -79,6 +81,14 @@ contentElementTypeRegistry.register({
   component: ListElementEditor,
   previewComponent: ListElementPreview,
   icon: 'list'
+})
+
+contentElementTypeRegistry.register({
+  type: 'columns',
+  label: 'Oszlopok',
+  component: ColumnsElementEditor,
+  previewComponent: ColumnsElementPreview,
+  icon: 'columns'
 })
 
 export * from './ContentElementTypeRegistry'

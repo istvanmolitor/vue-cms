@@ -205,7 +205,7 @@ onMounted(() => {
               <div class="flex items-center space-x-2">
                 <Checkbox id="is_published" v-model:checked="form.is_published" />
                 <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Publikálva
+                  Publikálvad
                 </Label>
               </div>
               <FieldError :errors="errors.is_published" />
