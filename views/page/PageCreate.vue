@@ -98,8 +98,7 @@ const handleSubmit = async () => {
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,  // API expects 'settings' field
-        sort: index,
-        is_visible: element.is_visible
+        sort: index
       }))
     }
 
@@ -147,6 +146,7 @@ onMounted(() => {
             <CardTitle>Tartalom elemei</CardTitle>
           </CardHeader>
           <CardContent>
+            <pre class="text-xs bg-gray-100 p-4 rounded overflow-auto max-h-96">{{ JSON.stringify(form, null, 2) }}</pre>
             <EditContent v-model="form.content_elements" />
             <FieldError :errors="errors['content.content_elements']" />
             <FieldError :errors="errors.content" />

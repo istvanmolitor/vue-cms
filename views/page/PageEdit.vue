@@ -129,8 +129,7 @@ const handleSubmit = async () => {
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,  // API expects 'settings' field
-        sort: index,
-        is_visible: element.is_visible
+        sort: index
       }))
     }
 

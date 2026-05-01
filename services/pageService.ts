@@ -58,7 +58,6 @@ export interface PagePayload {
     type: string
     settings: any  // API expects 'settings' not 'content'
     sort: number
-    is_visible: boolean
   }>
 }
 
