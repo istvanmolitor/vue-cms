@@ -7,7 +7,7 @@ export interface ContentElement {
   type: string
   settings: any
   sort: number
-  is_visible: boolean
+  content_elements: ContentElement[]
 }
 
 export interface Content {
@@ -31,9 +31,9 @@ export interface ContentRegionPayload {
   content: {
     content_elements: Array<{
       type: string
-      settings: any  // API expects 'settings' not 'content'
+      settings: any
       sort: number
-      is_visible: boolean
+      content_elements: ContentElement[]
     }>
   }
 }

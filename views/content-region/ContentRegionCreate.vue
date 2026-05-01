@@ -39,7 +39,7 @@ const handleSubmit = async () => {
           type: element.type,
           settings: element.settings,  // API expects 'settings' field
           sort: index,
-          is_visible: element.is_visible
+          content_elements: element.content_elements
         }))
       }
     }

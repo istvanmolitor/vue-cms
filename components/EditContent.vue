@@ -25,6 +25,7 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true, deep: true })
 
 const updateModel = () => {
+  console.log('Updating model:', elements.value)
   emit('update:modelValue', elements.value)
 }
 
@@ -41,7 +42,7 @@ const addElementWithType = (type: string) => {
     type,
     settings: {},
     sort: nextSort,
-    is_visible: true
+    content_elements: []
   })
 
   // Automatically open edit mode for the new element

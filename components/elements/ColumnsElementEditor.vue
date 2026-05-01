@@ -9,11 +9,6 @@ import type { ContentElement } from '../../services/contentRegionService'
 // Use async component to avoid circular dependency
 const EditContent = defineAsyncComponent(() => import('../EditContent.vue'))
 
-interface ColumnData {
-  content_elements: ContentElement[]
-  width?: string
-}
-
 interface Props {
   modelValue: Record<string, any>
 }
@@ -21,22 +16,31 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
-const columns = ref<ColumnData[]>([])
-const columnsCount = ref(2)
+const columns = ref<ContentElement[]>([])
 
 // Initialize if empty
 onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
+  if (!props.modelValue?.content_elements || props.modelValue.content_elements.length === 0) {
     // Create default 2 columns
     columns.value = [
-      { content_elements: [], width: '50%' },
-      { content_elements: [], width: '50%' }
-    ]
-    columnsCount.value = 2
+      {
+        id: null,
+        type: 'column',
+        settings: { width: '50%' },
+        sort: 0,
+        content_elements: []
+      },
+      {
+        id: null,
+        type: 'column',
+        settings: { width: '50%' },
+        sort: 1,
+        content_elements: []
+      }
+    ] as unknown as ContentElement[]
     updateValue()
   } else {
-    columns.value = props.modelValue.columns || []
-    columnsCount.value = props.modelValue.columns_count || 2
+    columns.value = props.modelValue.content_elements || []
   }
 })
 
@@ -44,16 +48,16 @@ let isUpdating = false
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal && !isUpdating) {
-    columns.value = newVal.columns || []
-    columnsCount.value = newVal.columns_count || 2
+    columns.value = newVal.content_elements || []
   }
 }, { deep: true })
 
 const updateValue = () => {
   isUpdating = true
   emit('update:modelValue', {
-    columns: columns.value,
-    columns_count: columnsCount.value
+    type: 'columns',
+    settings: props.modelValue?.settings || {},
+    content_elements: columns.value
   })
   // Reset flag after a tick to allow prop updates
   setTimeout(() => {
@@ -66,16 +70,20 @@ const addColumn = () => {
 
   // Adjust existing columns widths
   columns.value.forEach(col => {
-    col.width = newWidth
+    if (col.settings) {
+      col.settings.width = newWidth
+    }
   })
 
   // Add new column
   columns.value.push({
-    content_elements: [],
-    width: newWidth
-  })
+    id: null,
+    type: 'column',
+    settings: { width: newWidth },
+    sort: columns.value.length,
+    content_elements: []
+  } as unknown as ContentElement)
 
-  columnsCount.value = columns.value.length
   updateValue()
 }
 
@@ -87,15 +95,19 @@ const removeColumn = (index: number) => {
   // Redistribute widths evenly
   const newWidth = `${Math.floor(100 / columns.value.length)}%`
   columns.value.forEach(col => {
-    col.width = newWidth
+    if (col.settings) {
+      col.settings.width = newWidth
+    }
   })
 
-  columnsCount.value = columns.value.length
   updateValue()
 }
 
 const updateColumnContent = (index: number, content: ContentElement[]) => {
-  columns.value[index]!.content_elements = content
+  const column = columns.value[index]
+  if (column) {
+    column.content_elements = content
+  }
   updateValue()
 }
 </script>
@@ -103,7 +115,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
 <template>
   <div class="space-y-4 p-4">
     <div class="flex items-center justify-between mb-4">
-      <Label class="text-sm font-medium">Oszlopok ({{ columnsCount }} darab)</Label>
+      <Label class="text-sm font-medium">Oszlopok ({{ columns.length }} darab)</Label>
       <Button
         type="button"
         size="sm"
@@ -115,7 +127,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
       </Button>
     </div>
 
-    <div class="grid gap-4" :style="{ gridTemplateColumns: `repeat(${columnsCount}, 1fr)` }">
+    <div class="grid gap-4" :style="{ gridTemplateColumns: `repeat(${columns.length}, 1fr)` }">
       <div
         v-for="(column, index) in columns"
         :key="index"
@@ -126,7 +138,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
             Oszlop {{ index + 1 }}
           </Label>
           <IconButton
-            v-if="columnsCount > 1"
+            v-if="columns.length > 1"
             icon="trash"
             size="sm"
             @click="removeColumn(index)"
@@ -134,7 +146,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
         </div>
 
         <EditContent
-          :model-value="column.content_elements"
+          :model-value="column.content_elements || []"
           @update:model-value="updateColumnContent(index, $event)"
         />
       </div>
@@ -145,4 +157,3 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
     </div>
   </div>
 </template>
-

@@ -9,7 +9,7 @@ export interface ContentElement {
   type: string
   settings: any
   sort: number
-  is_visible: boolean
+  content_elements: ContentElement[]
 }
 
 export interface Content {
