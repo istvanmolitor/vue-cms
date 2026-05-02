@@ -1,39 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const quote = ref(props.modelValue?.quote || '')
-const author = ref(props.modelValue?.author || '')
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { quote: '', author: '' })
-  }
+const { quote, author } = useElementEditor(props, emit, {
+  quote: '',
+  author: ''
 })
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    quote.value = newVal.quote || ''
-    author.value = newVal.author || ''
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    quote: quote.value,
-    author: author.value
-  })
-}
-
-watch([quote, author], updateValue)
 </script>
 
 <template>
@@ -58,4 +33,3 @@ watch([quote, author], updateValue)
     </div>
   </div>
 </template>
-

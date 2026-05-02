@@ -1,65 +1,65 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 import Label from '@admin/components/ui/Label.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import IconButton from '@admin/components/ui/button/IconButton.vue'
 import type { ContentElement } from '../../services/contentRegionService'
+import {
+  useElementEditor,
+  type ElementEditorEmits,
+  type ElementEditorProps,
+} from '../../composables/useElementEditor'
 
 // Use async component to avoid circular dependency
 const EditContent = defineAsyncComponent(() => import('../EditContent.vue'))
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
+const { updateContentElements } = useElementEditor(props, emit, {})
 const columns = ref<ContentElement[]>([])
 
-// Initialize if empty
 onMounted(() => {
-  if (!props.modelValue?.content_elements || props.modelValue.content_elements.length === 0) {
-    // Create default 2 columns
+  if (!props.contentElements || props.contentElements.length === 0) {
     columns.value = [
       {
         id: null,
         type: 'column',
         settings: { width: '50%' },
         sort: 0,
-        content_elements: []
+        content_elements: [],
       },
       {
         id: null,
         type: 'column',
         settings: { width: '50%' },
         sort: 1,
-        content_elements: []
-      }
+        content_elements: [],
+      },
     ] as unknown as ContentElement[]
     updateValue()
-  } else {
-    columns.value = props.modelValue.content_elements || []
+    return
   }
+
+  columns.value = props.contentElements
 })
 
 let isUpdating = false
 
-watch(() => props.modelValue, (newVal) => {
-  if (newVal && !isUpdating) {
-    columns.value = newVal.content_elements || []
-  }
-}, { deep: true })
+watch(
+  () => props.contentElements,
+  (newValue) => {
+    if (newValue && !isUpdating) {
+      columns.value = newValue
+    }
+  },
+  { deep: true }
+)
 
 const updateValue = () => {
   isUpdating = true
-  emit('update:modelValue', {
-    type: 'columns',
-    settings: props.modelValue?.settings || {},
-    content_elements: columns.value
-  })
-  // Reset flag after a tick to allow prop updates
+  updateContentElements(columns.value)
   setTimeout(() => {
     isUpdating = false
   }, 0)
@@ -68,35 +68,34 @@ const updateValue = () => {
 const addColumn = () => {
   const newWidth = `${Math.floor(100 / (columns.value.length + 1))}%`
 
-  // Adjust existing columns widths
-  columns.value.forEach(col => {
-    if (col.settings) {
-      col.settings.width = newWidth
+  columns.value.forEach((column) => {
+    if (column.settings) {
+      column.settings.width = newWidth
     }
   })
 
-  // Add new column
   columns.value.push({
     id: null,
     type: 'column',
     settings: { width: newWidth },
     sort: columns.value.length,
-    content_elements: []
+    content_elements: [],
   } as unknown as ContentElement)
 
   updateValue()
 }
 
 const removeColumn = (index: number) => {
-  if (columns.value.length <= 1) return
+  if (columns.value.length <= 1) {
+    return
+  }
 
   columns.value.splice(index, 1)
 
-  // Redistribute widths evenly
   const newWidth = `${Math.floor(100 / columns.value.length)}%`
-  columns.value.forEach(col => {
-    if (col.settings) {
-      col.settings.width = newWidth
+  columns.value.forEach((column) => {
+    if (column.settings) {
+      column.settings.width = newWidth
     }
   })
 
@@ -108,6 +107,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
   if (column) {
     column.content_elements = content
   }
+
   updateValue()
 }
 </script>

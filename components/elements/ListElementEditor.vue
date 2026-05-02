@@ -1,41 +1,16 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Label from '@admin/components/ui/Label.vue'
 import { Plus, Trash } from 'lucide-vue-next'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const items = ref<string[]>(props.modelValue?.items || [])
-const listType = ref(props.modelValue?.type || 'ul')
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0 || !props.modelValue.items) {
-    emit('update:modelValue', { items: [''], type: 'ul' })
-  }
+const { items, type: listType } = useElementEditor(props, emit, {
+  items: [''],
+  type: 'ul'
 })
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    items.value = newVal.items || ['']
-    listType.value = newVal.type || 'ul'
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    items: items.value.filter(item => item.trim() !== ''),
-    type: listType.value
-  })
-}
-
-watch([items, listType], updateValue, { deep: true })
 
 const addItem = () => {
   items.value.push('')
@@ -51,6 +26,17 @@ const removeItem = (index: number) => {
 
 <template>
   <div class="space-y-4">
+    <div>
+      <Label class="text-sm font-medium mb-1 block">Lista típusa</Label>
+      <select
+        v-model="listType"
+        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <option value="ul">Felsorolás (pontozott)</option>
+        <option value="ol">Számozás</option>
+      </select>
+    </div>
+
     <div>
       <div class="flex items-center justify-between mb-2">
         <Label class="text-sm font-medium">Lista elemek</Label>
@@ -75,5 +61,4 @@ const removeItem = (index: number) => {
     </div>
   </div>
 </template>
-
 

@@ -1,39 +1,13 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const text = ref(props.modelValue?.text || '')
-const align = ref(props.modelValue?.align || 'left')
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { text: '', align: 'left' })
-  }
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
+const { text, align } = useElementEditor(props, emit, {
+  text: '',
+  align: 'left'
 })
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    text.value = newVal.text || ''
-    align.value = newVal.align || 'left'
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    text: text.value,
-    align: align.value
-  })
-}
-
-watch([text, align], updateValue)
 </script>
 
 <template>
@@ -78,4 +52,3 @@ watch([text, align], updateValue)
   white-space: pre-wrap;
 }
 </style>
-

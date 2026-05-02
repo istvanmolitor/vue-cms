@@ -1,54 +1,17 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const url = ref(props.modelValue?.url || '')
-const width = ref(props.modelValue?.width || '100%')
-const height = ref(props.modelValue?.height || '450px')
-const title = ref(props.modelValue?.title || '')
-const allowFullscreen = ref(props.modelValue?.allowFullscreen ?? true)
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0 || !props.modelValue.url) {
-    emit('update:modelValue', {
-      url: url.value,
-      width: width.value,
-      height: height.value,
-      title: title.value,
-      allowFullscreen: allowFullscreen.value
-    })
-  }
+const { url, width, height, title, allowFullscreen } = useElementEditor(props, emit, {
+  url: '',
+  width: '100%',
+  height: '450px',
+  title: '',
+  allowFullscreen: true
 })
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    url.value = newVal.url || ''
-    width.value = newVal.width || '100%'
-    height.value = newVal.height || '450px'
-    title.value = newVal.title || ''
-    allowFullscreen.value = newVal.allowFullscreen ?? true
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    url: url.value,
-    width: width.value,
-    height: height.value,
-    title: title.value,
-    allowFullscreen: allowFullscreen.value
-  })
-}
-
-watch([url, width, height, title, allowFullscreen], updateValue)
 </script>
 
 <template>
@@ -114,4 +77,3 @@ watch([url, width, height, title, allowFullscreen], updateValue)
     </div>
   </div>
 </template>
-

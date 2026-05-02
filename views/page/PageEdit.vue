@@ -128,8 +128,9 @@ const handleSubmit = async () => {
       page_group_ids: form.page_group_ids,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
-        settings: element.settings,  // API expects 'settings' field
-        sort: index
+        settings: element.settings,
+        sort: index,
+        content_elements: element.content_elements || []
       }))
     }
 
@@ -204,7 +205,7 @@ onMounted(() => {
               <div class="flex items-center space-x-2">
                 <Checkbox id="is_published" v-model:checked="form.is_published" />
                 <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Publikálvad
+                  Publikálva
                 </Label>
               </div>
               <FieldError :errors="errors.is_published" />

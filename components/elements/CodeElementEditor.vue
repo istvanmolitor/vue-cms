@@ -1,39 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const code = ref(props.modelValue?.code || '')
-const language = ref(props.modelValue?.language || 'javascript')
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { code: '', language: 'javascript' })
-  }
+const { code, language } = useElementEditor(props, emit, {
+  code: '',
+  language: 'javascript'
 })
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    code.value = newVal.code || ''
-    language.value = newVal.language || 'javascript'
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    code: code.value,
-    language: language.value
-  })
-}
-
-watch([code, language], updateValue)
 </script>
 
 <template>
@@ -66,4 +41,3 @@ watch([code, language], updateValue)
     </div>
   </div>
 </template>
-

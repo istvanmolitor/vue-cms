@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { ContentElement } from '../../services/contentRegionService'
 
 interface Props {
   settings: Record<string, any>
+  contentElements?: ContentElement[]
 }
 
 const props = defineProps<Props>()

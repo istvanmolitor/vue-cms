@@ -1,56 +1,25 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import Select from '@admin/components/ui/Select.vue'
 import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const src = ref(props.modelValue?.src || '')
-const alt = ref(props.modelValue?.alt || '')
-const width = ref(props.modelValue?.width || '')
-const height = ref(props.modelValue?.height || '')
-const alignment = ref(props.modelValue?.alignment || 'left')
+const { src, alt, width, height, alignment } = useElementEditor(props, emit, {
+  src: '',
+  alt: '',
+  width: '',
+  height: '',
+  alignment: 'left'
+})
 
 const alignmentOptions = [
   { value: 'left', label: 'Balra' },
   { value: 'center', label: 'Középen' },
   { value: 'right', label: 'Jobbra' }
 ]
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { src: '', alt: '', width: '', height: '', alignment: 'left' })
-  }
-})
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    src.value = newVal.src || ''
-    alt.value = newVal.alt || ''
-    width.value = newVal.width || ''
-    height.value = newVal.height || ''
-    alignment.value = newVal.alignment || 'left'
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    src: src.value,
-    alt: alt.value,
-    width: width.value,
-    height: height.value,
-    alignment: alignment.value
-  })
-}
-
-watch([src, alt, width, height, alignment], updateValue)
 </script>
 
 <template>
@@ -102,4 +71,3 @@ watch([src, alt, width, height, alignment], updateValue)
     </div>
   </div>
 </template>
-

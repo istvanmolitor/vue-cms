@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
-import { Label } from '@admin'
+import { computed } from 'vue'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const url = ref(props.modelValue?.url || '')
-const width = ref(props.modelValue?.width || '100%')
-const height = ref(props.modelValue?.height || '450px')
+const { url, width, height } = useElementEditor(props, emit, {
+  url: '',
+  width: '100%',
+  height: '450px'
+})
 
 const embedUrl = computed(() => {
   if (!url.value) return ''
@@ -21,35 +20,6 @@ const embedUrl = computed(() => {
 
   return match && match[1] ? `https://www.youtube.com/embed/${match[1]}` : ''
 })
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0 || !props.modelValue.url) {
-    emit('update:modelValue', {
-      url: url.value,
-      width: width.value,
-      height: height.value
-    })
-  }
-})
-
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    url.value = newVal.url || ''
-    width.value = newVal.width || '300px'
-    height.value = newVal.height || '450px'
-  }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    url: url.value,
-    width: width.value,
-    height: height.value
-  })
-}
-
-watch([url, width, height], updateValue)
 </script>
 
 <template>

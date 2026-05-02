@@ -25,7 +25,6 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true, deep: true })
 
 const updateModel = () => {
-  console.log('Updating model:', elements.value)
   emit('update:modelValue', elements.value)
 }
 
@@ -104,7 +103,6 @@ const shouldShowEditor = (index: number) => {
 
 <template>
   <div class="space-y-4">
-
     <div v-if="elements.length === 0" class="text-center py-8 border-2 border-dashed rounded-lg text-muted-foreground">
       Nincsenek tartalom elemek. Kattints az "Elem hozzáadása" gombra.
     </div>
@@ -150,8 +148,10 @@ const shouldShowEditor = (index: number) => {
               <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg">
                 <component
                   :is="contentElementTypeRegistry.getComponent(element.type)"
-                  v-model="element.settings"
-                  @update:modelValue="updateModel"
+                  v-model:settings="element.settings"
+                  v-model:content-elements="element.content_elements"
+                  @update:settings="updateModel"
+                  @update:content-elements="updateModel"
                 />
               </div>
               <!-- Show preview otherwise -->
@@ -159,6 +159,7 @@ const shouldShowEditor = (index: number) => {
                 <component
                   :is="getPreviewComponent(element.type)"
                   :settings="element.settings"
+                  :content-elements="element.content_elements"
                 />
               </div>
             </div>

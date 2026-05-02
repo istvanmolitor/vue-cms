@@ -1,39 +1,24 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { Label } from '@admin/index'
+import { computed } from 'vue'
+import Label from '@admin/components/ui/Label.vue'
+import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
-interface Props {
-  modelValue: Record<string, any>
-}
+const props = defineProps<ElementEditorProps>()
+const emit = defineEmits<ElementEditorEmits>()
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
-
-const text = ref(props.modelValue?.text || '')
-const level = ref(props.modelValue?.level || 1)
-
-// Initialize if empty
-onMounted(() => {
-  if (!props.modelValue || Object.keys(props.modelValue).length === 0) {
-    emit('update:modelValue', { text: '', level: 1 })
-  }
+const { text, level: rawLevel, updateValue } = useElementEditor(props, emit, {
+  text: '',
+  level: 1
 })
 
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    text.value = newVal.text || ''
-    level.value = newVal.level || 1
+// Custom computed to ensure level is always an integer
+const level = computed({
+  get: () => rawLevel.value,
+  set: (value) => {
+    rawLevel.value = parseInt(value.toString())
+    updateValue()
   }
-}, { deep: true })
-
-const updateValue = () => {
-  emit('update:modelValue', {
-    text: text.value,
-    level: parseInt(level.value.toString())
-  })
-}
-
-watch([text, level], updateValue)
+})
 </script>
 
 <template>
@@ -105,4 +90,3 @@ h6.heading-preview {
   line-height: 1.5rem;
 }
 </style>
-

@@ -2,22 +2,15 @@
 import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
 
-interface ColumnData {
-  content_elements: ContentElement[]
-  width?: string
-}
-
 interface Props {
-  settings: {
-    columns?: ColumnData[]
-    columns_count?: number
-  }
+  settings: Record<string, any>
+  contentElements?: ContentElement[]
 }
 
 const props = defineProps<Props>()
 
-const columns = computed(() => props.settings?.columns || [])
-const columnsCount = computed(() => props.settings?.columns_count || 0)
+const columns = computed(() => props.contentElements || [])
+const columnsCount = computed(() => props.contentElements?.length || 0)
 </script>
 
 <template>
