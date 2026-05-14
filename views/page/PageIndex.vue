@@ -14,7 +14,7 @@ const columns: Column<Page>[] = [
   { key: 'main_image_url', label: 'Kép', width: '80px' },
   { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'title', label: 'Cím', sortable: true },
-  { key: 'slug', label: 'Slug', sortable: true },
+  { key: 'pageGroups', label: 'Oldal csoportok' },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
@@ -62,6 +62,21 @@ onMounted(() => {
         </div>
         <div v-else class="w-12 h-12 rounded bg-gray-50 flex items-center justify-center text-gray-300">
           <Icon name="Image" :size="20" />
+        </div>
+      </template>
+
+      <template #pageGroups="{ row }">
+        <div class="flex flex-wrap gap-1">
+          <span
+            v-for="group in row.pageGroups"
+            :key="group.id"
+            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+          >
+            {{ group.name }}
+          </span>
+          <span v-if="!row.pageGroups || row.pageGroups.length === 0" class="text-gray-400 text-xs italic">
+            Nincs csoport
+          </span>
         </div>
       </template>
 
