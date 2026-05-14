@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { pageService, type Page } from '../../services/pageService.ts'
@@ -10,6 +11,7 @@ const pages = ref<Page[]>([])
 const isLoading = ref(false)
 
 const columns: Column<Page>[] = [
+  { key: 'main_image_url', label: 'Kép', width: '80px' },
   { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'title', label: 'Cím', sortable: true },
   { key: 'slug', label: 'Slug', sortable: true },
@@ -54,6 +56,15 @@ onMounted(() => {
       :loading="isLoading"
       @fetch="fetchPages"
     >
+      <template #main_image_url="{ row }">
+        <div v-if="row.main_image_url" class="w-12 h-12 rounded overflow-hidden bg-gray-100 flex items-center justify-center">
+          <img :src="row.main_image_url" :alt="row.title" class="w-full h-full object-cover" />
+        </div>
+        <div v-else class="w-12 h-12 rounded bg-gray-50 flex items-center justify-center text-gray-300">
+          <Icon name="Image" :size="20" />
+        </div>
+      </template>
+
       <template #actions>
         <CreateButton to="/admin/cms/page/create">Új oldal</CreateButton>
       </template>
