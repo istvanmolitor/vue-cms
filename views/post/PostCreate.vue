@@ -102,8 +102,22 @@ const handleSubmit = async () => {
       }))
     }
 
-    await postService.create(payload)
+    const response: any = await postService.create(payload)
     toastService.success('Poszt sikeresen létrehozva')
+
+    const createdPostId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
+
+    if (createdPostId !== undefined && createdPostId !== null) {
+      await router.push({
+        name: 'cms-post-edit',
+        params: {
+          id: String(createdPostId),
+        },
+      })
+
+      return
+    }
+
     router.push('/admin/cms/post')
   } catch (error: any) {
     if (error.response?.status === 422) {

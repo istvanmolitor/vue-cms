@@ -74,30 +74,6 @@ const cmsRoutes: RouteRecordRaw[] = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/admin/cms/page-group',
-    name: 'cms-page-groups',
-    component: () => import('../views/page-group/PageGroupIndex.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/page-group/create',
-    name: 'cms-page-group-create',
-    component: () => import('../views/page-group/PageGroupCreate.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/page-group/:id',
-    name: 'cms-page-group-show',
-    component: () => import('../views/page-group/PageGroupShow.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/page-group/:id/edit',
-    name: 'cms-page-group-edit',
-    component: () => import('../views/page-group/PageGroupEdit.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
     path: '/admin/cms/post-group',
     name: 'cms-post-groups',
     component: () => import('../views/post-group/PostGroupIndex.vue'),

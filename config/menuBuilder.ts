@@ -91,25 +91,18 @@ export class CmsMenuBuilder extends MenuBuilder {
           order: 40
         },
         {
-          id: 'cms-page-groups',
-          title: 'Oldal Csoportok',
-          path: '/admin/cms/page-group',
-          icon: FolderTree,
-          order: 50
-        },
-        {
           id: 'cms-post-groups',
           title: 'Poszt Csoportok',
           path: '/admin/cms/post-group',
           icon: FolderTree,
-          order: 60
+          order: 50
         },
         {
           id: 'cms-menus',
           title: 'Menük',
           path: '/admin/cms/menu',
           icon: MenuIcon,
-          order: 70
+          order: 60
         }
       ]
     }

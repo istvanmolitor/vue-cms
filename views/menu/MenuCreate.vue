@@ -37,7 +37,7 @@ const fetchLanguages = async () => {
     languageOptions.value = data.data
     // Set the first language as default if available
     if (languageOptions.value.length > 0) {
-      form.language_id = languageOptions.value[0].value
+      form.language_id = Number(languageOptions.value[0].value)
     }
   } catch (error) {
     console.error('Hiba a nyelvek betöltésekor:', error)
@@ -51,8 +51,22 @@ const handleSubmit = async () => {
     isSaving.value = true
     errors.value = {}
 
-    await menuService.create(form)
+    const response: any = await menuService.create(form)
     toastService.success('Menü sikeresen létrehozva')
+
+    const createdMenuId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
+
+    if (createdMenuId !== undefined && createdMenuId !== null) {
+      await router.push({
+        name: 'cms-menu-edit',
+        params: {
+          id: String(createdMenuId),
+        },
+      })
+
+      return
+    }
+
     router.push('/admin/cms/menu')
   } catch (error: any) {
     if (error.response?.status === 422) {

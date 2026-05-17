@@ -31,8 +31,22 @@ const handleSubmit = async () => {
     isSaving.value = true
     errors.value = {}
 
-    await authorService.create(form)
+    const response: any = await authorService.create(form)
     toastService.success('Szerző sikeresen létrehozva')
+
+    const createdAuthorId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
+
+    if (createdAuthorId !== undefined && createdAuthorId !== null) {
+      await router.push({
+        name: 'cms-author-edit',
+        params: {
+          id: String(createdAuthorId),
+        },
+      })
+
+      return
+    }
+
     router.push('/admin/cms/author')
   } catch (error: any) {
     if (error.response?.status === 422) {

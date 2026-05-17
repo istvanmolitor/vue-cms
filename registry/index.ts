@@ -8,7 +8,6 @@ import CodeElementEditor from '../components/elements/CodeElementEditor.vue'
 import QuoteElementEditor from '../components/elements/QuoteElementEditor.vue'
 import ListElementEditor from '../components/elements/ListElementEditor.vue'
 import ColumnsElementEditor from '../components/elements/ColumnsElementEditor.vue'
-import PageGroupElementEditor from '../components/elements/PageGroupElementEditor.vue'
 
 import TextElementPreview from '../components/elements/TextElementPreview.vue'
 import HeadingElementPreview from '../components/elements/HeadingElementPreview.vue'
@@ -19,7 +18,6 @@ import CodeElementPreview from '../components/elements/CodeElementPreview.vue'
 import QuoteElementPreview from '../components/elements/QuoteElementPreview.vue'
 import ListElementPreview from '../components/elements/ListElementPreview.vue'
 import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.vue'
-import PageGroupElementPreview from '../components/elements/PageGroupElementPreview.vue'
 
 contentElementTypeRegistry.register({
   type: 'text',
@@ -91,14 +89,6 @@ contentElementTypeRegistry.register({
   component: ColumnsElementEditor,
   previewComponent: ColumnsElementPreview,
   icon: 'columns'
-})
-
-contentElementTypeRegistry.register({
-  type: 'page_group',
-  label: 'Oldal csoport',
-  component: PageGroupElementEditor,
-  previewComponent: PageGroupElementPreview,
-  icon: 'layout-grid'
 })
 
 export * from './ContentElementTypeRegistry'

@@ -10,7 +10,6 @@ import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
-import MultiSelect from '@admin/components/ui/MultiSelect.vue'
 import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Icon from '@admin/components/ui/Icon.vue'
@@ -18,8 +17,6 @@ import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
-import { authorService, type Author } from '../../services/authorService.ts'
-import { pageGroupService, type PageGroup } from '../../services/pageGroupService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
@@ -28,13 +25,9 @@ const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
-const isLoadingAuthors = ref(true)
-const isLoadingPageGroups = ref(true)
 const isLoadingLayouts = ref(true)
 const pageId = route.params.id as string
 const errors = ref<any>({})
-const authors = ref<Author[]>([])
-const pageGroups = ref<PageGroup[]>([])
 const layouts = ref<Record<string, Layout>>({})
 const pageUrl = ref<string | null>(null)
 
@@ -46,33 +39,7 @@ const form = reactive({
   layout: 'default',
   main_image_url: '',
   content_elements: [] as ContentElement[],
-  author_ids: [] as number[],
-  page_group_ids: [] as number[]
 }) as PageFormData
-
-const fetchAuthors = async () => {
-  try {
-    isLoadingAuthors.value = true
-    const { data } = await authorService.getAll()
-    authors.value = data.data
-  } catch (error) {
-    console.error('Hiba a szerzők betöltésekor:', error)
-  } finally {
-    isLoadingAuthors.value = false
-  }
-}
-
-const fetchPageGroups = async () => {
-  try {
-    isLoadingPageGroups.value = true
-    const { data } = await pageGroupService.getAll()
-    pageGroups.value = data.data
-  } catch (error) {
-    console.error('Hiba az oldal csoportok betöltésekor:', error)
-  } finally {
-    isLoadingPageGroups.value = false
-  }
-}
 
 const fetchLayouts = async () => {
   try {
@@ -98,10 +65,6 @@ const fetchPage = async () => {
     form.main_image_url = data.data.main_image_url || ''
     // Load draft_content if it exists, otherwise fall back to published content
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
-    // Load authors
-    form.author_ids = data.data.authors?.map(author => author.id) || []
-    // Load page groups
-    form.page_group_ids = data.data.pageGroups?.map(pageGroup => pageGroup.id) || []
     // Store page URL
     pageUrl.value = data.data.url || null
   } catch (error) {
@@ -124,8 +87,6 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
-      author_ids: form.author_ids,
-      page_group_ids: form.page_group_ids,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,
@@ -159,8 +120,6 @@ const viewPage = () => {
 }
 
 onMounted(() => {
-  fetchAuthors()
-  fetchPageGroups()
   fetchLayouts()
   fetchPage()
 })
@@ -244,40 +203,6 @@ onMounted(() => {
                 :accept-types="['image/*']"
               />
               <FieldError :errors="errors.main_image_url" />
-            </div>
-            <hr class="my-6" />
-            <div class="space-y-2">
-              <MultiSelect
-                v-if="!isLoadingAuthors"
-                v-model="form.author_ids"
-                :items="authors"
-                label="Szerzők"
-                placeholder="Válassz szerzőket..."
-                search-placeholder="Szerző keresése név alapján..."
-                empty-message="Nincsenek elérhető szerzők."
-                label-field="name"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Szerzők betöltése...
-              </div>
-              <FieldError :errors="errors.author_ids" />
-            </div>
-            <hr class="my-6" />
-            <div class="space-y-2">
-              <MultiSelect
-                v-if="!isLoadingPageGroups"
-                v-model="form.page_group_ids"
-                :items="pageGroups"
-                label="Oldal csoportok"
-                placeholder="Válassz oldal csoportokat..."
-                search-placeholder="Oldal csoport keresése név alapján..."
-                empty-message="Nincsenek elérhető oldal csoportok."
-                label-field="name"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Oldal csoportok betöltése...
-              </div>
-              <FieldError :errors="errors.page_group_ids" />
             </div>
           </CardContent>
         </Card>

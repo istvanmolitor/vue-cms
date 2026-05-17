@@ -44,8 +44,22 @@ const handleSubmit = async () => {
       }
     }
 
-    await contentRegionService.create(payload)
+    const response: any = await contentRegionService.create(payload)
     toastService.success('Régió sikeresen létrehozva')
+
+    const createdRegionId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
+
+    if (createdRegionId !== undefined && createdRegionId !== null) {
+      await router.push({
+        name: 'cms-region-edit',
+        params: {
+          id: String(createdRegionId),
+        },
+      })
+
+      return
+    }
+
     router.push('/admin/cms/region')
   } catch (error: any) {
     if (error.response?.status === 422) {

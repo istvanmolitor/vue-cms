@@ -50,8 +50,22 @@ const handleSubmit = async () => {
     isSaving.value = true
     errors.value = {}
 
-    await postGroupService.create(form)
+    const response: any = await postGroupService.create(form)
     toastService.success('Poszt csoport sikeresen létrehozva')
+
+    const createdPostGroupId = response?.data?.data?.id ?? response?.data?.id ?? response?.id
+
+    if (createdPostGroupId !== undefined && createdPostGroupId !== null) {
+      await router.push({
+        name: 'cms-post-group-edit',
+        params: {
+          id: String(createdPostGroupId),
+        },
+      })
+
+      return
+    }
+
     router.push('/admin/cms/post-group')
   } catch (error: any) {
     if (error.response?.status === 422) {
