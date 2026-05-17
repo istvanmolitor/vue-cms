@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon, Newspaper } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -70,32 +70,46 @@ export class CmsMenuBuilder extends MenuBuilder {
           order: 10
         },
         {
+          id: 'cms-posts',
+          title: 'Posztok',
+          path: '/admin/cms/post',
+          icon: Newspaper,
+          order: 20
+        },
+        {
           id: 'cms-regions',
           title: 'Régiók',
           path: '/admin/cms/region',
           icon: Layers,
-          order: 20
+          order: 30
         },
         {
           id: 'cms-authors',
           title: 'Szerzők',
           path: '/admin/cms/author',
           icon: User,
-          order: 30
+          order: 40
         },
         {
           id: 'cms-page-groups',
           title: 'Oldal Csoportok',
           path: '/admin/cms/page-group',
           icon: FolderTree,
-          order: 40
+          order: 50
+        },
+        {
+          id: 'cms-post-groups',
+          title: 'Poszt Csoportok',
+          path: '/admin/cms/post-group',
+          icon: FolderTree,
+          order: 60
         },
         {
           id: 'cms-menus',
           title: 'Menük',
           path: '/admin/cms/menu',
           icon: MenuIcon,
-          order: 50
+          order: 70
         }
       ]
     }

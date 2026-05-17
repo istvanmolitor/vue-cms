@@ -20,6 +20,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/cms/post',
+    name: 'cms-posts',
+    component: () => import('../views/post/PostIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post/create',
+    name: 'cms-post-create',
+    component: () => import('../views/post/PostCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post/:id/edit',
+    name: 'cms-post-edit',
+    component: () => import('../views/post/PostEdit.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/cms/region',
     name: 'cms-regions',
     component: () => import('../views/content-region/ContentRegionIndex.vue'),
@@ -77,6 +95,30 @@ const cmsRoutes: RouteRecordRaw[] = [
     path: '/admin/cms/page-group/:id/edit',
     name: 'cms-page-group-edit',
     component: () => import('../views/page-group/PageGroupEdit.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-group',
+    name: 'cms-post-groups',
+    component: () => import('../views/post-group/PostGroupIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-group/create',
+    name: 'cms-post-group-create',
+    component: () => import('../views/post-group/PostGroupCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-group/:id',
+    name: 'cms-post-group-show',
+    component: () => import('../views/post-group/PostGroupShow.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-group/:id/edit',
+    name: 'cms-post-group-edit',
+    component: () => import('../views/post-group/PostGroupEdit.vue'),
     meta: { requiresAuth: true }
   },
   {
