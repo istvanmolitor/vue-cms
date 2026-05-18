@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
+import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
@@ -12,6 +13,7 @@ import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
 import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
@@ -34,6 +36,7 @@ const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
 const layouts = ref<Record<string, Layout>>({})
+const postUrl = ref<string | null>(null)
 
 const form = reactive({
   title: '',
@@ -96,6 +99,7 @@ const fetchPost = async () => {
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     form.author_ids = data.data.authors?.map(author => author.id) || []
     form.post_group_ids = data.data.postGroups?.map(postGroup => postGroup.id) || []
+    postUrl.value = data.data.url || null
   } catch (error) {
     console.error('Hiba a poszt betöltésekor:', error)
   } finally {
@@ -142,6 +146,12 @@ const goBack = () => {
   router.push('/admin/cms/post')
 }
 
+const viewPost = () => {
+  if (postUrl.value) {
+    window.open(postUrl.value, '_blank')
+  }
+}
+
 onMounted(() => {
   fetchAuthors()
   fetchPostGroups()
@@ -154,6 +164,10 @@ onMounted(() => {
   <AdminLayout page-title="Poszt szerkesztése">
     <div class="flex items-center justify-end space-y-2 mb-4">
       <div class="flex gap-2">
+        <Button v-if="postUrl" variant="outline" @click="viewPost">
+          <Icon name="eye" :size="16" class="mr-2" />
+          Megtekintés
+        </Button>
         <FormButtons
             :is-saving="isSaving"
             @save="handleSubmit"
