@@ -23,9 +23,19 @@ export interface ListResponse<T> {
   data: T[]
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+  }
+}
+
 export const authorService = {
-  getAll() {
-    return api.get<ListResponse<Author>>('/api/cms/authors')
+  getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
+    return api.get<PaginatedResponse<Author>>('/api/cms/authors', { params })
   },
   getById(id: number | string) {
     return api.get<SingleResponse<Author>>(`/api/cms/authors/${id}`)

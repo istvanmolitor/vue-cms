@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
-import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
+import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -9,6 +9,12 @@ import { postService, type Post } from '../../services/postService.ts'
 const router = useRouter()
 const posts = ref<Post[]>([])
 const isLoading = ref(false)
+const pagination = ref<PaginationMeta>({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0
+})
 
 const columns: Column<Post>[] = [
   { key: 'main_image_url', label: 'Kép', width: '80px' },
@@ -18,11 +24,17 @@ const columns: Column<Post>[] = [
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
-const fetchPosts = async () => {
+const fetchPosts = async (params: {
+  search?: string
+  sort?: string
+  direction?: 'asc' | 'desc'
+  page?: number
+} = {}) => {
   try {
     isLoading.value = true
-    const response = await postService.getAll()
+    const response = await postService.getAll(params)
     posts.value = response.data.data
+    pagination.value = response.data.meta
   } catch (error) {
     console.error('Hiba a posztok betöltésekor:', error)
   } finally {
@@ -33,7 +45,7 @@ const fetchPosts = async () => {
 const deletePost = async (id: number) => {
   try {
     await postService.delete(id)
-    await fetchPosts()
+    await fetchPosts({ page: pagination.value.current_page })
   } catch (error) {
     console.error('Hiba a poszt törlésekor:', error)
   }
@@ -44,7 +56,11 @@ const editPost = (id: number) => {
 }
 
 onMounted(() => {
-  fetchPosts()
+  fetchPosts({
+    page: 1,
+    sort: 'created_at',
+    direction: 'desc'
+  })
 })
 </script>
 
@@ -54,6 +70,10 @@ onMounted(() => {
       :columns="columns"
       :data="posts"
       :loading="isLoading"
+      :pagination="pagination"
+      search-placeholder="Keresés cím vagy lead alapján..."
+      default-sort="created_at"
+      default-direction="desc"
       @fetch="fetchPosts"
     >
       <template #main_image_url="{ row }">

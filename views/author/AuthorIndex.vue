@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
-import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
+import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { authorService, type Author } from '../../services/authorService.ts'
@@ -8,6 +8,12 @@ import { authorService, type Author } from '../../services/authorService.ts'
 const router = useRouter()
 const authors = ref<Author[]>([])
 const isLoading = ref(false)
+const pagination = ref<PaginationMeta>({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0
+})
 
 const columns: Column<Author>[] = [
   { key: 'id', label: 'ID', sortable: true, width: '80px' },
@@ -16,11 +22,17 @@ const columns: Column<Author>[] = [
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
-const fetchAuthors = async () => {
+const fetchAuthors = async (params: {
+  search?: string
+  sort?: string
+  direction?: 'asc' | 'desc'
+  page?: number
+} = {}) => {
   try {
     isLoading.value = true
-    const response = await authorService.getAll()
+    const response = await authorService.getAll(params)
     authors.value = response.data.data
+    pagination.value = response.data.meta
   } catch (error) {
     console.error('Hiba a szerzők betöltésekor:', error)
   } finally {
@@ -31,7 +43,7 @@ const fetchAuthors = async () => {
 const deleteAuthor = async (id: number) => {
   try {
     await authorService.delete(id)
-    await fetchAuthors()
+    await fetchAuthors({ page: pagination.value.current_page })
   } catch (error) {
     console.error('Hiba a szerző törlésekor:', error)
   }
@@ -42,7 +54,11 @@ const editAuthor = (id: number) => {
 }
 
 onMounted(() => {
-  fetchAuthors()
+  fetchAuthors({
+    page: 1,
+    sort: 'name',
+    direction: 'asc'
+  })
 })
 </script>
 
@@ -53,6 +69,10 @@ onMounted(() => {
       :columns="columns"
       :data="authors"
       :loading="isLoading"
+      :pagination="pagination"
+      search-placeholder="Keresés név alapján..."
+      default-sort="name"
+      default-direction="asc"
       @fetch="fetchAuthors"
     >
       <template #actions>

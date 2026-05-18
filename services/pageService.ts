@@ -61,9 +61,19 @@ export interface ListResponse<T> {
   data: T[]
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+  }
+}
+
 export const pageService = {
-  getAll() {
-    return api.get<ListResponse<Page>>('/api/cms/pages')
+  getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
+    return api.get<PaginatedResponse<Page>>('/api/cms/pages', { params })
   },
   getById(id: number | string) {
     return api.get<SingleResponse<Page>>(`/api/cms/pages/${id}`)
