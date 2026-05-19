@@ -17,6 +17,15 @@ export interface Content {
   content_elements: ContentElement[]
 }
 
+export interface PostMeta {
+  id: number
+  post_id: number
+  name: string
+  meta_data: string
+  created_at?: string
+  updated_at?: string
+}
+
 export interface Post {
   id?: number
   title: string
@@ -29,6 +38,7 @@ export interface Post {
   content?: Content | null
   authors?: Author[]
   postGroups?: PostGroup[]
+  post_meta?: PostMeta[]
   created_at?: string
   updated_at?: string
 }

@@ -15,6 +15,15 @@ export interface Content {
   content_elements: ContentElement[]
 }
 
+export interface PageMeta {
+  id: number
+  page_id: number
+  name: string
+  meta_data: string
+  created_at?: string
+  updated_at?: string
+}
+
 export interface Page {
   id?: number
   title: string
@@ -25,6 +34,7 @@ export interface Page {
   layout?: string
   main_image_url?: string
   content?: Content | null
+  meta_data?: PageMeta[]
   created_at?: string
   updated_at?: string
 }

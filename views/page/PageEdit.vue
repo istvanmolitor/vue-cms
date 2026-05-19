@@ -16,7 +16,7 @@ import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
+import { pageService, type PageFormData, type ContentElement, type PageMeta } from '../../services/pageService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
@@ -30,6 +30,7 @@ const pageId = route.params.id as string
 const errors = ref<any>({})
 const layouts = ref<Record<string, Layout>>({})
 const pageUrl = ref<string | null>(null)
+const pageMetaData = ref<PageMeta[]>([])
 
 const form = reactive({
   title: '',
@@ -67,6 +68,7 @@ const fetchPage = async () => {
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     // Store page URL
     pageUrl.value = data.data.url || null
+    pageMetaData.value = data.data.meta_data || []
   } catch (error) {
     console.error('Hiba az oldal betöltésekor:', error)
   } finally {
@@ -203,6 +205,27 @@ onMounted(() => {
                 :accept-types="['image/*']"
               />
               <FieldError :errors="errors.main_image_url" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Meta adatok</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div v-if="pageMetaData.length === 0" class="text-sm text-[--color-muted-foreground]">
+              Nincs meta adat.
+            </div>
+            <div v-else class="space-y-4">
+              <div
+                v-for="metaItem in pageMetaData"
+                :key="metaItem.id"
+                class="rounded-md border p-3"
+              >
+                <p class="text-xs font-medium uppercase tracking-wide text-[--color-muted-foreground]">{{ metaItem.name }}</p>
+                <p class="mt-1 break-all text-sm">{{ metaItem.meta_data }}</p>
+              </div>
             </div>
           </CardContent>
         </Card>

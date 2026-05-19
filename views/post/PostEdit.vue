@@ -17,7 +17,7 @@ import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { postService, type PostFormData, type ContentElement } from '../../services/postService.ts'
+import { postService, type PostFormData, type ContentElement, type PostMeta } from '../../services/postService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
@@ -37,6 +37,7 @@ const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
 const layouts = ref<Record<string, Layout>>({})
 const postUrl = ref<string | null>(null)
+const postMetaData = ref<PostMeta[]>([])
 
 const form = reactive({
   title: '',
@@ -100,6 +101,7 @@ const fetchPost = async () => {
     form.author_ids = data.data.authors?.map(author => author.id) || []
     form.post_group_ids = data.data.postGroups?.map(postGroup => postGroup.id) || []
     postUrl.value = data.data.url || null
+    postMetaData.value = data.data.post_meta || []
   } catch (error) {
     console.error('Hiba a poszt betöltésekor:', error)
   } finally {
@@ -270,6 +272,27 @@ onMounted(() => {
                 Poszt csoportok betöltése...
               </div>
               <FieldError :errors="errors.post_group_ids" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Meta adatok</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div v-if="postMetaData.length === 0" class="text-sm text-[--color-muted-foreground]">
+              Nincs meta adat.
+            </div>
+            <div v-else class="space-y-4">
+              <div
+                v-for="metaItem in postMetaData"
+                :key="metaItem.id"
+                class="rounded-md border p-3"
+              >
+                <p class="text-xs font-medium uppercase tracking-wide text-[--color-muted-foreground]">{{ metaItem.name }}</p>
+                <p class="mt-1 break-all text-sm">{{ metaItem.meta_data }}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
