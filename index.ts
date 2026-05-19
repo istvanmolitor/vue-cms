@@ -19,6 +19,7 @@ export type { MenuItem, MenuItemFormData } from './services/menuItemService'
 // Components
 export { default as EditContent } from './components/EditContent.vue'
 export { default as MenuItemEditor } from './components/menu/MenuItemEditor.vue'
+export { default as PostSelector } from './components/PostSelector.vue'
 
 // Registry
 export * from './registry/index'
