@@ -2,7 +2,6 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
-import Select from '@admin/components/ui/Select.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -12,13 +11,15 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Label from '@admin/components/ui/Label.vue'
+import LanguageSelector from '@language/components/LanguageSelector.vue'
 import MenuItemEditor from '../../components/menu/MenuItemEditor.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { menuService, type MenuFormData } from '../../services/menuService.ts'
+import { menuService } from '@cms/services/menuService'
+import type { MenuFormData } from '@cms/services/menuService'
 import { languageService } from '@language/services/languageService'
 import { toastService } from '@admin/lib/toastService'
-import type { SelectOption } from '@admin/index'
+import type { SelectOption } from '@admin'
 
 const router = useRouter()
 const route = useRoute()
@@ -116,7 +117,7 @@ onMounted(() => {
             </div>
             <div class="space-y-2">
               <Label for="language_id" class="text-sm font-medium">Nyelv</Label>
-              <Select
+              <LanguageSelector
                 id="language_id"
                 v-model="form.language_id"
                 :options="languageOptions"
