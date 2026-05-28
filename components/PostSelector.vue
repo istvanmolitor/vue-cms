@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
+import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 import { postService, type Post } from '../services/postService'
 
 const props = defineProps<{
@@ -148,9 +149,7 @@ onMounted(async () => {
       </div>
 
       <div class="max-h-72 overflow-auto p-1">
-        <div v-if="isLoading" class="py-3 px-3 text-sm text-muted-foreground text-center">
-          Betöltés...
-        </div>
+        <div v-if="isLoading" class="py-3 px-3 text-sm text-muted-foreground text-center"><LoadingSpinner label="Betöltés..." /></div>
         <div v-else-if="posts.length === 0" class="py-3 px-3 text-sm text-muted-foreground text-center">
           Nincs találat.
         </div>

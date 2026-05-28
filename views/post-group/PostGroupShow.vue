@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminLayout, Button, Icon, Card, CardContent, CardDescription, CardHeader, CardTitle, EditButton, DeleteButton } from '@admin'
+import { AdminLayout, Button, Icon, Card, CardContent, CardDescription, CardHeader, CardTitle, EditButton, DeleteButton, LoadingSpinner } from '@admin'
 import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -77,9 +77,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
+    <div v-if="isLoading" class="flex justify-center py-8"><LoadingSpinner label="Betöltés..." /></div>
 
     <div v-else-if="postGroup" class="space-y-6">
       <Card>

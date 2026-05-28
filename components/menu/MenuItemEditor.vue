@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { menuItemService, type MenuItem } from '../../services/menuItemService'
-import { toastService } from '@admin'
+import { toastService, LoadingSpinner } from '@admin'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
@@ -231,9 +231,7 @@ onMounted(() => {
       </div>
     </CardHeader>
     <CardContent>
-      <div v-if="isLoading" class="flex justify-center py-8">
-        Betöltés...
-      </div>
+      <div v-if="isLoading" class="flex justify-center py-8"><LoadingSpinner label="Betöltés..." /></div>
 
       <div v-else-if="menuItems.length === 0" class="text-center py-8 text-gray-500">
         Még nincsenek menü elemek. Kattints az "Új elem" gombra a létrehozáshoz.

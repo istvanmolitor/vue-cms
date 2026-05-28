@@ -20,6 +20,7 @@ import type { MenuFormData } from '@cms/services/menuService'
 import { languageService } from '@language/services/languageService'
 import { toastService } from '@admin/lib/toastService'
 import type { SelectOption } from '@admin'
+import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -94,9 +95,7 @@ onMounted(() => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
+    <div v-if="isLoading" class="flex justify-center py-8"><LoadingSpinner label="Betöltés..." /></div>
 
     <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">

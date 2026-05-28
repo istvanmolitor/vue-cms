@@ -16,6 +16,7 @@ import { reactive, ref, onMounted } from 'vue'
 import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
+import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -91,9 +92,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
+    <div v-if="isLoading" class="flex justify-center py-8"><LoadingSpinner label="Betöltés..." /></div>
 
     <Card v-else>
       <CardHeader>

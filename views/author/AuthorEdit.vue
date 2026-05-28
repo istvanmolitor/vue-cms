@@ -16,6 +16,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { authorService, type AuthorFormData } from '../../services/authorService.ts'
 import { toastService } from '@admin/lib/toastService'
+import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -75,9 +76,7 @@ onMounted(() => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
+    <div v-if="isLoading" class="flex justify-center py-8"><LoadingSpinner label="Betöltés..." /></div>
 
     <Card v-else>
       <CardHeader>
