@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import { postService, type Post } from '../services/postService'
 
 const props = defineProps<{
@@ -114,23 +115,19 @@ onMounted(async () => {
       <span :class="hasSelection ? '' : 'text-muted-foreground'" class="truncate">
         {{ triggerLabel }}
       </span>
-      <span class="flex items-center gap-1 ml-2 shrink-0">
-        <span
-          v-if="hasSelection"
-          role="button"
-          tabindex="0"
-          class="text-muted-foreground hover:text-foreground"
-          @click.stop="clear"
-          @keydown.enter.space.prevent.stop="clear"
-        >
-          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </span>
-        <svg class="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </span>
+       <span class="flex items-center gap-1 ml-2 shrink-0">
+         <span
+           v-if="hasSelection"
+           role="button"
+           tabindex="0"
+           class="text-muted-foreground hover:text-foreground"
+           @click.stop="clear"
+           @keydown.enter.space.prevent.stop="clear"
+         >
+           <Icon name="close" class="h-3.5 w-3.5" />
+         </span>
+         <Icon name="chevron-down" class="h-4 w-4 opacity-50" />
+       </span>
     </div>
 
     <!-- Dropdown -->
@@ -172,24 +169,14 @@ onMounted(async () => {
               class="w-full h-full object-cover"
             />
             <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+              <Icon name="image" class="h-5 w-5" />
             </div>
           </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium truncate">{{ post.title }}</p>
-            <p v-if="post.lead" class="text-xs text-muted-foreground line-clamp-2 mt-0.5">{{ truncateLead(post.lead) }}</p>
-          </div>
-          <svg
-            v-if="modelValue === post.id"
-            class="h-4 w-4 shrink-0 mt-1 text-primary"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
+           <div class="flex-1 min-w-0">
+             <p class="text-sm font-medium truncate">{{ post.title }}</p>
+             <p v-if="post.lead" class="text-xs text-muted-foreground line-clamp-2 mt-0.5">{{ truncateLead(post.lead) }}</p>
+           </div>
+           <Icon v-if="modelValue === post.id" name="check" class="h-4 w-4 shrink-0 mt-1 text-primary" />
         </div>
       </div>
     </div>
