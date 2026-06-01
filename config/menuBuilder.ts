@@ -61,48 +61,55 @@ export class CmsMenuBuilder extends MenuBuilder {
       title: 'CMS',
       icon: Layout,
       order: 30,
+      permission: 'cms',
       children: [
         {
           id: 'cms-pages',
           title: 'Oldalak',
           path: '/admin/cms/page',
           icon: FileText,
-          order: 10
+          order: 10,
+          permission: 'cms'
         },
         {
           id: 'cms-posts',
           title: 'Posztok',
           path: '/admin/cms/post',
           icon: Newspaper,
-          order: 20
+          order: 20,
+          permission: 'cms'
         },
         {
           id: 'cms-regions',
           title: 'Régiók',
           path: '/admin/cms/region',
           icon: Layers,
-          order: 30
+          order: 30,
+          permission: 'cms'
         },
         {
           id: 'cms-authors',
           title: 'Szerzők',
           path: '/admin/cms/author',
           icon: User,
-          order: 40
+          order: 40,
+          permission: 'cms'
         },
         {
           id: 'cms-post-groups',
           title: 'Poszt Csoportok',
           path: '/admin/cms/post-group',
           icon: FolderTree,
-          order: 50
+          order: 50,
+          permission: 'cms'
         },
         {
           id: 'cms-menus',
           title: 'Menük',
           path: '/admin/cms/menu',
           icon: MenuIcon,
-          order: 60
+          order: 60,
+          permission: 'cms'
         }
       ]
     }
