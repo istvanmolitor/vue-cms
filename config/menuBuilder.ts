@@ -61,7 +61,6 @@ export class CmsMenuBuilder extends MenuBuilder {
       title: 'CMS',
       icon: Layout,
       order: 30,
-      permission: 'cms',
       children: [
         {
           id: 'cms-pages',
@@ -69,7 +68,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/page',
           icon: FileText,
           order: 10,
-          permission: 'cms'
+          permission: 'cms_page'
         },
         {
           id: 'cms-posts',
@@ -77,7 +76,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/post',
           icon: Newspaper,
           order: 20,
-          permission: 'cms'
+          permission: 'cms_post'
         },
         {
           id: 'cms-regions',
@@ -85,7 +84,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/region',
           icon: Layers,
           order: 30,
-          permission: 'cms'
+          permission: 'cms_region'
         },
         {
           id: 'cms-authors',
@@ -93,7 +92,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/author',
           icon: User,
           order: 40,
-          permission: 'cms'
+          permission: 'cms_author'
         },
         {
           id: 'cms-post-groups',
@@ -101,7 +100,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/post-group',
           icon: FolderTree,
           order: 50,
-          permission: 'cms'
+          permission: 'cms_post'
         },
         {
           id: 'cms-menus',
@@ -109,7 +108,7 @@ export class CmsMenuBuilder extends MenuBuilder {
           path: '/admin/cms/menu',
           icon: MenuIcon,
           order: 60,
-          permission: 'cms'
+          permission: 'cms_menu'
         }
       ]
     }
