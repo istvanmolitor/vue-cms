@@ -18,6 +18,7 @@ const pagination = ref<PaginationMeta>({
 const columns: Column<Author>[] = [
   { key: 'profile_url', label: 'Kép', sortable: false, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
+  { key: 'nickname', label: 'Becenév', sortable: true },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 

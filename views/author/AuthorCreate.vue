@@ -11,6 +11,7 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Label from '@admin/components/ui/Label.vue'
+import Textarea from '@admin/components/ui/Textarea.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
@@ -23,6 +24,11 @@ const errors = ref<any>({})
 
 const form = reactive({
   name: '',
+  nickname: '',
+  email: '',
+  phone: '',
+  position: '',
+  bio: '',
   profile_url: ''
 }) as AuthorFormData
 
@@ -83,6 +89,53 @@ const goBack = () => {
             placeholder="Szerző neve"
           />
           <FieldError :errors="errors.name" />
+        </div>
+        <div class="space-y-2">
+          <Label for="nickname" class="text-sm font-medium">Becenév</Label>
+          <Input
+            id="nickname"
+            v-model="form.nickname"
+            placeholder="Becenév"
+          />
+          <FieldError :errors="errors.nickname" />
+        </div>
+        <div class="space-y-2">
+          <Label for="email" class="text-sm font-medium">E-mail</Label>
+          <Input
+            id="email"
+            v-model="form.email"
+            type="email"
+            placeholder="email@pelda.hu"
+          />
+          <FieldError :errors="errors.email" />
+        </div>
+        <div class="space-y-2">
+          <Label for="phone" class="text-sm font-medium">Telefonszám</Label>
+          <Input
+            id="phone"
+            v-model="form.phone"
+            placeholder="+36 30 123 4567"
+          />
+          <FieldError :errors="errors.phone" />
+        </div>
+        <div class="space-y-2">
+          <Label for="position" class="text-sm font-medium">Beosztás</Label>
+          <Input
+            id="position"
+            v-model="form.position"
+            placeholder="pl. Főszerkesztő"
+          />
+          <FieldError :errors="errors.position" />
+        </div>
+        <div class="space-y-2">
+          <Label for="bio" class="text-sm font-medium">Bemutatkozás</Label>
+          <Textarea
+            id="bio"
+            v-model="form.bio"
+            placeholder="Rövid bemutatkozó szöveg..."
+            :rows="4"
+          />
+          <FieldError :errors="errors.bio" />
         </div>
         <div class="space-y-2">
           <Label for="profile_url" class="text-sm font-medium">Profil URL</Label>

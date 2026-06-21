@@ -5,6 +5,11 @@ const api = createApiClient()
 export interface Author {
   id: number
   name: string
+  nickname?: string | null
+  email?: string | null
+  phone?: string | null
+  position?: string | null
+  bio?: string | null
   profile_url?: string | null
   created_at?: string
   updated_at?: string
@@ -12,6 +17,11 @@ export interface Author {
 
 export interface AuthorFormData {
   name: string
+  nickname?: string
+  email?: string
+  phone?: string
+  position?: string
+  bio?: string
   profile_url?: string
 }
 
@@ -43,14 +53,24 @@ export const authorService = {
   create(formData: AuthorFormData) {
     const data = {
       ...formData,
-      profile_url: formData.profile_url || null
+      nickname: formData.nickname || null,
+      email: formData.email || null,
+      phone: formData.phone || null,
+      position: formData.position || null,
+      bio: formData.bio || null,
+      profile_url: formData.profile_url || null,
     }
     return api.post<SingleResponse<Author>>('/api/cms/authors', data)
   },
   update(id: number | string, formData: AuthorFormData) {
     const data = {
       ...formData,
-      profile_url: formData.profile_url || null
+      nickname: formData.nickname || null,
+      email: formData.email || null,
+      phone: formData.phone || null,
+      position: formData.position || null,
+      bio: formData.bio || null,
+      profile_url: formData.profile_url || null,
     }
     return api.put<SingleResponse<Author>>(`/api/cms/authors/${id}`, data)
   },
