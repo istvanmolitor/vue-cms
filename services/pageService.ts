@@ -33,6 +33,7 @@ export interface Page {
   lead?: string
   layout?: string
   main_image_url?: string
+  keywords?: string
   content?: Content | null
   meta_data?: PageMeta[]
   created_at?: string
@@ -46,6 +47,7 @@ export interface PageFormData {
   lead?: string
   layout: string
   main_image_url?: string
+  keywords?: string
   content_elements: ContentElement[]
 }
 
@@ -56,6 +58,7 @@ export interface PagePayload {
   lead?: string
   layout?: string
   main_image_url?: string
+  keywords?: string
   content_elements: Array<{
     type: string
     settings: any  // API expects 'settings' not 'content'

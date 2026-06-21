@@ -44,6 +44,7 @@ const form = reactive({
   lead: '',
   layout: 'default',
   main_image_url: '',
+  keywords: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
   post_group_ids: [] as number[]
@@ -83,6 +84,7 @@ const fetchPost = async () => {
     form.lead = data.data.lead || ''
     form.layout = data.data.layout || 'default'
     form.main_image_url = data.data.main_image_url || ''
+    form.keywords = data.data.keywords || ''
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     form.author_ids = data.data.authors?.map(author => author.id) || []
     form.post_group_ids = data.data.postGroups?.map(postGroup => postGroup.id) || []
@@ -107,6 +109,7 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
+      keywords: form.keywords,
       author_ids: form.author_ids,
       post_group_ids: form.post_group_ids,
       content_elements: form.content_elements.map((element, index) => ({
@@ -201,6 +204,11 @@ onMounted(() => {
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
+            </div>
+            <div class="space-y-2">
+              <Label for="keywords" class="text-sm font-medium">Kulcsszavak</Label>
+              <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
+              <FieldError :errors="errors.keywords" />
             </div>
             <LayoutSelect v-model="form.layout" :errors="errors.layout" />
 

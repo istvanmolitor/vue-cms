@@ -37,6 +37,7 @@ const form = reactive({
   lead: '',
   layout: 'default',
   main_image_url: '',
+  keywords: '',
   content_elements: [] as ContentElement[],
 }) as PageFormData
 
@@ -50,6 +51,7 @@ const fetchPage = async () => {
     form.lead = data.data.lead || ''
     form.layout = data.data.layout || 'default'
     form.main_image_url = data.data.main_image_url || ''
+    form.keywords = data.data.keywords || ''
     // Load draft_content if it exists, otherwise fall back to published content
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     // Store page URL
@@ -75,6 +77,7 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
+      keywords: form.keywords,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,
@@ -168,6 +171,11 @@ onMounted(() => {
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
               <FieldError :errors="errors.lead" />
+            </div>
+            <div class="space-y-2">
+              <Label for="keywords" class="text-sm font-medium">Kulcsszavak</Label>
+              <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
+              <FieldError :errors="errors.keywords" />
             </div>
             <LayoutSelect v-model="form.layout" :errors="errors.layout" />
 

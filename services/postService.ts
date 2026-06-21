@@ -35,6 +35,7 @@ export interface Post {
   lead?: string
   layout?: string
   main_image_url?: string
+  keywords?: string
   content?: Content | null
   authors?: Author[]
   postGroups?: PostGroup[]
@@ -50,6 +51,7 @@ export interface PostFormData {
   lead?: string
   layout: string
   main_image_url?: string
+  keywords?: string
   content_elements: ContentElement[]
   author_ids: number[]
   post_group_ids: number[]
@@ -62,6 +64,7 @@ export interface PostPayload {
   lead?: string
   layout?: string
   main_image_url?: string
+  keywords?: string
   author_ids?: number[]
   post_group_ids?: number[]
   content_elements: Array<{
