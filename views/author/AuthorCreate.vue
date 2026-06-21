@@ -14,7 +14,7 @@ import Label from '@admin/components/ui/Label.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { authorService, type AuthorFormData } from '../../services/authorService.ts'
 import { toastService } from '@admin/lib/toastService'
 
@@ -22,8 +22,25 @@ const router = useRouter()
 const isSaving = ref(false)
 const errors = ref<any>({})
 
+const isSlugManuallyEdited = ref(false)
+
+const slugify = (text: string): string => {
+  const map: Record<string, string> = {
+    'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ö': 'o', 'ő': 'o',
+    'ú': 'u', 'ü': 'u', 'ű': 'u',
+  }
+  return text
+    .toLowerCase()
+    .split('')
+    .map(c => map[c] ?? c)
+    .join('')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 const form = reactive({
   name: '',
+  slug: '',
   nickname: '',
   email: '',
   phone: '',
@@ -31,6 +48,12 @@ const form = reactive({
   bio: '',
   profile_url: ''
 }) as AuthorFormData
+
+watch(() => form.name, (newName) => {
+  if (!isSlugManuallyEdited.value) {
+    form.slug = slugify(newName)
+  }
+})
 
 const handleSubmit = async () => {
   try {
@@ -89,6 +112,16 @@ const goBack = () => {
             placeholder="Szerző neve"
           />
           <FieldError :errors="errors.name" />
+        </div>
+        <div class="space-y-2">
+          <Label for="slug" class="text-sm font-medium">Slug</Label>
+          <Input
+            id="slug"
+            v-model="form.slug"
+            placeholder="szerzo-neve"
+            @input="isSlugManuallyEdited = true"
+          />
+          <FieldError :errors="errors.slug" />
         </div>
         <div class="space-y-2">
           <Label for="nickname" class="text-sm font-medium">Becenév</Label>

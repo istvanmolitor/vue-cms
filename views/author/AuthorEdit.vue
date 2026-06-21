@@ -28,6 +28,7 @@ const errors = ref<any>({})
 
 const form = reactive({
   name: '',
+  slug: '',
   nickname: '',
   email: '',
   phone: '',
@@ -41,6 +42,7 @@ const fetchAuthor = async () => {
     isLoading.value = true
     const { data } = await authorService.getById(authorId)
     form.name = data.data.name
+    form.slug = data.data.slug
     form.nickname = data.data.nickname || ''
     form.email = data.data.email || ''
     form.phone = data.data.phone || ''
@@ -103,6 +105,15 @@ onMounted(() => {
             placeholder="Szerző neve"
           />
           <FieldError :errors="errors.name" />
+        </div>
+        <div class="space-y-2">
+          <Label for="slug" class="text-sm font-medium">Slug</Label>
+          <Input
+            id="slug"
+            v-model="form.slug"
+            placeholder="szerzo-neve"
+          />
+          <FieldError :errors="errors.slug" />
         </div>
         <div class="space-y-2">
           <Label for="nickname" class="text-sm font-medium">Becenév</Label>

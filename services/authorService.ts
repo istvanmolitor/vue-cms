@@ -4,6 +4,7 @@ const api = createApiClient()
 
 export interface Author {
   id: number
+  slug: string
   name: string
   nickname?: string | null
   email?: string | null
@@ -17,6 +18,7 @@ export interface Author {
 
 export interface AuthorFormData {
   name: string
+  slug?: string
   nickname?: string
   email?: string
   phone?: string
