@@ -16,9 +16,8 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<Author>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
+  { key: 'profile_url', label: 'Kép', sortable: false, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
-  { key: 'profile_url', label: 'Profil URL', sortable: false },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
@@ -77,6 +76,11 @@ onMounted(() => {
     >
       <template #actions>
         <CreateButton to="/admin/cms/author/create">Új szerző</CreateButton>
+      </template>
+
+      <template #profile_url="{ row }">
+        <img v-if="row.profile_url" :src="row.profile_url" :alt="row.name" class="h-10 w-10 rounded-full object-cover" />
+        <span v-else class="text-muted-foreground">—</span>
       </template>
 
       <template #row-actions="{ row }">
