@@ -10,14 +10,13 @@ import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
-import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement, type PageMeta } from '../../services/pageService.ts'
-import { layoutService, type Layout } from '../../services/layoutService.ts'
+import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
@@ -26,10 +25,8 @@ const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
-const isLoadingLayouts = ref(true)
 const pageId = route.params.id as string
 const errors = ref<any>({})
-const layouts = ref<Record<string, Layout>>({})
 const pageUrl = ref<string | null>(null)
 const pageMetaData = ref<PageMeta[]>([])
 
@@ -42,18 +39,6 @@ const form = reactive({
   main_image_url: '',
   content_elements: [] as ContentElement[],
 }) as PageFormData
-
-const fetchLayouts = async () => {
-  try {
-    isLoadingLayouts.value = true
-    const { data } = await layoutService.getAll()
-    layouts.value = data.data
-  } catch (error) {
-    console.error('Hiba a sablonok betöltésekor:', error)
-  } finally {
-    isLoadingLayouts.value = false
-  }
-}
 
 const fetchPage = async () => {
   try {
@@ -123,7 +108,6 @@ const viewPage = () => {
 }
 
 onMounted(() => {
-  fetchLayouts()
   fetchPage()
 })
 </script>
@@ -185,16 +169,7 @@ onMounted(() => {
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
               <FieldError :errors="errors.lead" />
             </div>
-            <div class="space-y-2">
-              <Label for="layout" class="text-sm font-medium">Sablon</Label>
-              <Select
-                id="layout"
-                v-model="form.layout"
-                :options="Object.entries(layouts).map(([key, layout]) => ({ value: key, label: layout.name }))"
-                placeholder="Válassz sablont..."
-              />
-              <FieldError :errors="errors.layout" />
-            </div>
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" />
 
             <hr class="my-6" />
             <div class="space-y-2">

@@ -10,40 +10,20 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
-import Select from '@admin/components/ui/Select.vue'
-import Label from '@admin/components/ui/Label.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { postGroupService, type PostGroupFormData } from '../../services/postGroupService.ts'
-import { layoutService } from '../../services/layoutService.ts'
+import { LayoutSelect } from '@theme'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
 const errors = ref<any>({})
-const layouts = ref<any>({})
-
 const form = reactive({
   name: '',
   slug: '',
   layout: ''
 }) as PostGroupFormData
-
-const layoutOptions = computed(() => {
-  return Object.entries(layouts.value).map(([key, layout]: [string, any]) => ({
-    value: key,
-    label: layout.name
-  }))
-})
-
-const fetchLayouts = async () => {
-  try {
-    const { data } = await layoutService.getAll()
-    layouts.value = data.data
-  } catch (error) {
-    console.error('Hiba a layoutok betöltésekor:', error)
-  }
-}
 
 const handleSubmit = async () => {
   try {
@@ -81,9 +61,6 @@ const goBack = () => {
   router.push('/admin/cms/post-group')
 }
 
-onMounted(() => {
-  fetchLayouts()
-})
 </script>
 
 <template>
@@ -116,16 +93,7 @@ onMounted(() => {
           />
           <FieldError :errors="errors.slug" />
         </div>
-        <div class="space-y-2">
-          <Label for="layout" class="text-sm font-medium">Layout</Label>
-          <Select
-            id="layout"
-            v-model="form.layout"
-            :options="layoutOptions"
-            placeholder="Válassz layoutot..."
-          />
-          <FieldError :errors="errors.layout" />
-        </div>
+        <LayoutSelect v-model="form.layout" :errors="errors.layout" />
       </CardContent>
       <CardFooter>
         <FormButtons

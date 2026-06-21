@@ -11,7 +11,6 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import MultiSelect from '@admin/components/ui/MultiSelect.vue'
-import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
@@ -20,7 +19,7 @@ import { reactive, ref, onMounted } from 'vue'
 import { postService, type PostFormData, type ContentElement, type PostMeta } from '../../services/postService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
-import { layoutService, type Layout } from '../../services/layoutService.ts'
+import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
@@ -31,12 +30,10 @@ const isSaving = ref(false)
 const isLoading = ref(true)
 const isLoadingAuthors = ref(true)
 const isLoadingPostGroups = ref(true)
-const isLoadingLayouts = ref(true)
 const postId = route.params.id as string
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
-const layouts = ref<Record<string, Layout>>({})
 const postUrl = ref<string | null>(null)
 const postMetaData = ref<PostMeta[]>([])
 
@@ -73,18 +70,6 @@ const fetchPostGroups = async () => {
     console.error('Hiba a poszt csoportok betöltésekor:', error)
   } finally {
     isLoadingPostGroups.value = false
-  }
-}
-
-const fetchLayouts = async () => {
-  try {
-    isLoadingLayouts.value = true
-    const { data } = await layoutService.getAll()
-    layouts.value = data.data
-  } catch (error) {
-    console.error('Hiba a sablonok betöltésekor:', error)
-  } finally {
-    isLoadingLayouts.value = false
   }
 }
 
@@ -158,7 +143,6 @@ const viewPost = () => {
 onMounted(() => {
   fetchAuthors()
   fetchPostGroups()
-  fetchLayouts()
   fetchPost()
 })
 </script>
@@ -218,16 +202,7 @@ onMounted(() => {
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
             </div>
-            <div class="space-y-2">
-              <Label for="layout" class="text-sm font-medium">Sablon</Label>
-              <Select
-                id="layout"
-                v-model="form.layout"
-                :options="Object.entries(layouts).map(([key, layout]) => ({ value: key, label: layout.name }))"
-                placeholder="Válassz sablont..."
-              />
-              <FieldError :errors="errors.layout" />
-            </div>
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" />
 
             <hr class="my-6" />
             <div class="space-y-2">
