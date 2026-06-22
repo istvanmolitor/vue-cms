@@ -16,17 +16,15 @@ import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
-import { pageTypeService, type PageType } from '../../services/pageTypeService.ts'
 import EditContent from '../../components/EditContent.vue'
+import PageTypeSelect from '../../components/PageTypeSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingLayouts = ref(true)
-const isLoadingPageTypes = ref(true)
 const errors = ref<any>({})
 const layouts = ref<Record<string, Layout>>({})
-const pageTypes = ref<PageType[]>([])
 
 const form = reactive({
   title: '',
@@ -38,18 +36,6 @@ const form = reactive({
   page_type_id: null as number | null,
   content_elements: [] as ContentElement[],
 }) as PageFormData
-
-const fetchPageTypes = async () => {
-  try {
-    isLoadingPageTypes.value = true
-    const { data } = await pageTypeService.getAll()
-    pageTypes.value = data.data
-  } catch (error) {
-    console.error('Hiba az oldal típusok betöltésekor:', error)
-  } finally {
-    isLoadingPageTypes.value = false
-  }
-}
 
 const fetchLayouts = async () => {
   try {
@@ -119,7 +105,6 @@ const goBack = () => {
 
 onMounted(() => {
   fetchLayouts()
-  fetchPageTypes()
 })
 </script>
 
@@ -176,22 +161,7 @@ onMounted(() => {
               <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
               <FieldError :errors="errors.slug" />
             </div>
-            <div class="space-y-2">
-              <Label class="text-sm font-medium">Oldal típus</Label>
-              <Select
-                v-if="!isLoadingPageTypes"
-                v-model="form.page_type_id"
-                :options="pageTypes"
-                label-field="name"
-                value-field="id"
-                placeholder="Válassz típust..."
-                :clearable="true"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Oldal típusok betöltése...
-              </div>
-              <FieldError :errors="errors.page_type_id" />
-            </div>
+            <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />

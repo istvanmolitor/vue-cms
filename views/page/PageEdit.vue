@@ -2,7 +2,7 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
-import Select from '@admin/components/ui/Select.vue'
+
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -17,9 +17,9 @@ import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement, type PageMeta } from '../../services/pageService.ts'
-import { pageTypeService, type PageType } from '../../services/pageTypeService.ts'
 import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
+import PageTypeSelect from '../../components/PageTypeSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
@@ -27,12 +27,10 @@ const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
-const isLoadingPageTypes = ref(true)
 const pageId = route.params.id as string
 const errors = ref<any>({})
 const pageUrl = ref<string | null>(null)
 const pageMetaData = ref<PageMeta[]>([])
-const pageTypes = ref<PageType[]>([])
 
 const form = reactive({
   title: '',
@@ -59,7 +57,7 @@ const fetchPage = async () => {
     form.keywords = data.data.keywords || ''
     // Load draft_content if it exists, otherwise fall back to published content
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
-    form.page_type_id = data.data.page_type_id ?? null
+    form.page_type_id = data.data.page_type_id ?? form.page_type_id
     // Store page URL
     pageUrl.value = data.data.url || null
     pageMetaData.value = data.data.meta_data || []
@@ -119,21 +117,8 @@ const viewPage = () => {
   }
 }
 
-const fetchPageTypes = async () => {
-  try {
-    isLoadingPageTypes.value = true
-    const { data } = await pageTypeService.getAll()
-    pageTypes.value = data.data
-  } catch (error) {
-    console.error('Hiba az oldal típusok betöltésekor:', error)
-  } finally {
-    isLoadingPageTypes.value = false
-  }
-}
-
 onMounted(() => {
   fetchPage()
-  fetchPageTypes()
 })
 </script>
 
@@ -189,22 +174,7 @@ onMounted(() => {
               <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
               <FieldError :errors="errors.slug" />
             </div>
-            <div class="space-y-2">
-              <Label class="text-sm font-medium">Oldal típus</Label>
-              <Select
-                v-if="!isLoadingPageTypes"
-                v-model="form.page_type_id"
-                :options="pageTypes"
-                label-field="name"
-                value-field="id"
-                placeholder="Válassz típust..."
-                :clearable="true"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Oldal típusok betöltése...
-              </div>
-              <FieldError :errors="errors.page_type_id" />
-            </div>
+            <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />

@@ -18,21 +18,19 @@ import { reactive, ref, onMounted } from 'vue'
 import { postService, type PostFormData, type ContentElement } from '../../services/postService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
-import { postTypeService, type PostType } from '../../services/postTypeService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
+import PostTypeSelect from '../../components/PostTypeSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingAuthors = ref(true)
 const isLoadingPostGroups = ref(true)
-const isLoadingPostTypes = ref(true)
 const isLoadingLayouts = ref(true)
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
-const postTypes = ref<PostType[]>([])
 const layouts = ref<Record<string, Layout>>({})
 
 const form = reactive({
@@ -69,18 +67,6 @@ const fetchPostGroups = async () => {
     console.error('Hiba a poszt csoportok betöltésekor:', error)
   } finally {
     isLoadingPostGroups.value = false
-  }
-}
-
-const fetchPostTypes = async () => {
-  try {
-    isLoadingPostTypes.value = true
-    const { data } = await postTypeService.getAll()
-    postTypes.value = data.data
-  } catch (error) {
-    console.error('Hiba a poszt típusok betöltésekor:', error)
-  } finally {
-    isLoadingPostTypes.value = false
   }
 }
 
@@ -155,7 +141,6 @@ const goBack = () => {
 onMounted(() => {
   fetchAuthors()
   fetchPostGroups()
-  fetchPostTypes()
   fetchLayouts()
 })
 </script>
@@ -211,22 +196,7 @@ onMounted(() => {
               <Input id="slug" v-model="form.slug" placeholder="poszt-cime" />
               <FieldError :errors="errors.slug" />
             </div>
-            <div class="space-y-2">
-              <Label class="text-sm font-medium">Poszt típus</Label>
-              <Select
-                v-if="!isLoadingPostTypes"
-                v-model="form.post_type_id"
-                :options="postTypes"
-                label-field="name"
-                value-field="id"
-                placeholder="Válassz típust..."
-                :clearable="true"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Poszt típusok betöltése...
-              </div>
-              <FieldError :errors="errors.post_type_id" />
-            </div>
+            <PostTypeSelect v-model="form.post_type_id" :errors="errors.post_type_id" />
             <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
