@@ -144,7 +144,9 @@ const handleSubmit = async () => {
     router.push('/admin/cms/post')
   } catch (error: any) {
     if (error.response?.status === 422) {
-      errors.value = error.response.data.errors
+      errors.value = error.response?.data?.errors ?? {}
+    } else {
+      toastService.error('Hiba a poszt frissítésekor')
     }
     console.error('Hiba a poszt frissítésekor:', error)
   } finally {

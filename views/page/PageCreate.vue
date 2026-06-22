@@ -103,7 +103,9 @@ const handleSubmit = async () => {
     await router.push('/admin/cms/page')
   } catch (error: any) {
     if (error.response?.status === 422) {
-      errors.value = error.response.data.errors
+      errors.value = error.response?.data?.errors ?? {}
+    } else {
+      toastService.error('Hiba az oldal létrehozásakor')
     }
     console.error('Hiba az oldal létrehozásakor:', error)
   } finally {
