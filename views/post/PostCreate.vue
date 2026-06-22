@@ -191,6 +191,15 @@ onMounted(() => {
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <Checkbox id="is_published" v-model:checked="form.is_published" />
+                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Publikálva
+                </Label>
+              </div>
+              <FieldError :errors="errors.is_published" />
+            </div>
+            <div class="space-y-2">
               <Label for="title" class="text-sm font-medium">Cím</Label>
               <Input id="title" v-model="form.title" placeholder="Poszt címe" />
               <FieldError :errors="errors.title" />
@@ -199,6 +208,22 @@ onMounted(() => {
               <Label for="slug" class="text-sm font-medium">Slug</Label>
               <Input id="slug" v-model="form.slug" placeholder="poszt-cime" />
               <FieldError :errors="errors.slug" />
+            </div>
+            <div class="space-y-2">
+              <Label class="text-sm font-medium">Poszt típus</Label>
+              <Select
+                v-if="!isLoadingPostTypes"
+                v-model="form.post_type_id"
+                :options="postTypes"
+                label-field="name"
+                value-field="id"
+                placeholder="Válassz típust..."
+                :clearable="true"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Poszt típusok betöltése...
+              </div>
+              <FieldError :errors="errors.post_type_id" />
             </div>
             <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
@@ -214,15 +239,6 @@ onMounted(() => {
                 placeholder="Válassz sablont..."
               />
               <FieldError :errors="errors.layout" />
-            </div>
-            <div class="space-y-2">
-              <div class="flex items-center space-x-2">
-                <Checkbox id="is_published" v-model:checked="form.is_published" />
-                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Publikálva
-                </Label>
-              </div>
-              <FieldError :errors="errors.is_published" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
@@ -249,23 +265,6 @@ onMounted(() => {
                 Szerzők betöltése...
               </div>
               <FieldError :errors="errors.author_ids" />
-            </div>
-            <hr class="my-6" />
-            <div class="space-y-2">
-              <Label class="text-sm font-medium">Poszt típus</Label>
-              <Select
-                v-if="!isLoadingPostTypes"
-                v-model="form.post_type_id"
-                :options="postTypes"
-                label-field="name"
-                value-field="id"
-                placeholder="Válassz típust..."
-                :clearable="true"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Poszt típusok betöltése...
-              </div>
-              <FieldError :errors="errors.post_type_id" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">

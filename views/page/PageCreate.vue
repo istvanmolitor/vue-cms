@@ -16,14 +16,17 @@ import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
 import { layoutService, type Layout } from '../../services/layoutService.ts'
+import { pageTypeService, type PageType } from '../../services/pageTypeService.ts'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingLayouts = ref(true)
+const isLoadingPageTypes = ref(true)
 const errors = ref<any>({})
 const layouts = ref<Record<string, Layout>>({})
+const pageTypes = ref<PageType[]>([])
 
 const form = reactive({
   title: '',
@@ -32,8 +35,21 @@ const form = reactive({
   lead: '',
   layout: 'default',
   main_image_url: '',
+  page_type_id: null as number | null,
   content_elements: [] as ContentElement[],
 }) as PageFormData
+
+const fetchPageTypes = async () => {
+  try {
+    isLoadingPageTypes.value = true
+    const { data } = await pageTypeService.getAll()
+    pageTypes.value = data.data
+  } catch (error) {
+    console.error('Hiba az oldal típusok betöltésekor:', error)
+  } finally {
+    isLoadingPageTypes.value = false
+  }
+}
 
 const fetchLayouts = async () => {
   try {
@@ -60,6 +76,7 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
+      page_type_id: form.page_type_id,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,
@@ -100,6 +117,7 @@ const goBack = () => {
 
 onMounted(() => {
   fetchLayouts()
+  fetchPageTypes()
 })
 </script>
 
@@ -138,6 +156,15 @@ onMounted(() => {
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <Checkbox id="is_published" v-model:checked="form.is_published" />
+                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Publikálva
+                </Label>
+              </div>
+              <FieldError :errors="errors.is_published" />
+            </div>
+            <div class="space-y-2">
               <Label for="title" class="text-sm font-medium">Cím</Label>
               <Input id="title" v-model="form.title" placeholder="Oldal címe" />
               <FieldError :errors="errors.title" />
@@ -146,6 +173,22 @@ onMounted(() => {
               <Label for="slug" class="text-sm font-medium">Slug</Label>
               <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
               <FieldError :errors="errors.slug" />
+            </div>
+            <div class="space-y-2">
+              <Label class="text-sm font-medium">Oldal típus</Label>
+              <Select
+                v-if="!isLoadingPageTypes"
+                v-model="form.page_type_id"
+                :options="pageTypes"
+                label-field="name"
+                value-field="id"
+                placeholder="Válassz típust..."
+                :clearable="true"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Oldal típusok betöltése...
+              </div>
+              <FieldError :errors="errors.page_type_id" />
             </div>
             <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
@@ -161,15 +204,6 @@ onMounted(() => {
                 placeholder="Válassz sablont..."
               />
               <FieldError :errors="errors.layout" />
-            </div>
-            <div class="space-y-2">
-              <div class="flex items-center space-x-2">
-                <Checkbox id="is_published" v-model:checked="form.is_published" />
-                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Publikálva
-                </Label>
-              </div>
-              <FieldError :errors="errors.is_published" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">

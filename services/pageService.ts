@@ -34,6 +34,7 @@ export interface Page {
   layout?: string
   main_image_url?: string
   keywords?: string
+  page_type_id?: number | null
   content?: Content | null
   meta_data?: PageMeta[]
   created_at?: string
@@ -48,6 +49,7 @@ export interface PageFormData {
   layout: string
   main_image_url?: string
   keywords?: string
+  page_type_id?: number | null
   content_elements: ContentElement[]
 }
 
@@ -59,9 +61,10 @@ export interface PagePayload {
   layout?: string
   main_image_url?: string
   keywords?: string
+  page_type_id?: number | null
   content_elements: Array<{
     type: string
-    settings: any  // API expects 'settings' not 'content'
+    settings: any
     sort: number
   }>
 }

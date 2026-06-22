@@ -221,6 +221,22 @@ onMounted(() => {
               <FieldError :errors="errors.slug" />
             </div>
             <div class="space-y-2">
+              <Label class="text-sm font-medium">Poszt típus</Label>
+              <Select
+                v-if="!isLoadingPostTypes"
+                v-model="form.post_type_id"
+                :options="postTypes"
+                label-field="name"
+                value-field="id"
+                placeholder="Válassz típust..."
+                :clearable="true"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Poszt típusok betöltése...
+              </div>
+              <FieldError :errors="errors.post_type_id" />
+            </div>
+            <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
@@ -257,23 +273,6 @@ onMounted(() => {
                 Szerzők betöltése...
               </div>
               <FieldError :errors="errors.author_ids" />
-            </div>
-            <hr class="my-6" />
-            <div class="space-y-2">
-              <Label class="text-sm font-medium">Poszt típus</Label>
-              <Select
-                v-if="!isLoadingPostTypes"
-                v-model="form.post_type_id"
-                :options="postTypes"
-                label-field="name"
-                value-field="id"
-                placeholder="Válassz típust..."
-                :clearable="true"
-              />
-              <div v-else class="text-sm text-[--color-muted-foreground]">
-                Poszt típusok betöltése...
-              </div>
-              <FieldError :errors="errors.post_type_id" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
