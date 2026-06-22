@@ -8,6 +8,9 @@ export interface PostGroup {
   name: string
   slug: string
   layout?: string
+  lead?: string
+  main_image_url?: string
+  keywords?: string
   posts?: Post[]
   created_at?: string
   updated_at?: string
@@ -17,6 +20,9 @@ export interface PostGroupFormData {
   name: string
   slug: string
   layout: string
+  lead: string
+  main_image_url: string
+  keywords: string
 }
 
 export interface SingleResponse<T> {

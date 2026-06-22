@@ -2,6 +2,8 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
+import Textarea from '@admin/components/ui/Textarea.vue'
+import Label from '@admin/components/ui/Label.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -10,6 +12,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { postGroupService, type PostGroupFormData } from '../../services/postGroupService.ts'
@@ -26,7 +29,10 @@ const errors = ref<any>({})
 const form = reactive({
   name: '',
   slug: '',
-  layout: ''
+  layout: '',
+  lead: '',
+  main_image_url: '',
+  keywords: '',
 }) as PostGroupFormData
 
 const fetchPostGroup = async () => {
@@ -36,6 +42,9 @@ const fetchPostGroup = async () => {
     form.name = data.data.name
     form.slug = data.data.slug
     form.layout = data.data.layout || ''
+    form.lead = data.data.lead || ''
+    form.main_image_url = data.data.main_image_url || ''
+    form.keywords = data.data.keywords || ''
   } catch (error) {
     console.error('Hiba a poszt csoport betöltésekor:', error)
   } finally {
@@ -103,6 +112,32 @@ onMounted(() => {
           <FieldError :errors="errors.slug" />
         </div>
         <LayoutSelect v-model="form.layout" :errors="errors.layout" />
+        <div class="space-y-2">
+          <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
+          <Textarea
+            id="lead"
+            v-model="form.lead"
+            placeholder="Rövid bevezető szöveg a csoporthoz"
+          />
+          <FieldError :errors="errors.lead" />
+        </div>
+        <div class="space-y-2">
+          <Label class="text-sm font-medium">Főkép</Label>
+          <MediaFilePicker
+            v-model="form.main_image_url"
+            :accept-types="['image/*']"
+          />
+          <FieldError :errors="errors.main_image_url" />
+        </div>
+        <div class="space-y-2">
+          <Label for="keywords" class="text-sm font-medium">Kulcsszavak</Label>
+          <Input
+            id="keywords"
+            v-model="form.keywords"
+            placeholder="kulcsszó1, kulcsszó2, ..."
+          />
+          <FieldError :errors="errors.keywords" />
+        </div>
       </CardContent>
       <CardFooter>
         <FormButtons
