@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon, Newspaper, Tag } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon, Newspaper, Tag, BookOpen } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -109,6 +109,14 @@ export class CmsMenuBuilder extends MenuBuilder {
           icon: Tag,
           order: 55,
           permission: 'cms_post_type'
+        },
+        {
+          id: 'cms-page-types',
+          title: 'Oldal Típusok',
+          path: '/admin/cms/page-type',
+          icon: BookOpen,
+          order: 57,
+          permission: 'cms_page_type'
         },
         {
           id: 'cms-menus',
