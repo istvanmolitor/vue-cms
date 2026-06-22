@@ -18,7 +18,6 @@ const pagination = ref<PaginationMeta>({
 
 const columns: Column<Page>[] = [
   { key: 'main_image_url', label: 'Kép', width: '80px' },
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'title', label: 'Cím', sortable: true },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]

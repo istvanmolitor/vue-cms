@@ -17,7 +17,6 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<Menu>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
   { key: 'language', label: 'Nyelv', sortable: false },
   { key: 'created_at', label: 'Létrehozva', sortable: true },

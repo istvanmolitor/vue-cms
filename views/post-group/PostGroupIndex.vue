@@ -10,7 +10,6 @@ const postGroups = ref<PostGroup[]>([])
 const isLoading = ref(false)
 
 const columns: Column<PostGroup>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
   { key: 'slug', label: 'Slug', sortable: true },
   { key: 'created_at', label: 'Létrehozva', sortable: true },

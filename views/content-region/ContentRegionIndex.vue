@@ -11,7 +11,6 @@ const regions = ref<ContentRegion[]>([])
 const isLoading = ref(false)
 
 const columns: Column<ContentRegion>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: true },
 ]
 

@@ -14,7 +14,6 @@ const postGroup = ref<PostGroup | null>(null)
 const isLoading = ref(true)
 
 const columns: Column<Post>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'title', label: 'Cím', sortable: true },
   { key: 'slug', label: 'Slug', sortable: true },
   { key: 'created_at', label: 'Létrehozva', sortable: true },

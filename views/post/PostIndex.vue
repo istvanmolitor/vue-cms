@@ -18,7 +18,6 @@ const pagination = ref<PaginationMeta>({
 
 const columns: Column<Post>[] = [
   { key: 'main_image_url', label: 'Kép', width: '80px' },
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'title', label: 'Cím', sortable: true },
   { key: 'postGroups', label: 'Poszt csoportok' },
   { key: 'created_at', label: 'Létrehozva', sortable: true },
