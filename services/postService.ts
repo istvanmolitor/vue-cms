@@ -1,6 +1,7 @@
 import { createApiClient } from '@user/services/apiClient'
 import type { Author } from './authorService'
 import type { PostGroup } from './postGroupService'
+import type { PostType } from './postTypeService'
 
 const api = createApiClient()
 
@@ -39,6 +40,8 @@ export interface Post {
   content?: Content | null
   authors?: Author[]
   postGroups?: PostGroup[]
+  postType?: PostType
+  post_type_id?: number | null
   post_meta?: PostMeta[]
   created_at?: string
   updated_at?: string
@@ -55,6 +58,7 @@ export interface PostFormData {
   content_elements: ContentElement[]
   author_ids: number[]
   post_group_ids: number[]
+  post_type_id: number | null
 }
 
 export interface PostPayload {
@@ -67,6 +71,7 @@ export interface PostPayload {
   keywords?: string
   author_ids?: number[]
   post_group_ids?: number[]
+  post_type_id?: number | null
   content_elements: Array<{
     type: string
     settings: any
@@ -103,11 +108,12 @@ export const postService = {
     return api.get<SingleResponse<Post>>(`/api/cms/post/slug/${slug}`)
   },
   create(payload: PostPayload) {
-    const { content_elements, author_ids, post_group_ids, ...rest } = payload
+    const { content_elements, author_ids, post_group_ids, post_type_id, ...rest } = payload
     const data = {
       ...rest,
       author_ids,
       post_group_ids,
+      post_type_id,
       content: {
         content_elements
       }
@@ -115,11 +121,12 @@ export const postService = {
     return api.post<SingleResponse<Post>>('/api/cms/posts', data)
   },
   update(id: number | string, payload: PostPayload) {
-    const { content_elements, author_ids, post_group_ids, ...rest } = payload
+    const { content_elements, author_ids, post_group_ids, post_type_id, ...rest } = payload
     const data = {
       ...rest,
       author_ids,
       post_group_ids,
+      post_type_id,
       content: {
         content_elements
       }

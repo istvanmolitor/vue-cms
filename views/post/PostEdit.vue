@@ -19,6 +19,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { postService, type PostFormData, type ContentElement, type PostMeta } from '../../services/postService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
+import { postTypeService, type PostType } from '../../services/postTypeService.ts'
+import Select from '@admin/components/ui/Select.vue'
 import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
 import { toastService } from '@admin/lib/toastService'
@@ -30,10 +32,12 @@ const isSaving = ref(false)
 const isLoading = ref(true)
 const isLoadingAuthors = ref(true)
 const isLoadingPostGroups = ref(true)
+const isLoadingPostTypes = ref(true)
 const postId = route.params.id as string
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
+const postTypes = ref<PostType[]>([])
 const postUrl = ref<string | null>(null)
 const postMetaData = ref<PostMeta[]>([])
 
@@ -47,7 +51,8 @@ const form = reactive({
   keywords: '',
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
-  post_group_ids: [] as number[]
+  post_group_ids: [] as number[],
+  post_type_id: null as number | null
 }) as PostFormData
 
 const fetchAuthors = async () => {
@@ -74,6 +79,18 @@ const fetchPostGroups = async () => {
   }
 }
 
+const fetchPostTypes = async () => {
+  try {
+    isLoadingPostTypes.value = true
+    const { data } = await postTypeService.getAll()
+    postTypes.value = data.data
+  } catch (error) {
+    console.error('Hiba a poszt típusok betöltésekor:', error)
+  } finally {
+    isLoadingPostTypes.value = false
+  }
+}
+
 const fetchPost = async () => {
   try {
     isLoading.value = true
@@ -88,6 +105,7 @@ const fetchPost = async () => {
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     form.author_ids = data.data.authors?.map(author => author.id) || []
     form.post_group_ids = data.data.postGroups?.map(postGroup => postGroup.id) || []
+    form.post_type_id = data.data.post_type_id ?? null
     postUrl.value = data.data.url || null
     postMetaData.value = data.data.post_meta || []
   } catch (error) {
@@ -112,6 +130,7 @@ const handleSubmit = async () => {
       keywords: form.keywords,
       author_ids: form.author_ids,
       post_group_ids: form.post_group_ids,
+      post_type_id: form.post_type_id,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
         settings: element.settings,
@@ -146,6 +165,7 @@ const viewPost = () => {
 onMounted(() => {
   fetchAuthors()
   fetchPostGroups()
+  fetchPostTypes()
   fetchPost()
 })
 </script>
@@ -237,6 +257,23 @@ onMounted(() => {
                 Szerzők betöltése...
               </div>
               <FieldError :errors="errors.author_ids" />
+            </div>
+            <hr class="my-6" />
+            <div class="space-y-2">
+              <Label class="text-sm font-medium">Poszt típus</Label>
+              <Select
+                v-if="!isLoadingPostTypes"
+                v-model="form.post_type_id"
+                :options="postTypes"
+                label-field="name"
+                value-field="id"
+                placeholder="Válassz típust..."
+                :clearable="true"
+              />
+              <div v-else class="text-sm text-[--color-muted-foreground]">
+                Poszt típusok betöltése...
+              </div>
+              <FieldError :errors="errors.post_type_id" />
             </div>
             <hr class="my-6" />
             <div class="space-y-2">
