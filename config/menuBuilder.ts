@@ -1,5 +1,5 @@
 import { MenuBuilder, type MenuItemConfig } from '@menu/index'
-import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon, Newspaper } from 'lucide-vue-next'
+import { FileText, Layout, Layers, User, FolderTree, Menu as MenuIcon, Newspaper, Tag } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -101,6 +101,14 @@ export class CmsMenuBuilder extends MenuBuilder {
           icon: FolderTree,
           order: 50,
           permission: 'cms_post'
+        },
+        {
+          id: 'cms-post-types',
+          title: 'Poszt Típusok',
+          path: '/admin/cms/post-type',
+          icon: Tag,
+          order: 55,
+          permission: 'cms_post_type'
         },
         {
           id: 'cms-menus',

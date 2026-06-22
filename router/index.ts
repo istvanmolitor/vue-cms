@@ -98,6 +98,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/cms/post-type',
+    name: 'cms-post-types',
+    component: () => import('../views/post-type/PostTypeIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-type/create',
+    name: 'cms-post-type-create',
+    component: () => import('../views/post-type/PostTypeCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/cms/post-type/:id/edit',
+    name: 'cms-post-type-edit',
+    component: () => import('../views/post-type/PostTypeEdit.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/cms/menu',
     name: 'cms-menus',
     component: () => import('../views/menu/MenuIndex.vue'),
