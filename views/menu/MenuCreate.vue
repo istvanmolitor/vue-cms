@@ -17,32 +17,25 @@ import { reactive, ref, onMounted } from 'vue'
 import { menuService, type MenuFormData } from '../../services/menuService'
 import { languageService } from '@language/services/languageService'
 import { toastService } from '@admin/lib/toastService'
-import type { SelectOption } from '@admin'
 
 const router = useRouter()
 const isSaving = ref(false)
-const isLoadingLanguages = ref(true)
 const errors = ref<any>({})
-const languageOptions = ref<SelectOption[]>([])
 
 const form = reactive({
   name: '',
   language_id: null
 }) as MenuFormData
 
-const fetchLanguages = async () => {
+const fetchDefaultLanguage = async () => {
   try {
-    isLoadingLanguages.value = true
-    const { data } = await languageService.getOptions()
-    languageOptions.value = data.data
-    // Set the first language as default if available
-    if (languageOptions.value.length > 0) {
-      form.language_id = Number(languageOptions.value[0].value)
+    const { data } = await languageService.searchForSelect({ per_page: 1 })
+    const first = data.data[0]
+    if (first?.id !== undefined) {
+      form.language_id = first.id
     }
   } catch (error) {
-    console.error('Hiba a nyelvek betöltésekor:', error)
-  } finally {
-    isLoadingLanguages.value = false
+    console.error('Hiba az alapértelmezett nyelv betöltésekor:', error)
   }
 }
 
@@ -83,7 +76,7 @@ const goBack = () => {
 }
 
 onMounted(() => {
-  fetchLanguages()
+  fetchDefaultLanguage()
 })
 </script>
 
@@ -113,7 +106,6 @@ onMounted(() => {
           <LanguageSelector
             id="language_id"
             v-model="form.language_id"
-            :options="languageOptions"
             placeholder="Válassz nyelvet..."
           />
           <FieldError :errors="errors.language_id" />

@@ -17,36 +17,20 @@ import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { menuService } from '@cms/services/menuService'
 import type { MenuFormData } from '@cms/services/menuService'
-import { languageService } from '@language/services/languageService'
 import { toastService } from '@admin/lib/toastService'
-import type { SelectOption } from '@admin'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
-const isLoadingLanguages = ref(true)
 const menuId = route.params.id as string
 const errors = ref<any>({})
-const languageOptions = ref<SelectOption[]>([])
 
 const form = reactive({
   name: '',
   language_id: null
 }) as MenuFormData
-
-const fetchLanguages = async () => {
-  try {
-    isLoadingLanguages.value = true
-    const { data } = await languageService.getOptions()
-    languageOptions.value = data.data
-  } catch (error) {
-    console.error('Hiba a nyelvek betöltésekor:', error)
-  } finally {
-    isLoadingLanguages.value = false
-  }
-}
 
 const fetchMenu = async () => {
   try {
@@ -84,7 +68,6 @@ const goBack = () => {
 }
 
 onMounted(() => {
-  fetchLanguages()
   fetchMenu()
 })
 </script>
@@ -119,7 +102,6 @@ onMounted(() => {
               <LanguageSelector
                 id="language_id"
                 v-model="form.language_id"
-                :options="languageOptions"
                 placeholder="Válassz nyelvet..."
               />
               <FieldError :errors="errors.language_id" />
