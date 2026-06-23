@@ -37,6 +37,7 @@ export interface Post {
   layout?: string
   main_image_url?: string
   keywords?: string
+  language_id?: number | null
   content?: Content | null
   authors?: Author[]
   postGroups?: PostGroup[]
@@ -55,6 +56,7 @@ export interface PostFormData {
   layout: string
   main_image_url?: string
   keywords?: string
+  language_id: number | null
   content_elements: ContentElement[]
   author_ids: number[]
   post_group_ids: number[]
@@ -69,6 +71,7 @@ export interface PostPayload {
   layout?: string
   main_image_url?: string
   keywords?: string
+  language_id?: number | null
   author_ids?: number[]
   post_group_ids?: number[]
   post_type_id?: number | null
@@ -108,12 +111,13 @@ export const postService = {
     return api.get<SingleResponse<Post>>(`/api/cms/post/slug/${slug}`)
   },
   create(payload: PostPayload) {
-    const { content_elements, author_ids, post_group_ids, post_type_id, ...rest } = payload
+    const { content_elements, author_ids, post_group_ids, post_type_id, language_id, ...rest } = payload
     const data = {
       ...rest,
       author_ids,
       post_group_ids,
       post_type_id,
+      language_id,
       content: {
         content_elements
       }
@@ -121,12 +125,13 @@ export const postService = {
     return api.post<SingleResponse<Post>>('/api/cms/posts', data)
   },
   update(id: number | string, payload: PostPayload) {
-    const { content_elements, author_ids, post_group_ids, post_type_id, ...rest } = payload
+    const { content_elements, author_ids, post_group_ids, post_type_id, language_id, ...rest } = payload
     const data = {
       ...rest,
       author_ids,
       post_group_ids,
       post_type_id,
+      language_id,
       content: {
         content_elements
       }

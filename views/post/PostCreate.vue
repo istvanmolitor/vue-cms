@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Input from '@admin/components/ui/Input.vue'
-import Select from '@admin/components/ui/Select.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -18,28 +17,28 @@ import { reactive, ref, onMounted } from 'vue'
 import { postService, type PostFormData, type ContentElement } from '../../services/postService.ts'
 import { authorService, type Author } from '../../services/authorService.ts'
 import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
-import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
 import PostTypeSelect from '../../components/PostTypeSelect.vue'
+import LanguageSelector from '@language/components/LanguageSelector.vue'
+import { LayoutSelect } from '@theme'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
 const isLoadingAuthors = ref(true)
 const isLoadingPostGroups = ref(true)
-const isLoadingLayouts = ref(true)
 const errors = ref<any>({})
 const authors = ref<Author[]>([])
 const postGroups = ref<PostGroup[]>([])
-const layouts = ref<Record<string, Layout>>({})
 
 const form = reactive({
   title: '',
   slug: '',
   is_published: false,
   lead: '',
-  layout: 'default',
+  layout: '',
   main_image_url: '',
+  language_id: null as number | null,
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
   post_group_ids: [] as number[],
@@ -70,18 +69,6 @@ const fetchPostGroups = async () => {
   }
 }
 
-const fetchLayouts = async () => {
-  try {
-    isLoadingLayouts.value = true
-    const { data } = await layoutService.getAll()
-    layouts.value = data.data
-  } catch (error) {
-    console.error('Hiba a sablonok betöltésekor:', error)
-  } finally {
-    isLoadingLayouts.value = false
-  }
-}
-
 const handleSubmit = async () => {
   try {
     isSaving.value = true
@@ -94,6 +81,7 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
+      language_id: form.language_id,
       author_ids: form.author_ids,
       post_group_ids: form.post_group_ids,
       post_type_id: form.post_type_id,
@@ -141,7 +129,6 @@ const goBack = () => {
 onMounted(() => {
   fetchAuthors()
   fetchPostGroups()
-  fetchLayouts()
 })
 </script>
 
@@ -198,20 +185,16 @@ onMounted(() => {
             </div>
             <PostTypeSelect v-model="form.post_type_id" :errors="errors.post_type_id" />
             <div class="space-y-2">
+              <Label class="text-sm font-medium">Nyelv <span class="text-destructive">*</span></Label>
+              <LanguageSelector v-model="form.language_id" :required="true" :auto-select-default="true" />
+              <FieldError :errors="errors.language_id" />
+            </div>
+            <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
             </div>
-            <div class="space-y-2">
-              <Label for="layout" class="text-sm font-medium">Sablon</Label>
-              <Select
-                id="layout"
-                v-model="form.layout"
-                :options="Object.entries(layouts).map(([key, layout]) => ({ value: key, label: layout.name }))"
-                placeholder="Válassz sablont..."
-              />
-              <FieldError :errors="errors.layout" />
-            </div>
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
             <hr class="my-6" />
             <div class="space-y-2">
               <Label class="text-sm font-medium">Főkép</Label>

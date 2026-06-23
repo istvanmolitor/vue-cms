@@ -22,6 +22,7 @@ import { postGroupService, type PostGroup } from '../../services/postGroupServic
 import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
 import PostTypeSelect from '../../components/PostTypeSelect.vue'
+import LanguageSelector from '@language/components/LanguageSelector.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
@@ -46,6 +47,7 @@ const form = reactive({
   layout: 'default',
   main_image_url: '',
   keywords: '',
+  language_id: null as number | null,
   content_elements: [] as ContentElement[],
   author_ids: [] as number[],
   post_group_ids: [] as number[],
@@ -84,13 +86,14 @@ const fetchPost = async () => {
     form.slug = data.data.slug
     form.is_published = data.data.is_published || false
     form.lead = data.data.lead || ''
-    form.layout = data.data.layout || 'default'
+    form.layout = data.data.layout || ''
     form.main_image_url = data.data.main_image_url || ''
     form.keywords = data.data.keywords || ''
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     form.author_ids = data.data.authors?.map(author => author.id) || []
     form.post_group_ids = data.data.postGroups?.map(postGroup => postGroup.id) || []
     form.post_type_id = data.data.post_type_id ?? form.post_type_id
+    form.language_id = data.data.language_id ?? null
     postUrl.value = data.data.url || null
     postMetaData.value = data.data.post_meta || []
   } catch (error) {
@@ -113,6 +116,7 @@ const handleSubmit = async () => {
       layout: form.layout,
       main_image_url: form.main_image_url,
       keywords: form.keywords,
+      language_id: form.language_id,
       author_ids: form.author_ids,
       post_group_ids: form.post_group_ids,
       post_type_id: form.post_type_id,
@@ -208,6 +212,11 @@ onMounted(() => {
             </div>
             <PostTypeSelect v-model="form.post_type_id" :errors="errors.post_type_id" />
             <div class="space-y-2">
+              <Label class="text-sm font-medium">Nyelv <span class="text-destructive">*</span></Label>
+              <LanguageSelector v-model="form.language_id" :required="true" />
+              <FieldError :errors="errors.language_id" />
+            </div>
+            <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
@@ -217,7 +226,7 @@ onMounted(() => {
               <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
               <FieldError :errors="errors.keywords" />
             </div>
-            <LayoutSelect v-model="form.layout" :errors="errors.layout" />
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
 
             <hr class="my-6" />
             <div class="space-y-2">
