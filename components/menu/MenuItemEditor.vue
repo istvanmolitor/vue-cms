@@ -141,10 +141,6 @@ const handleSave = async () => {
 }
 
 const deleteItem = async (item: MenuItem) => {
-  if (!confirm(`Biztosan törölni szeretnéd ezt a menü elemet: ${item.label}?`)) {
-    return
-  }
-
   try {
     await menuItemService.delete(item.id)
     toastService.success('Menü elem sikeresen törölve!')

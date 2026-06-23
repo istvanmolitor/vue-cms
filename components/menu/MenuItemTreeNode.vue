@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { MenuItem } from '../../services/menuItemService'
-import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
+import DeleteButton from '@admin/components/ui/button/DeleteButton.vue'
+import EditButton from '@admin/components/ui/button/EditButton.vue'
+import IconButton from '@admin/components/ui/button/IconButton.vue'
 
 interface Props {
   item: MenuItem
@@ -53,16 +55,12 @@ const canMoveDown = computed(() => {
       :style="indentClass"
     >
       <div class="flex items-center space-x-3 flex-1">
-        <button
+        <IconButton
           v-if="hasChildren"
-          class="text-gray-400 hover:text-gray-600 focus:outline-none"
+          :icon="isExpanded ? 'chevron-down' : 'chevron-right'"
+          variant="ghost"
           @click="emit('toggle', item.id)"
-        >
-          <Icon
-            :name="isExpanded ? 'chevron-down' : 'chevron-right'"
-            class="w-4 h-4"
-          />
-        </button>
+        />
         <div v-else class="w-4" />
 
         <Icon v-if="item.icon" :name="item.icon" class="w-4 h-4 text-gray-500" />
@@ -79,48 +77,25 @@ const canMoveDown = computed(() => {
       </div>
 
       <div class="flex items-center space-x-1">
-        <Button
+        <IconButton
+          icon="arrow-up"
           variant="ghost"
-          size="sm"
           :disabled="!canMoveUp"
           @click="emit('moveUp', item, siblings)"
-          title="Fel"
-        >
-          <Icon name="arrow-up" class="w-4 h-4" />
-        </Button>
-        <Button
+        />
+        <IconButton
+          icon="arrow-down"
           variant="ghost"
-          size="sm"
           :disabled="!canMoveDown"
           @click="emit('moveDown', item, siblings)"
-          title="Le"
-        >
-          <Icon name="arrow-down" class="w-4 h-4" />
-        </Button>
-        <Button
+        />
+        <IconButton
+          icon="plus"
           variant="ghost"
-          size="sm"
           @click="emit('createChild', item.id)"
-          title="Gyerek elem hozzáadása"
-        >
-          <Icon name="plus" class="w-4 h-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          @click="emit('edit', item)"
-          title="Szerkesztés"
-        >
-          <Icon name="pencil" class="w-4 h-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          @click="emit('delete', item)"
-          title="Törlés"
-        >
-          <Icon name="trash" class="w-4 h-4 text-red-500" />
-        </Button>
+        />
+        <EditButton @click="emit('edit', item)" />
+        <DeleteButton @confirm="emit('delete', item)" />
       </div>
     </div>
 

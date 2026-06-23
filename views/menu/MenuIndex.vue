@@ -19,7 +19,6 @@ const pagination = ref<PaginationMeta>({
 const columns: Column<Menu>[] = [
   { key: 'name', label: 'Név', sortable: true },
   { key: 'language', label: 'Nyelv', sortable: false },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
 const fetchMenus = async (params: {
