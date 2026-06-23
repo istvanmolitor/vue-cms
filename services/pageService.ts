@@ -34,6 +34,7 @@ export interface Page {
   layout?: string
   main_image_url?: string
   keywords?: string
+  language_id?: number | null
   page_type_id?: number | null
   content?: Content | null
   meta_data?: PageMeta[]
@@ -49,6 +50,7 @@ export interface PageFormData {
   layout: string
   main_image_url?: string
   keywords?: string
+  language_id?: number | null
   page_type_id?: number | null
   content_elements: ContentElement[]
 }
@@ -61,6 +63,7 @@ export interface PagePayload {
   layout?: string
   main_image_url?: string
   keywords?: string
+  language_id?: number | null
   page_type_id?: number | null
   content_elements: Array<{
     type: string

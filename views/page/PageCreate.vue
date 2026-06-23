@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Input from '@admin/components/ui/Input.vue'
-import Select from '@admin/components/ui/Select.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -13,48 +12,35 @@ import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
-import { layoutService, type Layout } from '../../services/layoutService.ts'
 import EditContent from '../../components/EditContent.vue'
 import PageTypeSelect from '../../components/PageTypeSelect.vue'
+import LanguageSelector from '@language/components/LanguageSelector.vue'
+import { LayoutSelect } from '@theme'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
 const isSaving = ref(false)
-const isLoadingLayouts = ref(true)
 const errors = ref<any>({})
-const layouts = ref<Record<string, Layout>>({})
 
 const form = reactive({
   title: '',
   slug: '',
   is_published: false,
   lead: '',
-  layout: 'default',
+  layout: '',
   main_image_url: '',
+  language_id: null as number | null,
   page_type_id: null as number | null,
   content_elements: [] as ContentElement[],
 }) as PageFormData
-
-const fetchLayouts = async () => {
-  try {
-    isLoadingLayouts.value = true
-    const { data } = await layoutService.getAll()
-    layouts.value = data.data
-  } catch (error) {
-    console.error('Hiba a sablonok betöltésekor:', error)
-  } finally {
-    isLoadingLayouts.value = false
-  }
-}
 
 const handleSubmit = async () => {
   try {
     isSaving.value = true
     errors.value = {}
 
-    // Transform data to match API expectations
     const payload = {
       title: form.title,
       slug: form.slug,
@@ -62,6 +48,7 @@ const handleSubmit = async () => {
       lead: form.lead,
       layout: form.layout,
       main_image_url: form.main_image_url,
+      language_id: form.language_id,
       page_type_id: form.page_type_id,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
@@ -102,10 +89,6 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/admin/cms/page')
 }
-
-onMounted(() => {
-  fetchLayouts()
-})
 </script>
 
 <template>
@@ -121,7 +104,6 @@ onMounted(() => {
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Left column: Content elements (2 units wide) -->
       <div class="lg:col-span-2 space-y-6">
         <Card>
           <CardHeader>
@@ -135,7 +117,6 @@ onMounted(() => {
         </Card>
       </div>
 
-      <!-- Right column: Page settings (1 unit wide) -->
       <div class="space-y-6">
         <Card>
           <CardHeader>
@@ -163,20 +144,16 @@ onMounted(() => {
             </div>
             <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
+              <Label class="text-sm font-medium">Nyelv <span class="text-destructive">*</span></Label>
+              <LanguageSelector v-model="form.language_id" :required="true" :auto-select-default="true" />
+              <FieldError :errors="errors.language_id" />
+            </div>
+            <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
               <FieldError :errors="errors.lead" />
             </div>
-            <div class="space-y-2">
-              <Label for="layout" class="text-sm font-medium">Sablon</Label>
-              <Select
-                id="layout"
-                v-model="form.layout"
-                :options="Object.entries(layouts).map(([key, layout]) => ({ value: key, label: layout.name }))"
-                placeholder="Válassz sablont..."
-              />
-              <FieldError :errors="errors.layout" />
-            </div>
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
             <hr class="my-6" />
             <div class="space-y-2">
               <Label class="text-sm font-medium">Főkép</Label>

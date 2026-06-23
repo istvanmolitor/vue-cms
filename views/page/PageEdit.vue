@@ -2,7 +2,6 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Input from '@admin/components/ui/Input.vue'
-
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -20,6 +19,7 @@ import { pageService, type PageFormData, type ContentElement, type PageMeta } fr
 import { LayoutSelect } from '@theme'
 import EditContent from '../../components/EditContent.vue'
 import PageTypeSelect from '../../components/PageTypeSelect.vue'
+import LanguageSelector from '@language/components/LanguageSelector.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 
@@ -40,6 +40,7 @@ const form = reactive({
   layout: 'default',
   main_image_url: '',
   keywords: '',
+  language_id: null as number | null,
   page_type_id: null as number | null,
   content_elements: [] as ContentElement[],
 }) as PageFormData
@@ -58,7 +59,7 @@ const fetchPage = async () => {
     // Load draft_content if it exists, otherwise fall back to published content
     form.content_elements = data.data.content?.content_elements || data.data.content?.content_elements || []
     form.page_type_id = data.data.page_type_id ?? form.page_type_id
-    // Store page URL
+    form.language_id = data.data.language_id ?? null
     pageUrl.value = data.data.url || null
     pageMetaData.value = data.data.meta_data || []
   } catch (error) {
@@ -82,6 +83,7 @@ const handleSubmit = async () => {
       layout: form.layout,
       main_image_url: form.main_image_url,
       keywords: form.keywords,
+      language_id: form.language_id,
       page_type_id: form.page_type_id,
       content_elements: form.content_elements.map((element, index) => ({
         type: element.type,
@@ -176,6 +178,11 @@ onMounted(() => {
             </div>
             <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
+              <Label class="text-sm font-medium">Nyelv <span class="text-destructive">*</span></Label>
+              <LanguageSelector v-model="form.language_id" :required="true" />
+              <FieldError :errors="errors.language_id" />
+            </div>
+            <div class="space-y-2">
               <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
               <FieldError :errors="errors.lead" />
@@ -185,7 +192,7 @@ onMounted(() => {
               <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
               <FieldError :errors="errors.keywords" />
             </div>
-            <LayoutSelect v-model="form.layout" :errors="errors.layout" />
+            <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
 
             <hr class="my-6" />
             <div class="space-y-2">
