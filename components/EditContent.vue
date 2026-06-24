@@ -158,7 +158,7 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
 
             <div class="pl-1 text-sm">
               <!-- Show editor when editing or when no settings exist -->
-              <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg">
+              <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg p-3">
                 <component
                   :is="contentElementTypeRegistry.getComponent(element.type)"
                   v-model:settings="element.settings"
