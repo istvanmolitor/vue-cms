@@ -106,7 +106,7 @@ onMounted(() => {
           <FieldError :errors="errors.name" />
         </div>
         <hr class="my-6" />
-        <EditContent v-model="form.content_elements" />
+        <EditContent v-model="form.content_elements" :errors="errors" />
         <FieldError :errors="errors['content.content_elements']" />
         <FieldError :errors="errors.content" />
       </CardContent>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Label from '@admin/components/ui/Label.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
 const props = defineProps<ElementEditorProps>()
@@ -29,6 +30,7 @@ const { code, language } = useElementEditor(props, emit, {
         <option value="sql">SQL</option>
         <option value="json">JSON</option>
       </select>
+      <FieldError :errors="props.errors?.language" />
     </div>
     <div>
       <Label class="text-sm font-medium mb-1 block">Kód</Label>
@@ -38,6 +40,7 @@ const { code, language } = useElementEditor(props, emit, {
         class="flex min-h-[240px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="// Írd be a kódot..."
       ></textarea>
+      <FieldError :errors="props.errors?.code" />
     </div>
   </div>
 </template>

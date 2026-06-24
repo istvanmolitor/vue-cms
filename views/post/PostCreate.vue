@@ -151,7 +151,7 @@ onMounted(() => {
             <CardTitle>Tartalom elemei</CardTitle>
           </CardHeader>
           <CardContent>
-            <EditContent v-model="form.content_elements" />
+            <EditContent v-model="form.content_elements" :errors="errors" />
             <FieldError :errors="errors['content.content_elements']" />
             <FieldError :errors="errors.content" />
           </CardContent>

@@ -4,6 +4,7 @@ import type { ContentElement } from '../services/contentRegionService'
 export interface ElementEditorProps {
   settings: Record<string, any>
   contentElements?: ContentElement[]
+  errors?: Record<string, string | string[]>
 }
 
 export interface ElementEditorEmits {

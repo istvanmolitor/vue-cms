@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Label from '@admin/components/ui/Label.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
 const props = defineProps<ElementEditorProps>()
@@ -32,6 +33,7 @@ const level = computed({
           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="Címsor szövege"
         />
+        <FieldError :errors="props.errors?.text" />
       </div>
       <div class="col-span-3">
         <Label class="text-sm font-medium mb-1 block">Szint</Label>
@@ -41,6 +43,7 @@ const level = computed({
         >
           <option v-for="l in 6" :key="l" :value="l">H{{ l }}</option>
         </select>
+        <FieldError :errors="props.errors?.level" />
       </div>
     </div>
 

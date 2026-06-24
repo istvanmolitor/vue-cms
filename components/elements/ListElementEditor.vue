@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Button from '@admin/components/ui/button/Button.vue'
 import Label from '@admin/components/ui/Label.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { Plus, Trash } from 'lucide-vue-next'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
@@ -45,6 +46,7 @@ const removeItem = (index: number) => {
           Elem hozzáadása
         </Button>
       </div>
+      <FieldError :errors="props.errors?.items" />
       <div class="space-y-2">
         <div v-for="(_item, index) in items" :key="index" class="flex gap-2">
           <input

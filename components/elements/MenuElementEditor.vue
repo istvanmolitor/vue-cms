@@ -25,6 +25,7 @@ const touched = ref(false)
         @blur="touched = true"
       />
       <FieldError v-if="touched && !name" errors="A menü neve kötelező." />
+      <FieldError :errors="props.errors?.name" />
     </div>
   </div>
 </template>

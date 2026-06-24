@@ -9,6 +9,7 @@ import DefaultElementPreview from './elements/DefaultElementPreview.vue'
 
 interface Props {
   modelValue: ContentElement[]
+  errors?: Record<string, string | string[]>
 }
 
 const props = defineProps<Props>()
@@ -99,6 +100,18 @@ const hasSettings = (element: ContentElement) => {
 const shouldShowEditor = (index: number) => {
   return editingElementIndex.value === index || !hasSettings(elements.value[index]!)
 }
+
+const getElementErrors = (index: number): Record<string, string | string[]> => {
+  if (!props.errors) return {}
+  const prefix = `content.content_elements.${index}.settings.`
+  const result: Record<string, string | string[]> = {}
+  for (const [key, value] of Object.entries(props.errors)) {
+    if (key.startsWith(prefix)) {
+      result[key.slice(prefix.length)] = value
+    }
+  }
+  return result
+}
 </script>
 
 <template>
@@ -150,6 +163,7 @@ const shouldShowEditor = (index: number) => {
                   :is="contentElementTypeRegistry.getComponent(element.type)"
                   v-model:settings="element.settings"
                   v-model:content-elements="element.content_elements"
+                  :errors="getElementErrors(index)"
                   @update:settings="updateModel"
                   @update:content-elements="updateModel"
                 />

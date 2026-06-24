@@ -2,6 +2,8 @@
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import Select from '@admin/components/ui/Select.vue'
 import Label from '@admin/components/ui/Label.vue'
+import Input from '@admin/components/ui/Input.vue'
+import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
 const props = defineProps<ElementEditorProps>()
@@ -31,15 +33,16 @@ const alignmentOptions = [
         :accept-types="['image/*']"
         :show-preview="true"
       />
+      <FieldError :errors="props.errors?.src" />
     </div>
     <div>
       <Label class="text-sm font-medium mb-1 block">Alternatív szöveg</Label>
-      <input
+      <Input
         v-model="alt"
         type="text"
-        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="Kép leírása"
       />
+      <FieldError :errors="props.errors?.alt" />
     </div>
     <div>
       <Label class="text-sm font-medium mb-1 block">Elrendezés</Label>
@@ -48,25 +51,26 @@ const alignmentOptions = [
         :options="alignmentOptions"
         placeholder="Válassz elrendezést..."
       />
+      <FieldError :errors="props.errors?.alignment" />
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
         <Label class="text-sm font-medium mb-1 block">Szélesség</Label>
-        <input
+        <Input
           v-model="width"
           type="text"
-          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="640px vagy üres"
         />
+        <FieldError :errors="props.errors?.width" />
       </div>
       <div>
         <Label class="text-sm font-medium mb-1 block">Magasság</Label>
-        <input
+        <Input
           v-model="height"
           type="text"
-          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="480px vagy üres"
         />
+        <FieldError :errors="props.errors?.height" />
       </div>
     </div>
   </div>
