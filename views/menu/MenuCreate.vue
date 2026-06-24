@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -92,15 +92,7 @@ onMounted(() => {
         <CardDescription>Add meg az új menü adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input
-            id="name"
-            v-model="form.name"
-            placeholder="Menü neve"
-          />
-          <FieldError :errors="errors.name" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Menü neve" :errors="errors.name" />
         <div class="space-y-2">
           <Label for="language_id">Nyelv</Label>
           <LanguageSelector

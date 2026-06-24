@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
-import Textarea from '@admin/components/ui/Textarea.vue'
+import TextareaField from '@admin/components/ui/TextareaField.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
 import Card from '@admin/components/ui/Card.vue'
@@ -11,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -166,32 +166,16 @@ onMounted(() => {
               </div>
               <FieldError :errors="errors.is_published" />
             </div>
-            <div class="space-y-2">
-              <Label for="title">Cím</Label>
-              <Input id="title" v-model="form.title" placeholder="Oldal címe" />
-              <FieldError :errors="errors.title" />
-            </div>
-            <div class="space-y-2">
-              <Label for="slug">Slug</Label>
-              <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
-              <FieldError :errors="errors.slug" />
-            </div>
+            <InputField id="title" label="Cím" v-model="form.title" placeholder="Oldal címe" :errors="errors.title" />
+            <InputField id="slug" label="Slug" v-model="form.slug" placeholder="oldal-cime" :errors="errors.slug" />
             <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
               <Label>Nyelv <span class="text-destructive">*</span></Label>
               <LanguageSelector v-model="form.language_id" :required="true" />
               <FieldError :errors="errors.language_id" />
             </div>
-            <div class="space-y-2">
-              <Label for="lead">Bevezető szöveg</Label>
-              <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" />
-              <FieldError :errors="errors.lead" />
-            </div>
-            <div class="space-y-2">
-              <Label for="keywords">Kulcsszavak</Label>
-              <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
-              <FieldError :errors="errors.keywords" />
-            </div>
+            <TextareaField id="lead" label="Bevezető szöveg" v-model="form.lead" placeholder="Rövid bevezető szöveg az oldalhoz" :errors="errors.lead" />
+            <InputField id="keywords" label="Kulcsszavak" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" :errors="errors.keywords" />
             <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
 
             <hr class="my-6" />

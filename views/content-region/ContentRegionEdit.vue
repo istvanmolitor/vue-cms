@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -10,7 +9,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/button/FormButtons.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
-import Label from '@admin/components/ui/Label.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { contentRegionService, type ContentRegionFormData, type ContentElement } from '../../services/contentRegionService.ts'
@@ -100,11 +99,7 @@ onMounted(() => {
         <CardDescription>Módosítsd a régió adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input id="name" v-model="form.name" placeholder="Régió neve" />
-          <FieldError :errors="errors.name" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Régió neve" :errors="errors.name" />
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" :errors="errors" />
         <FieldError :errors="errors['content.content_elements']" />

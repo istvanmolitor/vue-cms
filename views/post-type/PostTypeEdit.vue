@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
-import Label from '@admin/components/ui/Label.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -82,24 +81,8 @@ onMounted(() => {
         <CardDescription>Módosítsd a poszt típus adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input
-            id="name"
-            v-model="form.name"
-            placeholder="Típus neve"
-          />
-          <FieldError :errors="errors.name" />
-        </div>
-        <div class="space-y-2">
-          <Label for="slug">Slug</Label>
-          <Input
-            id="slug"
-            v-model="form.slug"
-            placeholder="tipus-slug"
-          />
-          <FieldError :errors="errors.slug" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Típus neve" :errors="errors.name" />
+        <InputField id="slug" label="Slug" v-model="form.slug" placeholder="tipus-slug" :errors="errors.slug" />
       </CardContent>
       <CardFooter>
         <FormButtons

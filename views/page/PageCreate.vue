@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -132,16 +132,8 @@ const goBack = () => {
               </div>
               <FieldError :errors="errors.is_published" />
             </div>
-            <div class="space-y-2">
-              <Label for="title">Cím</Label>
-              <Input id="title" v-model="form.title" placeholder="Oldal címe" />
-              <FieldError :errors="errors.title" />
-            </div>
-            <div class="space-y-2">
-              <Label for="slug">Slug</Label>
-              <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
-              <FieldError :errors="errors.slug" />
-            </div>
+            <InputField id="title" label="Cím" v-model="form.title" placeholder="Oldal címe" :errors="errors.title" />
+            <InputField id="slug" label="Slug" v-model="form.slug" placeholder="oldal-cime" :errors="errors.slug" />
             <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />
             <div class="space-y-2">
               <Label>Nyelv <span class="text-destructive">*</span></Label>

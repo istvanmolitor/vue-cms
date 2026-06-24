@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
@@ -200,16 +200,8 @@ onMounted(() => {
               </div>
               <FieldError :errors="errors.is_published" />
             </div>
-            <div class="space-y-2">
-              <Label for="title">Cím</Label>
-              <Input id="title" v-model="form.title" placeholder="Poszt címe" />
-              <FieldError :errors="errors.title" />
-            </div>
-            <div class="space-y-2">
-              <Label for="slug">Slug</Label>
-              <Input id="slug" v-model="form.slug" placeholder="poszt-cime" />
-              <FieldError :errors="errors.slug" />
-            </div>
+            <InputField id="title" label="Cím" v-model="form.title" placeholder="Poszt címe" :errors="errors.title" />
+            <InputField id="slug" label="Slug" v-model="form.slug" placeholder="poszt-cime" :errors="errors.slug" />
             <PostTypeSelect v-model="form.post_type_id" :errors="errors.post_type_id" />
             <div class="space-y-2">
               <Label>Nyelv <span class="text-destructive">*</span></Label>
@@ -221,11 +213,7 @@ onMounted(() => {
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
             </div>
-            <div class="space-y-2">
-              <Label for="keywords">Kulcsszavak</Label>
-              <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
-              <FieldError :errors="errors.keywords" />
-            </div>
+            <InputField id="keywords" label="Kulcsszavak" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" :errors="errors.keywords" />
             <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
 
             <hr class="my-6" />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -97,61 +97,12 @@ onMounted(() => {
         <CardDescription>Módosítsd a szerző adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input
-            id="name"
-            v-model="form.name"
-            placeholder="Szerző neve"
-          />
-          <FieldError :errors="errors.name" />
-        </div>
-        <div class="space-y-2">
-          <Label for="slug">Slug</Label>
-          <Input
-            id="slug"
-            v-model="form.slug"
-            placeholder="szerzo-neve"
-          />
-          <FieldError :errors="errors.slug" />
-        </div>
-        <div class="space-y-2">
-          <Label for="nickname">Becenév</Label>
-          <Input
-            id="nickname"
-            v-model="form.nickname"
-            placeholder="Becenév"
-          />
-          <FieldError :errors="errors.nickname" />
-        </div>
-        <div class="space-y-2">
-          <Label for="email">E-mail</Label>
-          <Input
-            id="email"
-            v-model="form.email"
-            type="email"
-            placeholder="email@pelda.hu"
-          />
-          <FieldError :errors="errors.email" />
-        </div>
-        <div class="space-y-2">
-          <Label for="phone">Telefonszám</Label>
-          <Input
-            id="phone"
-            v-model="form.phone"
-            placeholder="+36 30 123 4567"
-          />
-          <FieldError :errors="errors.phone" />
-        </div>
-        <div class="space-y-2">
-          <Label for="position">Beosztás</Label>
-          <Input
-            id="position"
-            v-model="form.position"
-            placeholder="pl. Főszerkesztő"
-          />
-          <FieldError :errors="errors.position" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Szerző neve" :errors="errors.name" />
+        <InputField id="slug" label="Slug" v-model="form.slug" placeholder="szerzo-neve" :errors="errors.slug" />
+        <InputField id="nickname" label="Becenév" v-model="form.nickname" placeholder="Becenév" :errors="errors.nickname" />
+        <InputField id="email" label="E-mail" v-model="form.email" :type="'email'" placeholder="email@pelda.hu" :errors="errors.email" />
+        <InputField id="phone" label="Telefonszám" v-model="form.phone" placeholder="+36 30 123 4567" :errors="errors.phone" />
+        <InputField id="position" label="Beosztás" v-model="form.position" placeholder="pl. Főszerkesztő" :errors="errors.position" />
         <div class="space-y-2">
           <Label for="bio">Bemutatkozás</Label>
           <Textarea

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import Label from '@admin/components/ui/Label.vue'
 import Card from '@admin/components/ui/Card.vue'
@@ -81,24 +81,8 @@ const goBack = () => {
         <CardDescription>Add meg az új poszt csoport adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input
-            id="name"
-            v-model="form.name"
-            placeholder="Csoport neve"
-          />
-          <FieldError :errors="errors.name" />
-        </div>
-        <div class="space-y-2">
-          <Label for="slug">Slug</Label>
-          <Input
-            id="slug"
-            v-model="form.slug"
-            placeholder="csoport-slug"
-          />
-          <FieldError :errors="errors.slug" />
-        </div>
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Csoport neve" :errors="errors.name" />
+        <InputField id="slug" label="Slug" v-model="form.slug" placeholder="csoport-slug" :errors="errors.slug" />
         <LayoutSelect v-model="form.layout" :errors="errors.layout" />
         <div class="space-y-2">
           <Label for="lead">Bevezető szöveg</Label>
@@ -117,15 +101,7 @@ const goBack = () => {
           />
           <FieldError :errors="errors.main_image_url" />
         </div>
-        <div class="space-y-2">
-          <Label for="keywords">Kulcsszavak</Label>
-          <Input
-            id="keywords"
-            v-model="form.keywords"
-            placeholder="kulcsszó1, kulcsszó2, ..."
-          />
-          <FieldError :errors="errors.keywords" />
-        </div>
+        <InputField id="keywords" label="Kulcsszavak" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, ..." :errors="errors.keywords" />
       </CardContent>
       <CardFooter>
         <FormButtons
