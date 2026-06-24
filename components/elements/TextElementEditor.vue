@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Label from '@admin/components/ui/Label.vue'
+import Textarea from '@admin/components/ui/Textarea.vue'
+import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
@@ -9,32 +11,30 @@ const { text, align } = useElementEditor(props, emit, {
   text: '',
   align: 'left'
 })
+
+const alignOptions = [
+  { value: 'left', label: 'Balra' },
+  { value: 'center', label: 'Középre' },
+  { value: 'right', label: 'Jobbra' },
+  { value: 'justify', label: 'Sorkizárt' },
+]
 </script>
 
 <template>
   <div class="space-y-4">
     <div>
       <Label class="text-sm font-medium mb-1 block">Tartalom</Label>
-      <textarea
+      <Textarea
         v-model="text"
-        rows="5"
-        class="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        class="min-h-[120px]"
         placeholder="Szöveg tartalom..."
-      ></textarea>
+      />
       <FieldError :errors="props.errors?.text" />
     </div>
 
     <div>
       <Label class="text-sm font-medium mb-1 block">Igazítás</Label>
-      <select
-        v-model="align"
-        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <option value="left">Balra</option>
-        <option value="center">Középre</option>
-        <option value="right">Jobbra</option>
-        <option value="justify">Sorkizárt</option>
-      </select>
+      <Select v-model="align" :options="alignOptions" />
       <FieldError :errors="props.errors?.align" />
     </div>
 

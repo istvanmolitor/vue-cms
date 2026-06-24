@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Label from '@admin/components/ui/Label.vue'
+import Input from '@admin/components/ui/Input.vue'
+import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
@@ -12,7 +14,6 @@ const { text, level: rawLevel, updateValue } = useElementEditor(props, emit, {
   level: 1
 })
 
-// Custom computed to ensure level is always an integer
 const level = computed({
   get: () => rawLevel.value,
   set: (value) => {
@@ -20,6 +21,8 @@ const level = computed({
     updateValue()
   }
 })
+
+const levelOptions = Array.from({ length: 6 }, (_, i) => ({ value: i + 1, label: `H${i + 1}` }))
 </script>
 
 <template>
@@ -27,22 +30,12 @@ const level = computed({
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-9">
         <Label class="text-sm font-medium mb-1 block">Szöveg</Label>
-        <input
-          v-model="text"
-          type="text"
-          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder="Címsor szövege"
-        />
+        <Input v-model="text" placeholder="Címsor szövege" />
         <FieldError :errors="props.errors?.text" />
       </div>
       <div class="col-span-3">
         <Label class="text-sm font-medium mb-1 block">Szint</Label>
-        <select
-          v-model="level"
-          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <option v-for="l in 6" :key="l" :value="l">H{{ l }}</option>
-        </select>
+        <Select v-model="level" :options="levelOptions" />
         <FieldError :errors="props.errors?.level" />
       </div>
     </div>
