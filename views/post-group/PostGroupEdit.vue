@@ -94,7 +94,7 @@ onMounted(() => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <Label for="name" class="text-sm font-medium">Név</Label>
+          <Label for="name">Név</Label>
           <Input
             id="name"
             v-model="form.name"
@@ -103,7 +103,7 @@ onMounted(() => {
           <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
-          <Label for="slug" class="text-sm font-medium">Slug</Label>
+          <Label for="slug">Slug</Label>
           <Input
             id="slug"
             v-model="form.slug"
@@ -113,7 +113,7 @@ onMounted(() => {
         </div>
         <LayoutSelect v-model="form.layout" :errors="errors.layout" />
         <div class="space-y-2">
-          <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
+          <Label for="lead">Bevezető szöveg</Label>
           <Textarea
             id="lead"
             v-model="form.lead"
@@ -122,7 +122,7 @@ onMounted(() => {
           <FieldError :errors="errors.lead" />
         </div>
         <div class="space-y-2">
-          <Label class="text-sm font-medium">Főkép</Label>
+          <Label>Főkép</Label>
           <MediaFilePicker
             v-model="form.main_image_url"
             :accept-types="['image/*']"
@@ -130,7 +130,7 @@ onMounted(() => {
           <FieldError :errors="errors.main_image_url" />
         </div>
         <div class="space-y-2">
-          <Label for="keywords" class="text-sm font-medium">Kulcsszavak</Label>
+          <Label for="keywords">Kulcsszavak</Label>
           <Input
             id="keywords"
             v-model="form.keywords"

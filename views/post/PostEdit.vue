@@ -194,35 +194,35 @@ onMounted(() => {
             <div class="space-y-2">
               <div class="flex items-center space-x-2">
                 <Checkbox id="is_published" v-model="form.is_published" />
-                <Label for="is_published" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <Label for="is_published" variant="checkbox">
                   Publikálva
                 </Label>
               </div>
               <FieldError :errors="errors.is_published" />
             </div>
             <div class="space-y-2">
-              <Label for="title" class="text-sm font-medium">Cím</Label>
+              <Label for="title">Cím</Label>
               <Input id="title" v-model="form.title" placeholder="Poszt címe" />
               <FieldError :errors="errors.title" />
             </div>
             <div class="space-y-2">
-              <Label for="slug" class="text-sm font-medium">Slug</Label>
+              <Label for="slug">Slug</Label>
               <Input id="slug" v-model="form.slug" placeholder="poszt-cime" />
               <FieldError :errors="errors.slug" />
             </div>
             <PostTypeSelect v-model="form.post_type_id" :errors="errors.post_type_id" />
             <div class="space-y-2">
-              <Label class="text-sm font-medium">Nyelv <span class="text-destructive">*</span></Label>
+              <Label>Nyelv <span class="text-destructive">*</span></Label>
               <LanguageSelector v-model="form.language_id" :required="true" />
               <FieldError :errors="errors.language_id" />
             </div>
             <div class="space-y-2">
-              <Label for="lead" class="text-sm font-medium">Bevezető szöveg</Label>
+              <Label for="lead">Bevezető szöveg</Label>
               <Textarea id="lead" v-model="form.lead" placeholder="Rövid bevezető szöveg a poszthoz" />
               <FieldError :errors="errors.lead" />
             </div>
             <div class="space-y-2">
-              <Label for="keywords" class="text-sm font-medium">Kulcsszavak</Label>
+              <Label for="keywords">Kulcsszavak</Label>
               <Input id="keywords" v-model="form.keywords" placeholder="kulcsszó1, kulcsszó2, kulcsszó3" />
               <FieldError :errors="errors.keywords" />
             </div>
@@ -230,7 +230,7 @@ onMounted(() => {
 
             <hr class="my-6" />
             <div class="space-y-2">
-              <Label class="text-sm font-medium">Főkép</Label>
+              <Label>Főkép</Label>
               <MediaFilePicker
                 v-model="form.main_image_url"
                 :accept-types="['image/*']"

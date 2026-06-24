@@ -115,7 +115,7 @@ const updateColumnContent = (index: number, content: ContentElement[]) => {
 <template>
   <div class="space-y-4 p-4">
     <div class="flex items-center justify-between mb-4">
-      <Label class="text-sm font-medium">Oszlopok ({{ columns.length }} darab)</Label>
+      <Label>Oszlopok ({{ columns.length }} darab)</Label>
       <Button
         type="button"
         size="sm"

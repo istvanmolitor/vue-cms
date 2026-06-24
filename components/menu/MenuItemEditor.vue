@@ -286,7 +286,7 @@ onMounted(() => {
           id="is_external"
           v-model="form.is_external"
         />
-        <Label for="is_external" class="cursor-pointer">Külső link</Label>
+        <Label for="is_external" variant="checkbox">Külső link</Label>
       </div>
 
       <div class="flex justify-end space-x-2 pt-4">

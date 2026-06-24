@@ -39,7 +39,6 @@ const alignmentOptions = [
       <Label class="text-sm font-medium mb-1 block">Alternatív szöveg</Label>
       <Input
         v-model="alt"
-        type="text"
         placeholder="Kép leírása"
       />
       <FieldError :errors="props.errors?.alt" />
@@ -58,7 +57,6 @@ const alignmentOptions = [
         <Label class="text-sm font-medium mb-1 block">Szélesség</Label>
         <Input
           v-model="width"
-          type="text"
           placeholder="640px vagy üres"
         />
         <FieldError :errors="props.errors?.width" />
@@ -67,7 +65,6 @@ const alignmentOptions = [
         <Label class="text-sm font-medium mb-1 block">Magasság</Label>
         <Input
           v-model="height"
-          type="text"
           placeholder="480px vagy üres"
         />
         <FieldError :errors="props.errors?.height" />

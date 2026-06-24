@@ -83,7 +83,7 @@ onMounted(() => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <Label for="name" class="text-sm font-medium">Név</Label>
+          <Label for="name">Név</Label>
           <Input
             id="name"
             v-model="form.name"
@@ -92,7 +92,7 @@ onMounted(() => {
           <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
-          <Label for="slug" class="text-sm font-medium">Slug</Label>
+          <Label for="slug">Slug</Label>
           <Input
             id="slug"
             v-model="form.slug"

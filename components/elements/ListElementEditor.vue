@@ -41,7 +41,7 @@ const removeItem = (index: number) => {
 
     <div>
       <div class="flex items-center justify-between mb-2">
-        <Label class="text-sm font-medium">Lista elemek</Label>
+        <Label>Lista elemek</Label>
         <Button type="button" variant="outline" size="sm" @click="addItem">
           <Plus class="w-3 h-3 mr-1" />
           Elem hozzáadása

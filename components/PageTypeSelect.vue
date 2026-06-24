@@ -37,7 +37,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-2">
-    <Label class="text-sm font-medium">{{ label }}</Label>
+    <Label>{{ label }}</Label>
     <Select
       v-if="!isLoading"
       :model-value="modelValue"

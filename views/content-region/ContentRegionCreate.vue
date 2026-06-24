@@ -89,7 +89,7 @@ const goBack = () => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <Label for="name" class="text-sm font-medium">Név</Label>
+          <Label for="name">Név</Label>
           <Input id="name" v-model="form.name" placeholder="Régió neve" />
           <FieldError :errors="errors.name" />
         </div>

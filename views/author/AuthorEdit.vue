@@ -98,7 +98,7 @@ onMounted(() => {
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <Label for="name" class="text-sm font-medium">Név</Label>
+          <Label for="name">Név</Label>
           <Input
             id="name"
             v-model="form.name"
@@ -107,7 +107,7 @@ onMounted(() => {
           <FieldError :errors="errors.name" />
         </div>
         <div class="space-y-2">
-          <Label for="slug" class="text-sm font-medium">Slug</Label>
+          <Label for="slug">Slug</Label>
           <Input
             id="slug"
             v-model="form.slug"
@@ -116,7 +116,7 @@ onMounted(() => {
           <FieldError :errors="errors.slug" />
         </div>
         <div class="space-y-2">
-          <Label for="nickname" class="text-sm font-medium">Becenév</Label>
+          <Label for="nickname">Becenév</Label>
           <Input
             id="nickname"
             v-model="form.nickname"
@@ -125,7 +125,7 @@ onMounted(() => {
           <FieldError :errors="errors.nickname" />
         </div>
         <div class="space-y-2">
-          <Label for="email" class="text-sm font-medium">E-mail</Label>
+          <Label for="email">E-mail</Label>
           <Input
             id="email"
             v-model="form.email"
@@ -135,7 +135,7 @@ onMounted(() => {
           <FieldError :errors="errors.email" />
         </div>
         <div class="space-y-2">
-          <Label for="phone" class="text-sm font-medium">Telefonszám</Label>
+          <Label for="phone">Telefonszám</Label>
           <Input
             id="phone"
             v-model="form.phone"
@@ -144,7 +144,7 @@ onMounted(() => {
           <FieldError :errors="errors.phone" />
         </div>
         <div class="space-y-2">
-          <Label for="position" class="text-sm font-medium">Beosztás</Label>
+          <Label for="position">Beosztás</Label>
           <Input
             id="position"
             v-model="form.position"
@@ -153,7 +153,7 @@ onMounted(() => {
           <FieldError :errors="errors.position" />
         </div>
         <div class="space-y-2">
-          <Label for="bio" class="text-sm font-medium">Bemutatkozás</Label>
+          <Label for="bio">Bemutatkozás</Label>
           <Textarea
             id="bio"
             v-model="form.bio"
@@ -163,7 +163,7 @@ onMounted(() => {
           <FieldError :errors="errors.bio" />
         </div>
         <div class="space-y-2">
-          <Label for="profile_url" class="text-sm font-medium">Profil URL</Label>
+          <Label for="profile_url">Profil URL</Label>
           <MediaFilePicker
             v-model="form.profile_url"
             :accept-types="['image/*']"
