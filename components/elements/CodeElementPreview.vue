@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
+import ElementPreviewWrapper from './ElementPreviewWrapper.vue'
 
 interface Props {
   settings: Record<string, any>
@@ -14,15 +15,12 @@ const language = computed(() => props.settings.language || 'javascript')
 </script>
 
 <template>
-  <div v-if="code" class="mt-2">
+  <ElementPreviewWrapper :has-content="!!code">
     <div class="rounded-lg bg-muted p-3 border border-border">
       <div class="text-xs text-muted-foreground mb-1 font-medium">{{ language }}</div>
       <pre class="text-xs overflow-x-auto"><code>{{ code }}</code></pre>
     </div>
-  </div>
-  <div v-else class="text-xs italic">
-    Nincsenek beállítások - kattints a <span class="inline-block">⚙️</span> ikonra a szerkesztéshez
-  </div>
+  </ElementPreviewWrapper>
 </template>
 
 <style scoped>

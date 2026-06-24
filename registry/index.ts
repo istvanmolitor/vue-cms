@@ -1,4 +1,6 @@
 import { contentElementTypeRegistry } from './ContentElementTypeRegistry'
+import MenuElementEditor from '../components/elements/MenuElementEditor.vue'
+import MenuElementPreview from '../components/elements/MenuElementPreview.vue'
 import TextElementEditor from '../components/elements/TextElementEditor.vue'
 import HeadingElementEditor from '../components/elements/HeadingElementEditor.vue'
 import ImageElementEditor from '../components/elements/ImageElementEditor.vue'
@@ -18,6 +20,14 @@ import CodeElementPreview from '../components/elements/CodeElementPreview.vue'
 import QuoteElementPreview from '../components/elements/QuoteElementPreview.vue'
 import ListElementPreview from '../components/elements/ListElementPreview.vue'
 import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.vue'
+
+contentElementTypeRegistry.register({
+  type: 'menu',
+  label: 'Menü',
+  component: MenuElementEditor,
+  previewComponent: MenuElementPreview,
+  icon: 'menu'
+})
 
 contentElementTypeRegistry.register({
   type: 'text',

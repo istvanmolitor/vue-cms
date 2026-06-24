@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
 import ElementPreviewWrapper from './ElementPreviewWrapper.vue'
 
@@ -9,16 +8,13 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-const text = computed(() => props.settings.text || '')
-const align = computed(() => props.settings.align || 'left')
 </script>
 
 <template>
-  <ElementPreviewWrapper :has-content="!!text">
-    <p :class="`text-${align} text-sm leading-relaxed`">
-      {{ text }}
-    </p>
+  <ElementPreviewWrapper :has-content="!!settings.name">
+    <div class="text-xs">
+      <span class="font-medium">Menü:</span>
+      <span class="ml-1">{{ settings.name }}</span>
+    </div>
   </ElementPreviewWrapper>
 </template>
-

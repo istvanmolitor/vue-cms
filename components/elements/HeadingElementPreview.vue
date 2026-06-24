@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
+import ElementPreviewWrapper from './ElementPreviewWrapper.vue'
 
 interface Props {
   settings: Record<string, any>
@@ -27,16 +28,13 @@ const text = computed(() => props.settings.text || '')
 </script>
 
 <template>
-  <div v-if="text" class="mt-2">
+  <ElementPreviewWrapper :has-content="!!text">
     <component
       :is="`h${level}`"
       :class="getHeadingClass(level)"
     >
       {{ text }}
     </component>
-  </div>
-  <div v-else class="text-xs italic">
-    Nincsenek beállítások - kattints a <span class="inline-block">⚙️</span> ikonra a szerkesztéshez
-  </div>
+  </ElementPreviewWrapper>
 </template>
 

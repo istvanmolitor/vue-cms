@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
+import ElementPreviewWrapper from './ElementPreviewWrapper.vue'
 
 interface Props {
   settings: Record<string, any>
@@ -22,7 +23,7 @@ const embedUrl = computed(() => {
 </script>
 
 <template>
-  <div v-if="embedUrl" class="mt-2">
+  <ElementPreviewWrapper :has-content="!!embedUrl">
     <div class="relative overflow-hidden rounded-lg shadow-sm border border-border aspect-video" style="width: 300px;">
       <iframe
         :src="embedUrl"
@@ -30,9 +31,6 @@ const embedUrl = computed(() => {
         class="w-full h-full border-0"
       ></iframe>
     </div>
-  </div>
-  <div v-else class="text-xs italic">
-    Nincsenek beállítások - kattints a <span class="inline-block">⚙️</span> ikonra a szerkesztéshez
-  </div>
+  </ElementPreviewWrapper>
 </template>
 

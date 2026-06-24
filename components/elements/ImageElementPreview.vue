@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ContentElement } from '../../services/contentRegionService'
+import ElementPreviewWrapper from './ElementPreviewWrapper.vue'
 
 interface Props {
   settings: Record<string, any>
@@ -28,7 +29,7 @@ const alignmentClass = computed(() => {
 </script>
 
 <template>
-  <div v-if="src" class="mt-2">
+  <ElementPreviewWrapper :has-content="!!src">
     <div :class="alignmentClass">
       <div>
         <img
@@ -46,9 +47,6 @@ const alignmentClass = computed(() => {
         </div>
       </div>
     </div>
-  </div>
-  <div v-else class="text-xs italic">
-    Nincsenek beállítások - kattints a <span class="inline-block">⚙️</span> ikonra a szerkesztéshez
-  </div>
+  </ElementPreviewWrapper>
 </template>
 
