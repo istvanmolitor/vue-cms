@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import type { ContentElement } from '../services/contentRegionService'
 
 export interface ElementEditorProps {
@@ -54,8 +54,11 @@ export function useElementEditor<T extends Record<string, any>>(
     localSettings[typedKey] = ref(props.settings?.[key] ?? defaultSettings[typedKey])
   })
 
-  // Watch for external changes from props
+  let isEmitting = false
+
+  // Watch for external changes from props (skip if we triggered the change)
   watch(() => props.settings, (newVal) => {
+    if (isEmitting) return
     if (newVal) {
       Object.keys(defaultSettings).forEach(key => {
         const typedKey = key as keyof T
@@ -73,7 +76,9 @@ export function useElementEditor<T extends Record<string, any>>(
       const typedKey = key as keyof T
       updated[typedKey] = localSettings[typedKey].value
     })
+    isEmitting = true
     emit('update:settings', updated)
+    nextTick(() => { isEmitting = false })
   }
 
   // Auto-watch all settings and emit changes
