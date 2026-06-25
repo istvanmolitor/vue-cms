@@ -12,6 +12,7 @@ import ListElementEditor from '../components/elements/ListElementEditor.vue'
 import ColumnsElementEditor from '../components/elements/ColumnsElementEditor.vue'
 import PostHeroElementEditor from '../components/elements/PostHeroElementEditor.vue'
 import HeroElementEditor from '../components/elements/HeroElementEditor.vue'
+import LatestPostsElementEditor from '../components/elements/LatestPostsElementEditor.vue'
 
 import TextElementPreview from '../components/elements/TextElementPreview.vue'
 import HeadingElementPreview from '../components/elements/HeadingElementPreview.vue'
@@ -24,6 +25,7 @@ import ListElementPreview from '../components/elements/ListElementPreview.vue'
 import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.vue'
 import PostHeroElementPreview from '../components/elements/PostHeroElementPreview.vue'
 import HeroElementPreview from '../components/elements/HeroElementPreview.vue'
+import LatestPostsElementPreview from '../components/elements/LatestPostsElementPreview.vue'
 
 contentElementTypeRegistry.register({
   type: 'menu',
@@ -119,6 +121,14 @@ contentElementTypeRegistry.register({
   component: HeroElementEditor,
   previewComponent: HeroElementPreview,
   icon: 'layout-template'
+})
+
+contentElementTypeRegistry.register({
+  type: 'latest-posts',
+  label: 'Legfrissebb posztok',
+  component: LatestPostsElementEditor,
+  previewComponent: LatestPostsElementPreview,
+  icon: 'newspaper'
 })
 
 export * from './ContentElementTypeRegistry'
