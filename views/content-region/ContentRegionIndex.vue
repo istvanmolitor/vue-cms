@@ -14,10 +14,10 @@ const columns: Column<ContentRegion>[] = [
   { key: 'name', label: 'Név', sortable: true },
 ]
 
-const fetchRegions = async () => {
+const fetchRegions = async (params?: { search?: string }) => {
   try {
     isLoading.value = true
-    const response = await contentRegionService.getAll()
+    const response = await contentRegionService.getAll(params)
     regions.value = response.data.data
   } catch (error) {
     console.error('Hiba a régiók betöltésekor:', error)

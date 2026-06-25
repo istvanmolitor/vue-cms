@@ -47,8 +47,8 @@ export interface ListResponse<T> {
 }
 
 export const contentRegionService = {
-  getAll() {
-    return api.get<ListResponse<ContentRegion>>('/api/cms/regions')
+  getAll(params?: { search?: string }) {
+    return api.get<ListResponse<ContentRegion>>('/api/cms/regions', { params })
   },
   getById(id: number | string) {
     return api.get<SingleResponse<ContentRegion>>(`/api/cms/regions/${id}`)

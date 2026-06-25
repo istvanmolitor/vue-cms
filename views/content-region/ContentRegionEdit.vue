@@ -99,7 +99,7 @@ onMounted(() => {
         <CardDescription>Módosítsd a régió adatait</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <InputField id="name" label="Név" v-model="form.name" placeholder="Régió neve" :errors="errors.name" />
+        <InputField id="name" label="Név" v-model="form.name" placeholder="Régió neve" :errors="errors.name" disabled />
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" :errors="errors" />
         <FieldError :errors="errors['content.content_elements']" />
