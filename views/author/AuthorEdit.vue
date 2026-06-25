@@ -13,6 +13,7 @@ import FieldError from '@admin/components/ui/FieldError.vue'
 import Label from '@admin/components/ui/Label.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
+import { LayoutSelect } from '@theme'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { authorService, type AuthorFormData } from '../../services/authorService.ts'
@@ -34,7 +35,8 @@ const form = reactive({
   phone: '',
   position: '',
   bio: '',
-  profile_url: ''
+  profile_url: '',
+  layout: 'right-sidebar'
 }) as AuthorFormData
 
 const fetchAuthor = async () => {
@@ -49,6 +51,7 @@ const fetchAuthor = async () => {
     form.position = data.data.position || ''
     form.bio = data.data.bio || ''
     form.profile_url = data.data.profile_url || ''
+    form.layout = data.data.layout || 'right-sidebar'
   } catch (error) {
     console.error('Hiba a szerző betöltésekor:', error)
   } finally {
@@ -121,6 +124,7 @@ onMounted(() => {
           />
           <FieldError :errors="errors.profile_url" />
         </div>
+        <LayoutSelect v-model="form.layout" :errors="errors.layout" :required="true" />
       </CardContent>
       <CardFooter>
         <FormButtons

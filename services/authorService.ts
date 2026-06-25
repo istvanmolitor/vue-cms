@@ -12,6 +12,7 @@ export interface Author {
   position?: string | null
   bio?: string | null
   profile_url?: string | null
+  layout: string
   created_at?: string
   updated_at?: string
 }
@@ -25,6 +26,7 @@ export interface AuthorFormData {
   position?: string
   bio?: string
   profile_url?: string
+  layout: string
 }
 
 export interface SingleResponse<T> {
@@ -61,6 +63,7 @@ export const authorService = {
       position: formData.position || null,
       bio: formData.bio || null,
       profile_url: formData.profile_url || null,
+      layout: formData.layout,
     }
     return api.post<SingleResponse<Author>>('/api/cms/authors', data)
   },
@@ -73,6 +76,7 @@ export const authorService = {
       position: formData.position || null,
       bio: formData.bio || null,
       profile_url: formData.profile_url || null,
+      layout: formData.layout,
     }
     return api.put<SingleResponse<Author>>(`/api/cms/authors/${id}`, data)
   },
