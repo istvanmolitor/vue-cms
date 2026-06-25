@@ -11,6 +11,7 @@ import QuoteElementEditor from '../components/elements/QuoteElementEditor.vue'
 import ListElementEditor from '../components/elements/ListElementEditor.vue'
 import ColumnsElementEditor from '../components/elements/ColumnsElementEditor.vue'
 import PostHeroElementEditor from '../components/elements/PostHeroElementEditor.vue'
+import HeroElementEditor from '../components/elements/HeroElementEditor.vue'
 
 import TextElementPreview from '../components/elements/TextElementPreview.vue'
 import HeadingElementPreview from '../components/elements/HeadingElementPreview.vue'
@@ -22,6 +23,7 @@ import QuoteElementPreview from '../components/elements/QuoteElementPreview.vue'
 import ListElementPreview from '../components/elements/ListElementPreview.vue'
 import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.vue'
 import PostHeroElementPreview from '../components/elements/PostHeroElementPreview.vue'
+import HeroElementPreview from '../components/elements/HeroElementPreview.vue'
 
 contentElementTypeRegistry.register({
   type: 'menu',
@@ -109,6 +111,14 @@ contentElementTypeRegistry.register({
   component: PostHeroElementEditor,
   previewComponent: PostHeroElementPreview,
   icon: 'layout'
+})
+
+contentElementTypeRegistry.register({
+  type: 'hero',
+  label: 'Hero',
+  component: HeroElementEditor,
+  previewComponent: HeroElementPreview,
+  icon: 'layout-template'
 })
 
 export * from './ContentElementTypeRegistry'
