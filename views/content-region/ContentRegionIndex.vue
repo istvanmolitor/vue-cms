@@ -1,35 +1,18 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
-import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
-// ...existing code...
+import DataTable from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
-import { contentRegionService, type ContentRegion } from '../../services/contentRegionService.ts'
+import { ref } from 'vue'
+import { contentRegionService } from '../../services/contentRegionService.ts'
 
 const router = useRouter()
-const regions = ref<ContentRegion[]>([])
-const isLoading = ref(false)
-
-const columns = ref<Column[]>([])
-
-const fetchRegions = async (params?: { search?: string }) => {
-  try {
-    isLoading.value = true
-    const response = await contentRegionService.getAll(params)
-    regions.value = response.data.data
-    columns.value = (response.data.columns ?? []) as Column[]
-  } catch (error) {
-    console.error('Hiba a régiók betöltésekor:', error)
-  } finally {
-    isLoading.value = false
-  }
-}
+const table = ref()
 
 const deleteRegion = async (id: number) => {
   if (!confirm('Biztosan törölni szeretné ezt a régiót?')) return
   try {
     await contentRegionService.delete(id)
-    await fetchRegions()
+    table.value?.refresh()
   } catch (error) {
     console.error('Hiba a régió törlésekor:', error)
   }
@@ -38,27 +21,21 @@ const deleteRegion = async (id: number) => {
 const editRegion = (id: number) => {
   router.push(`/admin/cms/region/${id}/edit`)
 }
-
-onMounted(() => {
-  fetchRegions()
-})
 </script>
 
 <template>
   <AdminLayout page-title="Régiók">
     <DataTable
-      :columns="columns"
-      :data="regions"
-      :loading="isLoading"
-      @fetch="fetchRegions"
+      ref="table"
+      url="/api/cms/regions"
     >
       <template #actions>
         <CreateButton to="/admin/cms/region/create">Új régió</CreateButton>
       </template>
 
       <template #row-actions="{ row }">
-        <EditButton @click="editRegion(row.id!)" />
-        <DeleteButton @confirm="deleteRegion(row.id!)" />
+        <EditButton @click="editRegion((row as any).id)" />
+        <DeleteButton @confirm="deleteRegion((row as any).id)" />
       </template>
       <template #empty>
         Nincs megjeleníthető régió.

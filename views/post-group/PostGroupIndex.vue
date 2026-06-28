@@ -1,33 +1,17 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, IconButton, CreateButton } from '@admin'
-import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
+import DataTable from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
-import { postGroupService, type PostGroup } from '../../services/postGroupService.ts'
+import { ref } from 'vue'
+import { postGroupService } from '../../services/postGroupService.ts'
 
 const router = useRouter()
-const postGroups = ref<PostGroup[]>([])
-const isLoading = ref(false)
-
-const columns = ref<Column[]>([])
-
-const fetchPostGroups = async () => {
-  try {
-    isLoading.value = true
-    const response = await postGroupService.getAll()
-    postGroups.value = response.data.data
-    columns.value = (response.data.columns ?? []) as Column[]
-  } catch (error) {
-    console.error('Hiba a poszt csoportok betöltésekor:', error)
-  } finally {
-    isLoading.value = false
-  }
-}
+const table = ref()
 
 const deletePostGroup = async (id: number) => {
   try {
     await postGroupService.delete(id)
-    await fetchPostGroups()
+    table.value?.refresh()
   } catch (error) {
     console.error('Hiba a poszt csoport törlésekor:', error)
   }
@@ -40,28 +24,22 @@ const editPostGroup = (id: number) => {
 const showPostGroup = (id: number) => {
   router.push(`/admin/cms/post-group/${id}`)
 }
-
-onMounted(() => {
-  fetchPostGroups()
-})
 </script>
 
 <template>
   <AdminLayout page-title="Poszt Csoportok">
     <DataTable
-      :columns="columns"
-      :data="postGroups"
-      :loading="isLoading"
-      @fetch="fetchPostGroups"
+      ref="table"
+      url="/api/cms/post-groups"
     >
       <template #actions>
         <CreateButton to="/admin/cms/post-group/create">Új csoport</CreateButton>
       </template>
 
       <template #row-actions="{ row }">
-        <IconButton icon="eye" @click="showPostGroup(row.id!)" />
-        <EditButton @click="editPostGroup(row.id!)" />
-        <DeleteButton @confirm="deletePostGroup(row.id!)" />
+        <IconButton icon="eye" @click="showPostGroup((row as any).id)" />
+        <EditButton @click="editPostGroup((row as any).id)" />
+        <DeleteButton @confirm="deletePostGroup((row as any).id)" />
       </template>
       <template #empty>
         Nincs megjeleníthető poszt csoport.
