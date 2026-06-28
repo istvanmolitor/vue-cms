@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
+import { AdminLayout, EditButton, DeleteButton, CreateButton, ShowButton } from '@admin'
 import DataTable from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -20,6 +20,10 @@ const deletePage = async (id: number) => {
 const editPage = (id: number) => {
   router.push(`/admin/cms/page/${id}/edit`)
 }
+
+const showPage = (url: string) => {
+  window.open(url, '_blank')
+}
 </script>
 
 <template>
@@ -33,6 +37,7 @@ const editPage = (id: number) => {
       </template>
 
       <template #row-actions="{ row }">
+        <ShowButton v-if="(row as any).url" @click="showPage((row as any).url)" />
         <EditButton @click="editPage((row as any).id)" />
         <DeleteButton @confirm="deletePage((row as any).id)" />
       </template>
