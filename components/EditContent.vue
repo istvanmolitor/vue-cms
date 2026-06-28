@@ -152,10 +152,10 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
 
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mb-4">
-                  <div class="flex items-center gap-3">
-                    <div class="flex items-center text-[11px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
-                      <Icon :name="contentElementTypeRegistry.getIcon(element.type) || 'type'" class="w-3 h-3 mr-1.5" />
-                      <span>{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="flex items-center min-w-0 text-[11px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
+                      <Icon :name="contentElementTypeRegistry.getIcon(element.type) || 'type'" class="w-3 h-3 mr-1.5 shrink-0" />
+                      <span class="truncate">{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
                     </div>
                   </div>
 
@@ -218,18 +218,18 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
     <Teleport to="body">
       <div v-if="showTypeModal" class="fixed inset-0 flex items-center justify-center">
         <div class="absolute inset-0 bg-black/50" @click="closeTypeModal"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-lg p-6">
-          <h4 class="text-base font-medium mb-4">Válaszd ki az elem típusát</h4>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-3xl p-8">
+          <h4 class="text-base font-medium mb-6">Válaszd ki az elem típusát</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <Button
               v-for="type in availableTypes"
               :key="type.type"
               type="button"
               variant="outline"
-              class="justify-start"
+              class="justify-start h-auto py-4 px-4 text-sm"
               @click="addElementWithType(type.type)"
             >
-              <Icon :name="type.icon" class="w-4 h-4 mr-2" />
+              <Icon :name="type.icon" class="w-5 h-5 mr-3 shrink-0" />
               {{ type.label }}
             </Button>
           </div>
