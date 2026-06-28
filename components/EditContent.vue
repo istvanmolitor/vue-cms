@@ -20,6 +20,7 @@ const availableTypes = computed(() => contentElementTypeRegistry.getTypes())
 
 const showTypeModal = ref(false)
 const editingElementIndex = ref<number | null>(null)
+const insertAtIndex = ref<number | null>(null)
 
 watch(() => props.modelValue, (newVal) => {
   elements.value = JSON.parse(JSON.stringify(newVal || []))
@@ -29,27 +30,26 @@ const updateModel = () => {
   emit('update:modelValue', elements.value)
 }
 
-const openAddElementModal = () => {
+const openAddElementModal = (insertAt?: number) => {
+  insertAtIndex.value = insertAt ?? null
   showTypeModal.value = true
 }
 
 const addElementWithType = (type: string) => {
-  const nextSort = elements.value.length > 0
-    ? Math.max(...elements.value.map(e => e.sort)) + 1
-    : 0
+  const newElement = { type, settings: {}, sort: 0, content_elements: [] }
 
-  elements.value.push({
-    type,
-    settings: {},
-    sort: nextSort,
-    content_elements: []
-  })
+  if (insertAtIndex.value !== null) {
+    elements.value.splice(insertAtIndex.value, 0, newElement)
+    editingElementIndex.value = insertAtIndex.value
+  } else {
+    elements.value.push(newElement)
+    editingElementIndex.value = elements.value.length - 1
+  }
 
-  // Automatically open edit mode for the new element
-  editingElementIndex.value = elements.value.length - 1
-
+  elements.value.forEach((el, i) => el.sort = i)
   updateModel()
   showTypeModal.value = false
+  insertAtIndex.value = null
 }
 
 const closeTypeModal = () => {
@@ -115,72 +115,104 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-0">
     <div v-if="elements.length === 0" class="text-center py-8 border-2 border-dashed rounded-lg text-muted-foreground">
       Nincsenek tartalom elemek. Kattints az "Elem hozzáadása" gombra.
     </div>
 
-    <div v-else class="border rounded-lg divide-y bg-background shadow-sm">
-      <div v-for="(element, index) in elements" :key="index" class="p-4 group relative hover:bg-muted/10 transition-colors">
-        <div class="flex items-start gap-3">
-          <!-- Move controls - subtle & vertical -->
-          <div class="flex flex-col items-center self-stretch pt-1">
-            <div class="text-muted-foreground/30 group-hover:text-muted-foreground/60 transition-colors mb-2">
-              <Icon name="grip-vertical" class="w-4 h-4" />
-            </div>
-            <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <IconButton icon="move-up" @click="moveUp(index)" :disabled="index === 0" />
-              <IconButton icon="move-down" @click="moveDown(index)" :disabled="index === elements.length - 1" />
-            </div>
-          </div>
+    <template v-else>
+      <!-- Insert zone before first element -->
+      <div class="group/insert flex items-center gap-2 py-1">
+        <div class="flex-1 h-px bg-border group-hover/insert:bg-primary/40 transition-colors" />
+        <button
+          type="button"
+          class="opacity-0 group-hover/insert:opacity-100 transition-opacity flex items-center gap-1 text-xs text-muted-foreground hover:text-primary border border-border hover:border-primary rounded px-2 py-0.5 bg-background"
+          @click="openAddElementModal(0)"
+        >
+          <Icon name="plus" class="w-3 h-3" />
+          Elem ide
+        </button>
+        <div class="flex-1 h-px bg-border group-hover/insert:bg-primary/40 transition-colors" />
+      </div>
 
-            <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center text-[11px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
-                  <Icon :name="contentElementTypeRegistry.getIcon(element.type) || 'type'" class="w-3 h-3 mr-1.5" />
-                  <span>{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
+      <div class="border rounded-lg divide-y bg-background shadow-sm">
+        <template v-for="(element, index) in elements" :key="index">
+          <div class="p-4 group relative hover:bg-muted/10 transition-colors">
+            <div class="flex items-start gap-3">
+              <!-- Move controls - subtle & vertical -->
+              <div class="flex flex-col items-center self-stretch pt-1">
+                <div class="text-muted-foreground/30 group-hover:text-muted-foreground/60 transition-colors mb-2">
+                  <Icon name="grip-vertical" class="w-4 h-4" />
+                </div>
+                <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <IconButton icon="move-up" @click="moveUp(index)" :disabled="index === 0" />
+                  <IconButton icon="move-down" @click="moveDown(index)" :disabled="index === elements.length - 1" />
                 </div>
               </div>
 
-              <div class="flex items-center gap-1">
-                <IconButton
-                  v-if="hasSettings(element)"
-                  :icon="shouldShowEditor(index) ? 'show' : 'edit'"
-                  @click="toggleEditMode(index)"
-                />
-                <IconButton
-                  icon="trash"
-                  @click="removeElement(index)"
-                />
-              </div>
-            </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center gap-3">
+                    <div class="flex items-center text-[11px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
+                      <Icon :name="contentElementTypeRegistry.getIcon(element.type) || 'type'" class="w-3 h-3 mr-1.5" />
+                      <span>{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
+                    </div>
+                  </div>
 
-            <div class="pl-1 text-sm">
-              <!-- Show editor when editing or when no settings exist -->
-              <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg p-3">
-                <component
-                  :is="contentElementTypeRegistry.getComponent(element.type)"
-                  v-model:settings="element.settings"
-                  v-model:content-elements="element.content_elements"
-                  :errors="getElementErrors(index)"
-                  @update:settings="updateModel"
-                  @update:content-elements="updateModel"
-                />
-              </div>
-              <!-- Show preview otherwise -->
-              <div v-else class="text-muted-foreground">
-                <component
-                  :is="getPreviewComponent(element.type)"
-                  :settings="element.settings"
-                  :content-elements="element.content_elements"
-                />
+                  <div class="flex items-center gap-1">
+                    <IconButton
+                      v-if="hasSettings(element)"
+                      :icon="shouldShowEditor(index) ? 'show' : 'edit'"
+                      @click="toggleEditMode(index)"
+                    />
+                    <IconButton
+                      icon="trash"
+                      @click="removeElement(index)"
+                    />
+                  </div>
+                </div>
+
+                <div class="pl-1 text-sm">
+                  <!-- Show editor when editing or when no settings exist -->
+                  <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg p-3">
+                    <component
+                      :is="contentElementTypeRegistry.getComponent(element.type)"
+                      v-model:settings="element.settings"
+                      v-model:content-elements="element.content_elements"
+                      :errors="getElementErrors(index)"
+                      @update:settings="updateModel"
+                      @update:content-elements="updateModel"
+                    />
+                  </div>
+                  <!-- Show preview otherwise -->
+                  <div v-else class="text-muted-foreground">
+                    <component
+                      :is="getPreviewComponent(element.type)"
+                      :settings="element.settings"
+                      :content-elements="element.content_elements"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <!-- Insert zone after each element -->
+          <div v-if="index < elements.length - 1" class="group/insert flex items-center gap-2 py-1 px-4 border-t">
+            <div class="flex-1 h-px bg-transparent group-hover/insert:bg-primary/40 transition-colors" />
+            <button
+              type="button"
+              class="opacity-0 group-hover/insert:opacity-100 transition-opacity flex items-center gap-1 text-xs text-muted-foreground hover:text-primary border border-border hover:border-primary rounded px-2 py-0.5 bg-background"
+              @click="openAddElementModal(index + 1)"
+            >
+              <Icon name="plus" class="w-3 h-3" />
+              Elem ide
+            </button>
+            <div class="flex-1 h-px bg-transparent group-hover/insert:bg-primary/40 transition-colors" />
+          </div>
+        </template>
       </div>
-    </div>
+    </template>
 
     <!-- Type select modal -->
     <Teleport to="body">
@@ -208,8 +240,8 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
       </div>
     </Teleport>
 
-    <div class="flex items-center justify-end">
-      <Button type="button" @click="openAddElementModal">
+    <div class="flex items-center justify-end mt-4">
+      <Button type="button" @click="openAddElementModal()">
         <Icon name="plus" class="w-4 h-4 mr-2" />
         Elem hozzáadása
       </Button>
