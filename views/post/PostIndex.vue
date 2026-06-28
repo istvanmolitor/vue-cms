@@ -57,6 +57,10 @@ const showPost = (url: string) => {
         </div>
       </template>
 
+      <template #created_at="{ value }">
+        {{ value ? new Date(value).toLocaleDateString('hu-HU') : '–' }}
+      </template>
+
       <template #actions>
         <CreateButton to="/admin/cms/post/create">Új poszt</CreateButton>
       </template>
