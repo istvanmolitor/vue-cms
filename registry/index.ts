@@ -1,6 +1,8 @@
 import { contentElementTypeRegistry } from './ContentElementTypeRegistry'
 import MenuElementEditor from '../components/elements/MenuElementEditor.vue'
 import MenuElementPreview from '../components/elements/MenuElementPreview.vue'
+import ParagraphElementEditor from '../components/elements/ParagraphElementEditor.vue'
+import ParagraphElementPreview from '../components/elements/ParagraphElementPreview.vue'
 import TextElementEditor from '../components/elements/TextElementEditor.vue'
 import HeadingElementEditor from '../components/elements/HeadingElementEditor.vue'
 import ImageElementEditor from '../components/elements/ImageElementEditor.vue'
@@ -26,6 +28,14 @@ import ColumnsElementPreview from '../components/elements/ColumnsElementPreview.
 import PostHeroElementPreview from '../components/elements/PostHeroElementPreview.vue'
 import HeroElementPreview from '../components/elements/HeroElementPreview.vue'
 import LatestPostsElementPreview from '../components/elements/LatestPostsElementPreview.vue'
+
+contentElementTypeRegistry.register({
+  type: 'paragraph',
+  label: 'Bekezdés',
+  component: ParagraphElementEditor,
+  previewComponent: ParagraphElementPreview,
+  icon: 'pilcrow'
+})
 
 contentElementTypeRegistry.register({
   type: 'menu',
