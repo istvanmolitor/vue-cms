@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AdminLayout, EditButton, DeleteButton, CreateButton } from '@admin'
-import DataTable, { type Column } from '@admin/components/ui/dataTable/DataTable.vue'
+import DataTable, { type Column, type PaginationMeta } from '@admin/components/ui/dataTable/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { postTypeService, type PostType } from '../../services/postTypeService.ts'
@@ -8,6 +8,12 @@ import { postTypeService, type PostType } from '../../services/postTypeService.t
 const router = useRouter()
 const postTypes = ref<PostType[]>([])
 const isLoading = ref(false)
+const pagination = ref<PaginationMeta>({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0
+})
 
 const columns: Column<PostType>[] = [
   { key: 'name', label: 'Név', sortable: true },
@@ -15,11 +21,17 @@ const columns: Column<PostType>[] = [
   { key: 'created_at', label: 'Létrehozva', sortable: true },
 ]
 
-const fetchPostTypes = async () => {
+const fetchPostTypes = async (params: {
+  search?: string
+  sort?: string
+  direction?: 'asc' | 'desc'
+  page?: number
+} = {}) => {
   try {
     isLoading.value = true
-    const response = await postTypeService.getAll()
+    const response = await postTypeService.getAll(params)
     postTypes.value = response.data.data
+    pagination.value = response.data.meta
   } catch (error) {
     console.error('Hiba a poszt típusok betöltésekor:', error)
   } finally {
@@ -30,7 +42,7 @@ const fetchPostTypes = async () => {
 const deletePostType = async (id: number) => {
   try {
     await postTypeService.delete(id)
-    await fetchPostTypes()
+    await fetchPostTypes({ page: pagination.value.current_page })
   } catch (error) {
     console.error('Hiba a poszt típus törlésekor:', error)
   }
@@ -51,6 +63,8 @@ onMounted(() => {
       :columns="columns"
       :data="postTypes"
       :loading="isLoading"
+      :pagination="pagination"
+      search-placeholder="Keresés név vagy slug alapján..."
       @fetch="fetchPostTypes"
     >
       <template #actions>
