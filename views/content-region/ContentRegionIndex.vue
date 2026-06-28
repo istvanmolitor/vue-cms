@@ -10,15 +10,14 @@ const router = useRouter()
 const regions = ref<ContentRegion[]>([])
 const isLoading = ref(false)
 
-const columns: Column<ContentRegion>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchRegions = async (params?: { search?: string }) => {
   try {
     isLoading.value = true
     const response = await contentRegionService.getAll(params)
     regions.value = response.data.data
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a régiók betöltésekor:', error)
   } finally {

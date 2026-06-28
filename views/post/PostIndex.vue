@@ -16,12 +16,7 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const columns: Column<Post>[] = [
-  { key: 'main_image_url', label: 'Kép', width: '80px' },
-  { key: 'title', label: 'Cím', sortable: true },
-  { key: 'postGroups', label: 'Poszt csoportok' },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchPosts = async (params: {
   search?: string
@@ -34,6 +29,7 @@ const fetchPosts = async (params: {
     const response = await postService.getAll(params)
     posts.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a posztok betöltésekor:', error)
   } finally {

@@ -9,17 +9,14 @@ const router = useRouter()
 const postGroups = ref<PostGroup[]>([])
 const isLoading = ref(false)
 
-const columns: Column<PostGroup>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'slug', label: 'Slug', sortable: true },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchPostGroups = async () => {
   try {
     isLoading.value = true
     const response = await postGroupService.getAll()
     postGroups.value = response.data.data
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a poszt csoportok betöltésekor:', error)
   } finally {

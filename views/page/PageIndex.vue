@@ -15,11 +15,7 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const columns: Column<Page>[] = [
-  { key: 'title', label: 'Cím', sortable: true },
-  { key: 'slug', label: 'Slug', sortable: true },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchPages = async (params: {
   search?: string
@@ -32,6 +28,7 @@ const fetchPages = async (params: {
     const response = await pageService.getAll(params)
     pages.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a lapok betöltésekor:', error)
   } finally {

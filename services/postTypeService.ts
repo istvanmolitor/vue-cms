@@ -27,6 +27,7 @@ export interface PaginatedResponse<T> {
     per_page: number
     total: number
   }
+  columns?: Array<{ key: string; label: string; sortable: boolean }>
 }
 
 export const postTypeService = {

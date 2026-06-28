@@ -15,11 +15,7 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const columns: Column<PostType>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'slug', label: 'Slug', sortable: true },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchPostTypes = async (params: {
   search?: string
@@ -32,6 +28,7 @@ const fetchPostTypes = async (params: {
     const response = await postTypeService.getAll(params)
     postTypes.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a poszt típusok betöltésekor:', error)
   } finally {

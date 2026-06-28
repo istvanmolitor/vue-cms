@@ -16,10 +16,7 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const columns: Column<Menu>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'language', label: 'Nyelv', sortable: false },
-]
+const columns = ref<Column[]>([])
 
 const fetchMenus = async (params: {
   search?: string
@@ -34,6 +31,7 @@ const fetchMenus = async (params: {
     if (response.data.meta) {
       pagination.value = response.data.meta
     }
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a menük betöltésekor:', error)
   } finally {

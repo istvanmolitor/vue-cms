@@ -9,17 +9,14 @@ const router = useRouter()
 const pageTypes = ref<PageType[]>([])
 const isLoading = ref(false)
 
-const columns: Column<PageType>[] = [
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'slug', label: 'Slug', sortable: true },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchPageTypes = async () => {
   try {
     isLoading.value = true
     const response = await pageTypeService.getAll()
     pageTypes.value = response.data.data
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba az oldal típusok betöltésekor:', error)
   } finally {

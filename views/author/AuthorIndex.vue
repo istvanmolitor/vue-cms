@@ -15,12 +15,7 @@ const pagination = ref<PaginationMeta>({
   total: 0
 })
 
-const columns: Column<Author>[] = [
-  { key: 'profile_url', label: 'Kép', sortable: false, width: '80px' },
-  { key: 'name', label: 'Név', sortable: true },
-  { key: 'nickname', label: 'Becenév', sortable: true },
-  { key: 'created_at', label: 'Létrehozva', sortable: true },
-]
+const columns = ref<Column[]>([])
 
 const fetchAuthors = async (params: {
   search?: string
@@ -33,6 +28,7 @@ const fetchAuthors = async (params: {
     const response = await authorService.getAll(params)
     authors.value = response.data.data
     pagination.value = response.data.meta
+    columns.value = (response.data.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a szerzők betöltésekor:', error)
   } finally {
