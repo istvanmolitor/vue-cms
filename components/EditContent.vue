@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import IconButton from '@admin/components/ui/button/IconButton.vue'
+import Modal from '@admin/components/ui/Modal.vue'
 import { contentElementTypeRegistry } from '../registry'
 import type { ContentElement } from '../services/contentRegionService'
 import DefaultElementPreview from './elements/DefaultElementPreview.vue'
@@ -215,30 +216,23 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
     </template>
 
     <!-- Type select modal -->
-    <Teleport to="body">
-      <div v-if="showTypeModal" class="fixed inset-0 flex items-center justify-center">
-        <div class="absolute inset-0 bg-black/50" @click="closeTypeModal"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-3xl p-8">
-          <h4 class="text-base font-medium mb-6">Válaszd ki az elem típusát</h4>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <Button
-              v-for="type in availableTypes"
-              :key="type.type"
-              type="button"
-              variant="outline"
-              class="justify-start h-auto py-4 px-4 text-sm"
-              @click="addElementWithType(type.type)"
-            >
-              <Icon :name="type.icon" class="w-5 h-5 mr-3 shrink-0" />
-              {{ type.label }}
-            </Button>
-          </div>
-          <div class="mt-6 text-right">
-            <Button type="button" variant="ghost" @click="closeTypeModal">Mégse</Button>
-          </div>
-        </div>
+    <Modal :show="showTypeModal" size="2xl" title="Válaszd ki az elem típusát" @close="closeTypeModal">
+      <div class="grid grid-cols-4 gap-3">
+        <button
+          v-for="type in availableTypes"
+          :key="type.type"
+          type="button"
+          class="flex flex-col items-center justify-center gap-2 rounded-lg border border-border bg-background hover:bg-muted hover:border-primary transition-colors p-4 text-center cursor-pointer"
+          @click="addElementWithType(type.type)"
+        >
+          <Icon :name="type.icon" class="w-7 h-7 text-muted-foreground" />
+          <span class="text-xs font-medium text-foreground leading-tight">{{ type.label }}</span>
+        </button>
       </div>
-    </Teleport>
+      <template #footer>
+        <Button type="button" variant="ghost" @click="closeTypeModal">Mégse</Button>
+      </template>
+    </Modal>
 
     <div class="flex items-center justify-end mt-4">
       <Button type="button" @click="openAddElementModal()">
