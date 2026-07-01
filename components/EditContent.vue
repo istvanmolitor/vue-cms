@@ -2,11 +2,11 @@
 import { ref, watch, computed } from 'vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
-import IconButton from '@admin/components/ui/button/IconButton.vue'
 import Modal from '@admin/components/ui/Modal.vue'
 import { contentElementTypeRegistry } from '../registry'
 import type { ContentElement } from '../services/contentRegionService'
-import DefaultElementPreview from './elements/DefaultElementPreview.vue'
+import InsertZone from './InsertZone.vue'
+import ContentElementItem from './ContentElementItem.vue'
 
 interface Props {
   modelValue: ContentElement[]
@@ -90,10 +90,6 @@ const moveDown = (index: number) => {
   }
 }
 
-const getPreviewComponent = (type: string) => {
-  return contentElementTypeRegistry.getPreviewComponent(type) || DefaultElementPreview
-}
-
 const hasSettings = (element: ContentElement) => {
   return element.settings && Object.keys(element.settings).length > 0
 }
@@ -123,94 +119,26 @@ const getElementErrors = (index: number): Record<string, string | string[]> => {
 
     <template v-else>
       <!-- Insert zone before first element -->
-      <div class="group/insert flex items-center gap-2 py-1">
-        <div class="flex-1 h-px bg-border group-hover/insert:bg-primary/40 transition-colors" />
-        <button
-          type="button"
-          class="opacity-0 group-hover/insert:opacity-100 transition-opacity flex items-center gap-1 text-xs text-muted-foreground hover:text-primary border border-border hover:border-primary rounded px-2 py-0.5 bg-background"
-          @click="openAddElementModal(0)"
-        >
-          <Icon name="plus" class="w-3 h-3" />
-          Elem ide
-        </button>
-        <div class="flex-1 h-px bg-border group-hover/insert:bg-primary/40 transition-colors" />
-      </div>
+      <InsertZone @click="openAddElementModal(0)" />
 
       <div class="border rounded-lg divide-y bg-background shadow-sm">
         <template v-for="(element, index) in elements" :key="index">
-          <div class="p-4 group relative hover:bg-muted/10 transition-colors">
-            <div class="flex items-start gap-3">
-              <!-- Move controls - subtle & vertical -->
-              <div class="flex flex-col items-center self-stretch pt-1">
-                <div class="text-muted-foreground/30 group-hover:text-muted-foreground/60 transition-colors mb-2">
-                  <Icon name="grip-vertical" class="w-4 h-4" />
-                </div>
-                <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <IconButton icon="move-up" @click="moveUp(index)" :disabled="index === 0" />
-                  <IconButton icon="move-down" @click="moveDown(index)" :disabled="index === elements.length - 1" />
-                </div>
-              </div>
-
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-4">
-                  <div class="flex items-center gap-3 min-w-0">
-                    <div class="flex items-center min-w-0 text-[11px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
-                      <Icon :name="contentElementTypeRegistry.getIcon(element.type) || 'type'" class="w-3 h-3 mr-1.5 shrink-0" />
-                      <span class="truncate">{{ contentElementTypeRegistry.getType(element.type)?.label || element.type }}</span>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center gap-1">
-                    <IconButton
-                      v-if="hasSettings(element)"
-                      :icon="shouldShowEditor(index) ? 'show' : 'edit'"
-                      @click="toggleEditMode(index)"
-                    />
-                    <IconButton
-                      icon="trash"
-                      @click="removeElement(index)"
-                    />
-                  </div>
-                </div>
-
-                <div class="pl-1 text-sm">
-                  <!-- Show editor when editing or when no settings exist -->
-                  <div v-if="shouldShowEditor(index)" class="bg-muted/30 rounded-lg p-3">
-                    <component
-                      :is="contentElementTypeRegistry.getComponent(element.type)"
-                      v-model:settings="element.settings"
-                      v-model:content-elements="element.content_elements"
-                      :errors="getElementErrors(index)"
-                      @update:settings="updateModel"
-                      @update:content-elements="updateModel"
-                    />
-                  </div>
-                  <!-- Show preview otherwise -->
-                  <div v-else class="text-muted-foreground">
-                    <component
-                      :is="getPreviewComponent(element.type)"
-                      :settings="element.settings"
-                      :content-elements="element.content_elements"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ContentElementItem
+            :element="element"
+            :is-first="index === 0"
+            :is-last="index === elements.length - 1"
+            :show-editor="shouldShowEditor(index)"
+            :errors="getElementErrors(index)"
+            @move-up="moveUp(index)"
+            @move-down="moveDown(index)"
+            @remove="removeElement(index)"
+            @toggle-edit="toggleEditMode(index)"
+            @update:settings="element.settings = $event; updateModel()"
+            @update:content-elements="element.content_elements = $event; updateModel()"
+          />
 
           <!-- Insert zone after each element -->
-          <div v-if="index < elements.length - 1" class="group/insert flex items-center gap-2 py-1 px-4 border-t">
-            <div class="flex-1 h-px bg-transparent group-hover/insert:bg-primary/40 transition-colors" />
-            <button
-              type="button"
-              class="opacity-0 group-hover/insert:opacity-100 transition-opacity flex items-center gap-1 text-xs text-muted-foreground hover:text-primary border border-border hover:border-primary rounded px-2 py-0.5 bg-background"
-              @click="openAddElementModal(index + 1)"
-            >
-              <Icon name="plus" class="w-3 h-3" />
-              Elem ide
-            </button>
-            <div class="flex-1 h-px bg-transparent group-hover/insert:bg-primary/40 transition-colors" />
-          </div>
+          <InsertZone v-if="index < elements.length - 1" inner @click="openAddElementModal(index + 1)" />
         </template>
       </div>
     </template>
