@@ -9,10 +9,12 @@ import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } fr
 const props = defineProps<ElementEditorProps>()
 const emit = defineEmits<ElementEditorEmits>()
 
-const { image_src, title, lead } = useElementEditor(props, emit, {
+const { image_src, title, lead, link, link_text } = useElementEditor(props, emit, {
   image_src: '',
   title: '',
-  lead: ''
+  lead: '',
+  link: '',
+  link_text: ''
 })
 </script>
 
@@ -36,6 +38,16 @@ const { image_src, title, lead } = useElementEditor(props, emit, {
       <Label class="text-sm font-medium mb-1 block">Lead</Label>
       <Textarea v-model="lead" class="min-h-[96px]" placeholder="Bevezető szöveg..." />
       <FieldError :errors="props.errors?.lead" />
+    </div>
+    <div>
+      <Label class="text-sm font-medium mb-1 block">Link</Label>
+      <Input v-model="link" placeholder="https://..." />
+      <FieldError :errors="props.errors?.link" />
+    </div>
+    <div>
+      <Label class="text-sm font-medium mb-1 block">Link szövege</Label>
+      <Input v-model="link_text" placeholder="Olvasd tovább" />
+      <FieldError :errors="props.errors?.link_text" />
     </div>
   </div>
 </template>
