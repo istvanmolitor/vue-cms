@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import Label from '@admin/components/ui/Label.vue'
-import Input from '@admin/components/ui/Input.vue'
-import Textarea from '@admin/components/ui/Textarea.vue'
+import InputField from '@admin/components/ui/InputField.vue'
+import TextareaField from '@admin/components/ui/TextareaField.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
@@ -20,8 +20,9 @@ const { image_src, title, lead, link, link_text } = useElementEditor(props, emit
 
 <template>
   <div class="space-y-4">
+    <InputField id="title" label="Cím" v-model="title" placeholder="Hero cím..." :errors="props.errors?.title" />
     <div>
-      <Label class="text-sm font-medium mb-1 block">Kép</Label>
+      <Label>Kép</Label>
       <MediaFilePicker
         v-model="image_src"
         :accept-types="['image/*']"
@@ -29,25 +30,8 @@ const { image_src, title, lead, link, link_text } = useElementEditor(props, emit
       />
       <FieldError :errors="props.errors?.image_src" />
     </div>
-    <div>
-      <Label class="text-sm font-medium mb-1 block">Cím</Label>
-      <Input v-model="title" placeholder="Hero cím..." />
-      <FieldError :errors="props.errors?.title" />
-    </div>
-    <div>
-      <Label class="text-sm font-medium mb-1 block">Lead</Label>
-      <Textarea v-model="lead" class="min-h-[96px]" placeholder="Bevezető szöveg..." />
-      <FieldError :errors="props.errors?.lead" />
-    </div>
-    <div>
-      <Label class="text-sm font-medium mb-1 block">Link</Label>
-      <Input v-model="link" placeholder="https://..." />
-      <FieldError :errors="props.errors?.link" />
-    </div>
-    <div>
-      <Label class="text-sm font-medium mb-1 block">Link szövege</Label>
-      <Input v-model="link_text" placeholder="Olvasd tovább" />
-      <FieldError :errors="props.errors?.link_text" />
-    </div>
+    <TextareaField id="lead" label="Lead" v-model="lead" :rows="4" placeholder="Bevezető szöveg..." :errors="props.errors?.lead" />
+    <InputField id="link" label="Link" v-model="link" placeholder="https://..." :errors="props.errors?.link" />
+    <InputField id="link_text" label="Link szövege" v-model="link_text" placeholder="Olvasd tovább" :errors="props.errors?.link_text" />
   </div>
 </template>
