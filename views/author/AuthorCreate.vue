@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
 import InputField from '@admin/components/ui/InputField.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
@@ -108,16 +107,7 @@ const goBack = () => {
       </CardHeader>
       <CardContent class="space-y-4">
         <InputField id="name" label="Név" v-model="form.name" placeholder="Szerző neve" :errors="errors.name" />
-        <div class="space-y-2">
-          <Label for="slug">Slug</Label>
-          <Input
-            id="slug"
-            v-model="form.slug"
-            placeholder="szerzo-neve"
-            @input="isSlugManuallyEdited = true"
-          />
-          <FieldError :errors="errors.slug" />
-        </div>
+        <InputField id="slug" label="Slug" v-model="form.slug" placeholder="szerzo-neve" @input="isSlugManuallyEdited = true" :errors="errors.slug" />
         <InputField id="nickname" label="Becenév" v-model="form.nickname" placeholder="Becenév" :errors="errors.nickname" />
         <InputField id="email" label="E-mail" v-model="form.email" :type="'email'" placeholder="email@pelda.hu" :errors="errors.email" />
         <InputField id="phone" label="Telefonszám" v-model="form.phone" placeholder="+36 30 123 4567" :errors="errors.phone" />

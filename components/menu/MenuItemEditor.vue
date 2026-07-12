@@ -7,8 +7,8 @@ import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Input from '@admin/components/ui/Input.vue'
 import Label from '@admin/components/ui/Label.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import Modal from '@admin/components/ui/Modal.vue'
@@ -254,32 +254,11 @@ onMounted(() => {
 
   <Modal :show="showModal" :title="editingItem ? 'Menü elem szerkesztése' : 'Új menü elem'" @close="showModal = false">
     <div class="space-y-4">
-      <div class="space-y-2">
-        <Label for="label">Címke *</Label>
-        <Input
-          id="label"
-          v-model="form.label"
-          placeholder="pl. Kezdőlap"
-        />
-      </div>
+      <InputField id="label" label="Címke *" v-model="form.label" placeholder="pl. Kezdőlap" />
 
-      <div class="space-y-2">
-        <Label for="url">URL</Label>
-        <Input
-          id="url"
-          v-model="form.url"
-          placeholder="pl. /kezdolap"
-        />
-      </div>
+      <InputField id="url" label="URL" v-model="form.url" placeholder="pl. /kezdolap" />
 
-      <div class="space-y-2">
-        <Label for="icon">Ikon</Label>
-        <Input
-          id="icon"
-          v-model="form.icon"
-          placeholder="pl. home"
-        />
-      </div>
+      <InputField id="icon" label="Ikon" v-model="form.icon" placeholder="pl. home" />
 
       <div class="flex items-center space-x-2">
         <Checkbox

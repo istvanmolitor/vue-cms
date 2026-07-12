@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Label from '@admin/components/ui/Label.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
-import Input from '@admin/components/ui/Input.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
 const props = defineProps<ElementEditorProps>()
@@ -21,10 +21,6 @@ const { quote, author } = useElementEditor(props, emit, {
       <Textarea v-model="quote" class="min-h-[96px]" placeholder="Az idézet szövege..." />
       <FieldError :errors="props.errors?.quote" />
     </div>
-    <div>
-      <Label class="text-sm font-medium mb-1 block">Szerző</Label>
-      <Input v-model="author" placeholder="Szerző neve" />
-      <FieldError :errors="props.errors?.author" />
-    </div>
+    <InputField id="author" label="Szerző" v-model="author" placeholder="Szerző neve" :errors="props.errors?.author" />
   </div>
 </template>

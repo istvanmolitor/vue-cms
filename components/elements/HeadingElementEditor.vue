@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Label from '@admin/components/ui/Label.vue'
-import Input from '@admin/components/ui/Input.vue'
+import InputField from '@admin/components/ui/InputField.vue'
 import Select from '@admin/components/ui/Select.vue'
 import FieldError from '@admin/components/ui/FieldError.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
@@ -23,15 +23,15 @@ const level = computed({
 })
 
 const levelOptions = Array.from({ length: 6 }, (_, i) => ({ value: i + 1, label: `H${i + 1}` }))
+
+const uid = Math.random().toString(36).slice(2, 9)
 </script>
 
 <template>
   <div class="space-y-4">
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-9">
-        <Label class="text-sm font-medium mb-1 block">Szöveg</Label>
-        <Input v-model="text" placeholder="Címsor szövege" />
-        <FieldError :errors="props.errors?.text" />
+        <InputField :id="`${uid}-text`" label="Szöveg" v-model="text" placeholder="Címsor szövege" :errors="props.errors?.text" />
       </div>
       <div class="col-span-3">
         <Label class="text-sm font-medium mb-1 block">Szint</Label>
