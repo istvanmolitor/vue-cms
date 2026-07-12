@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import Label from '@admin/components/ui/Label.vue'
 import InputField from '@admin/components/ui/InputField.vue'
-import Checkbox from '@admin/components/ui/Checkbox.vue'
+import CheckboxField from '@admin/components/ui/CheckboxField.vue'
 import { useElementEditor, type ElementEditorEmits, type ElementEditorProps } from '../../composables/useElementEditor'
 
 const props = defineProps<ElementEditorProps>()
@@ -40,11 +39,6 @@ const uid = Math.random().toString(36).slice(2, 9)
       <InputField :id="`${uid}-width`" label="Szélesség" v-model="width" placeholder="100% vagy 640px" :errors="props.errors?.width" />
       <InputField :id="`${uid}-height`" label="Magasság" v-model="height" placeholder="450px" :errors="props.errors?.height" />
     </div>
-    <div class="flex items-center space-x-2">
-      <Checkbox v-model="allowFullscreen" />
-      <Label class="text-sm font-medium cursor-pointer">
-        Teljes képernyő engedélyezése
-      </Label>
-    </div>
+    <CheckboxField :id="`${uid}-allow-fullscreen`" label="Teljes képernyő engedélyezése" v-model="allowFullscreen" />
   </div>
 </template>

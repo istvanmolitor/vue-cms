@@ -2,8 +2,8 @@
 import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import InputField from '@admin/components/ui/InputField.vue'
 import Textarea from '@admin/components/ui/Textarea.vue'
-import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Label from '@admin/components/ui/Label.vue'
+import CheckboxField from '@admin/components/ui/CheckboxField.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
@@ -123,15 +123,7 @@ const goBack = () => {
             <CardTitle>Oldal adatai</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
-            <div class="space-y-2">
-              <div class="flex items-center space-x-2">
-                <Checkbox id="is_published" v-model="form.is_published" />
-                <Label for="is_published" variant="checkbox">
-                  Publikálva
-                </Label>
-              </div>
-              <FieldError :errors="errors.is_published" />
-            </div>
+            <CheckboxField id="is_published" label="Publikálva" v-model="form.is_published" :errors="errors.is_published" />
             <InputField id="title" label="Cím" v-model="form.title" placeholder="Oldal címe" :errors="errors.title" />
             <InputField id="slug" label="Slug" v-model="form.slug" placeholder="oldal-cime" :errors="errors.slug" />
             <PageTypeSelect v-model="form.page_type_id" :errors="errors.page_type_id" />

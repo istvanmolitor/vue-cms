@@ -7,9 +7,8 @@ import CardContent from '@admin/components/ui/CardContent.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Button from '@admin/components/ui/button/Button.vue'
-import Label from '@admin/components/ui/Label.vue'
+import CheckboxField from '@admin/components/ui/CheckboxField.vue'
 import InputField from '@admin/components/ui/InputField.vue'
-import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Icon from '@admin/components/ui/Icon.vue'
 import Modal from '@admin/components/ui/Modal.vue'
 import MenuItemTreeNode from './MenuItemTreeNode.vue'
@@ -260,13 +259,7 @@ onMounted(() => {
 
       <InputField id="icon" label="Ikon" v-model="form.icon" placeholder="pl. home" />
 
-      <div class="flex items-center space-x-2">
-        <Checkbox
-          id="is_external"
-          v-model="form.is_external"
-        />
-        <Label for="is_external" variant="checkbox">Külső link</Label>
-      </div>
+      <CheckboxField id="is_external" label="Külső link" v-model="form.is_external" />
 
       <div class="flex justify-end space-x-2 pt-4">
         <Button variant="outline" @click="showModal = false">
