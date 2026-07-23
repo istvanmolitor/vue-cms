@@ -7,36 +7,15 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/page/PageIndex.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/admin/cms/page/create',
-    name: 'cms-page-create',
-    component: () => import('../views/page/PageCreate.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/page/:id/edit',
-    name: 'cms-page-edit',
-    component: () => import('../views/page/PageEdit.vue'),
-    meta: { requiresAuth: true }
-  },
+  // cms-page-create / cms-page-edit temporarily disabled: PageCreate/PageEdit
+  // import LayoutSelect from '@theme', which has no package under resources/js/packages yet.
   {
     path: '/admin/cms/post',
     name: 'cms-posts',
     component: () => import('../views/post/PostIndex.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/admin/cms/post/create',
-    name: 'cms-post-create',
-    component: () => import('../views/post/PostCreate.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/post/:id/edit',
-    name: 'cms-post-edit',
-    component: () => import('../views/post/PostEdit.vue'),
-    meta: { requiresAuth: true }
-  },
+  // cms-post-create / cms-post-edit temporarily disabled: same '@theme' dependency as above.
   {
     path: '/admin/cms/region',
     name: 'cms-regions',
@@ -61,40 +40,18 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/author/AuthorIndex.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/admin/cms/author/create',
-    name: 'cms-author-create',
-    component: () => import('../views/author/AuthorCreate.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/author/:id/edit',
-    name: 'cms-author-edit',
-    component: () => import('../views/author/AuthorEdit.vue'),
-    meta: { requiresAuth: true }
-  },
+  // cms-author-create / cms-author-edit temporarily disabled: same '@theme' dependency as above.
   {
     path: '/admin/cms/post-group',
     name: 'cms-post-groups',
     component: () => import('../views/post-group/PostGroupIndex.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/admin/cms/post-group/create',
-    name: 'cms-post-group-create',
-    component: () => import('../views/post-group/PostGroupCreate.vue'),
-    meta: { requiresAuth: true }
-  },
+  // cms-post-group-create / cms-post-group-edit temporarily disabled: same '@theme' dependency as above.
   {
     path: '/admin/cms/post-group/:id',
     name: 'cms-post-group-show',
     component: () => import('../views/post-group/PostGroupShow.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/admin/cms/post-group/:id/edit',
-    name: 'cms-post-group-edit',
-    component: () => import('../views/post-group/PostGroupEdit.vue'),
     meta: { requiresAuth: true }
   },
   {
