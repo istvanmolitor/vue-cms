@@ -17,7 +17,7 @@ import { pageService, type PageFormData, type ContentElement } from '../../servi
 import EditContent from '../../components/EditContent.vue'
 import PageTypeSelect from '../../components/PageTypeSelect.vue'
 import LanguageSelector from '@language/components/LanguageSelector.vue'
-import { LayoutSelect } from '@theme'
+import LayoutSelect from '../../components/LayoutSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()

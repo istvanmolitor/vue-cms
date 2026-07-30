@@ -16,7 +16,7 @@ import MediaFilePicker from '@media/components/MediaFilePicker.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { postGroupService, type PostGroupFormData } from '../../services/postGroupService.ts'
-import { LayoutSelect } from '@theme'
+import LayoutSelect from '../../components/LayoutSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 import LoadingSpinner from '@admin/components/ui/LoadingSpinner.vue'
 

@@ -20,7 +20,7 @@ import { postGroupService, type PostGroup } from '../../services/postGroupServic
 import EditContent from '../../components/EditContent.vue'
 import PostTypeSelect from '../../components/PostTypeSelect.vue'
 import LanguageSelector from '@language/components/LanguageSelector.vue'
-import { LayoutSelect } from '@theme'
+import LayoutSelect from '../../components/LayoutSelect.vue'
 import { toastService } from '@admin/lib/toastService'
 
 const router = useRouter()
