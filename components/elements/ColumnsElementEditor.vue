@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import Label from '@admin/components/ui/Label.vue'
 import Button from '@admin/components/ui/button/Button.vue'
 import Icon from '@admin/components/ui/Icon.vue'
@@ -10,9 +10,7 @@ import {
   type ElementEditorEmits,
   type ElementEditorProps,
 } from '../../composables/useElementEditor'
-
-// Use async component to avoid circular dependency
-const EditContent = defineAsyncComponent(() => import('../EditContent.vue'))
+import EditContent from '../EditContent.vue'
 
 const props = defineProps<ElementEditorProps>()
 const emit = defineEmits<ElementEditorEmits>()
